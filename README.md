@@ -64,13 +64,13 @@ Double
 # Todo #
 
 ## Functions to do ##
-- Add( number ) : Add '*number*' to '*this*' number.
 - Factorial() : The factorial of decimal numbers.
 
 ### Math functions ###
+- Eq( ) - If '*this*' number is equal to another.
+- Div( number ) : Divide '*this*' by '*number*' number.
 
 ### Other functions ###
-- Eq( ) - Compare this number to another
 - ToUInt()
 - ToShort()
 - ToByte()

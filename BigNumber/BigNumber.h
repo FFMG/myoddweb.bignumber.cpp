@@ -57,7 +57,7 @@ namespace MyOddWeb
     BigNumber& Factorial();
     BigNumber Mod(const BigNumber& denominator) const;
     BigNumber Quotient(const BigNumber& denominator) const;
-
+      
     BigNumber& Abs();
 
     bool Zero() const;
