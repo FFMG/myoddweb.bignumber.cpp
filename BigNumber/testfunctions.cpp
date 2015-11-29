@@ -345,27 +345,27 @@ TEST(FunctionBigNumber, ZeroNumbersWithDecimalsAreNotTimmed) {
 TEST(FunctionBigNumber, FractorialOfZero)
 {
   MyOddWeb::BigNumber c(0);
-  int x = c.Frac().ToInt();
+  int x = c.Factorial().ToInt();
   ASSERT_EQ(1, x);
 }
 
 TEST(FunctionBigNumber, FractorialOfNegativeNumber)
 {
   MyOddWeb::BigNumber c(-20 );
-  c.Frac();
+  c.Factorial();
   ASSERT_TRUE( c.Nan() );
 }
 
 TEST(FunctionBigNumber, SmallFractorial)
 {
   MyOddWeb::BigNumber c(5);
-  int x = c.Frac().ToInt();
+  int x = c.Factorial().ToInt();
   ASSERT_EQ( 120, x );
 }
 
 TEST(FunctionBigNumber, BigFractorial)
 {
   MyOddWeb::BigNumber c(20);
-  std::string x = c.Frac().ToString();
+  std::string x = c.Factorial().ToString();
   ASSERT_EQ(std::string("2432902008176640000"), x);
 }
