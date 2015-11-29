@@ -1,4 +1,4 @@
-// Copyright 2013 MyOddWeb.com.
+// Copyright 2015 MyOddWeb.com.
 // All Rights Reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -416,6 +416,76 @@ namespace MyOddWeb
   }
 
   /**
+  * Multiply 2 absolute numbers together.
+  * @param const BigNumber& rhs the number been multiplied
+  * @param const BigNumber& rhs the number multipling
+  * @param size_t precision the max precision to stop once the limit is reached.
+  * @return BigNumber the product of the two numbers.
+  */
+  BigNumber BigNumber::AbsDiv(const BigNumber& lhs, const BigNumber& rhs, size_t precision)
+  {
+    // lhs / 0 = nan
+    if ( rhs.Zero())
+    {
+      // lhs / 0 = nan
+      BigNumber c;
+      c._nan = true;
+      return c;
+    }
+
+    // 0 / n = 0
+    if (lhs.Zero())
+    {
+      // lhs / 0 = nan
+      return BigNumber(0);
+    }
+
+    // the decimal place.
+    size_t decimals = 0;
+
+    // the result
+    NUMBERS c;
+
+    // the number we are working with.
+    BigNumber number(lhs);
+
+    // quotien/remainder we will use.
+    BigNumber quotient;
+    BigNumber remainder;
+
+    // divide until we are done ... or we reached the presision limit.
+    for (;;)
+    {
+      BigNumber::QuotientAndRemainder(number, rhs, quotient, remainder);
+
+      // add the quotien to the current number.
+      c.insert(c.begin(), quotient._numbers.begin(), quotient._numbers.end());
+
+      //  are we done?
+      if (remainder.Zero())
+      {
+        break;
+      }
+
+      // 
+      number = remainder;
+      number.MultiplyByBase( 1 );
+
+      // have we reached our limit?
+      if (decimals >= precision)
+      {
+        break;
+      }
+
+      //  the number of decimal
+      ++decimals;
+    }
+
+    // set the decimal places.
+    return BigNumber( c, decimals, false );
+  }
+
+  /**
    * Multiply 2 absolute numbers together.
    * @param const BigNumber& rhs the number been multiplied
    * @param const BigNumber& rhs the number multipling
@@ -423,6 +493,14 @@ namespace MyOddWeb
    */
   BigNumber BigNumber::AbsMul(const BigNumber& lhs, const BigNumber& rhs)
   {
+    // if either number is zero, then the total is zero
+    // that's the rule.
+    if (lhs.Zero() || rhs.Zero())
+    {
+      //  zero * anything = zero.
+      return BigNumber(0);
+    }
+
     int maxDecimals = (int)(lhs._decimals >= rhs._decimals ? lhs._decimals : rhs._decimals);
 
     // if we have more than one decimals then we have to shift everything
@@ -438,11 +516,11 @@ namespace MyOddWeb
 
       // copy the lhs with no decimals
       BigNumber tlhs(lhs);
-      tlhs.MultiplyByBase(maxDecimals);
+      tlhs.MultiplyByBase(lhs._decimals);
 
       // copy the rhs with no decimals
       BigNumber trhs(rhs);
-      trhs.MultiplyByBase(maxDecimals);
+      trhs.MultiplyByBase(rhs._decimals);
 
       // do the multiplication without any decimals.
       BigNumber c = BigNumber::AbsMul(tlhs, trhs);
@@ -452,14 +530,6 @@ namespace MyOddWeb
 
       // return the value.
       return c.PerformPostOperations();
-    }
-
-    // if either number is zero, then the total is zero
-    // that's the rule.
-    if (lhs.Zero() || rhs.Zero())
-    {
-      //  zero * anything = zero.
-      return BigNumber(0);
     }
 
     //  15 * 5  = 5*5 = 25 = push(5) carry_over = 2
@@ -831,6 +901,29 @@ namespace MyOddWeb
   }
 
   /**
+   * Devide this number by the given number.
+   * @param const BigNumber& rhs the number we want to devide this by
+   * @param size_t precision the max precision we wish to reache.
+   * @return BigNumber& this number devided.
+   */
+  BigNumber& BigNumber::Div(const BigNumber& rhs, size_t precision)
+  {
+    // if one of them is negative, but not both, then it is negative
+    // if they are both the same, then it is positive.
+    // we need to save the value now as the next operation will make it positive
+    bool neg = (rhs.Neg() != Neg());
+
+    // just multiply
+    *this = BigNumber::AbsDiv(*this, rhs, precision );
+
+    // set the sign.
+    _neg = neg;
+
+    // return this/cleaned up.
+    return PerformPostOperations();
+  }
+
+  /**
    * Multiply this number to the given number.
    * @param const BigNumber& the number we are multiplying to.
    * @return BigNumber& this number.
@@ -1149,6 +1242,13 @@ namespace MyOddWeb
    */
   void BigNumber::MultiplyByBase( size_t multiplier)
   {
+    //  shortcut...
+    if (multiplier == _decimals)
+    {
+      _decimals = 0;
+      return;
+    }
+
     // muliply by _base means that we are shifting the multipliers.
     while (_decimals > 0 && multiplier > 0 ) {
       --_decimals;
@@ -1159,7 +1259,7 @@ namespace MyOddWeb
     // keep moving by adding zeros.
     for (size_t i = 0; i < multiplier; ++i)
     {
-      _numbers.push_back(0);
+      _numbers.insert( _numbers.begin(), 0);
     }
   }
 

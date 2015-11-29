@@ -53,5 +53,8 @@
     <ClCompile Include="src\BigNumber.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="tests\testdiv.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

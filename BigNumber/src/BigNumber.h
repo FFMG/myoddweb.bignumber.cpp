@@ -1,4 +1,4 @@
-// Copyright 2013 MyOddWeb.com.
+// Copyright 2015 MyOddWeb.com.
 // All Rights Reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,10 @@
 #pragma once
 #include <vector>
 
+// the precision we want to stop at, by default.
+// so we  don't devide for ever and ever...
+#define DEFAULT_PRECISION ((size_t)100)
+
 namespace MyOddWeb
 {
   class BigNumber
@@ -46,7 +50,7 @@ namespace MyOddWeb
 
     ~BigNumber();
 
-    static BigNumber AbsDiv(const BigNumber& lhs, const BigNumber& rhs);
+    static BigNumber AbsDiv(const BigNumber& lhs, const BigNumber& rhs, size_t precision );
     static BigNumber AbsAdd(const BigNumber& lhs, const BigNumber& rhs);
     static BigNumber AbsSub(const BigNumber& lhs, const BigNumber& rhs);
     static BigNumber AbsMul(const BigNumber& lhs, const BigNumber& rhs);
@@ -55,6 +59,7 @@ namespace MyOddWeb
     BigNumber& Add(const BigNumber& rhs);
     BigNumber& Sub(const BigNumber& rhs);
     BigNumber& Mul(const BigNumber& rhs);
+    BigNumber& Div(const BigNumber& rhs, size_t precision = DEFAULT_PRECISION);
     BigNumber& Factorial();
     BigNumber Mod(const BigNumber& denominator) const;
     BigNumber Quotient(const BigNumber& denominator) const;

@@ -1,4 +1,4 @@
-// Copyright 2013 MyOddWeb.com.
+// Copyright 2015 MyOddWeb.com.
 // All Rights Reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -31,12 +31,6 @@
 
 #include <gtest/gtest.h>
 #include "../src/BigNumber.h"
-
-double fRand(double fMin, double fMax)
-{
-  double f = (double)rand() / RAND_MAX;
-  return fMin + f * (fMax - fMin);
-}
 
 //
 //  --gtest_filter=AddBigNumber*AddLhsGreaterThanRhs

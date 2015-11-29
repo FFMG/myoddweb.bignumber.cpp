@@ -63,6 +63,7 @@ Double
 - Add( number ) : Add '*number*' to '*this*' number.
 - Sub( number ) : Subtract '*number*' from '*this*' number.
 - Mul( number ) : Multiply '*number*' to '*this*' number.
+- Div( number ) : Divide '*this*' by '*number*' number.
 - Add( number ) : Add '*number*' to '*this*' number.
 - Factorial() : The factorial of this number, (!n)
 - Mod( number ) : The mod of '*this*' number, (n % m). The remainder of the division. 
@@ -92,7 +93,6 @@ Double
 - Eq( number ) - If '*this*' number is equal to another.
 	- NEq( number ) - If '*this*' number is **not** equal to another.
 	- Compare( number ) - Compare '*this*' number to the given number, (-1 / 0 / 1 )
-- Div( number ) : Divide '*this*' by '*number*' number.
 - Pow( number ) : Raise '*this*' by the '*number*' power (n * n * n * ...)
 - Exp() : e raised to the power '*this*'
 
@@ -107,6 +107,7 @@ Double
 ## Misc ##
 
 - ToDouble( ... ) and ToInt( ... ) do not check if limits are reached.
+- Optimise Multiplication and Divisions, (especially division). Currently they are doing long division and long multiplication. This is not efficient.
 - Do some speed tests / benchmarks / comparison.
 
 - Specifically for C++ enable operators
