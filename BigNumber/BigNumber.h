@@ -63,6 +63,8 @@ namespace MyOddWeb
     BigNumber& Ceil();
     BigNumber& Floor();
 
+    static const BigNumber& e();
+
     bool Zero() const;
     bool Nan() const;
     bool Neg() const;
@@ -114,5 +116,8 @@ namespace MyOddWeb
 
     // devide this number by base.
     void DevideByBase(size_t divisor );
+
+    // constant values
+    static BigNumber _e;
   };
 }// namespace MyOddWeb

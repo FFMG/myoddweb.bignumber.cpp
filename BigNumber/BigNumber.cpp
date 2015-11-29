@@ -34,6 +34,9 @@
 
 namespace MyOddWeb
 {
+  //  set the constents to zero for now.
+  BigNumber BigNumber::_e = 0;
+
   BigNumber::BigNumber() : _base(10)
   {
     Default();
@@ -1158,5 +1161,24 @@ namespace MyOddWeb
     {
       _numbers.push_back(0);
     }
+  }
+
+  /** 
+   * @see https://en.wikipedia.org/wiki/E_%28mathematical_constant%29
+   * @return const BigNumber& e
+   */
+  const BigNumber& BigNumber::e()
+  {
+    //  did we calculate e already?
+    if (_e._decimals != 0 )
+    {
+      return _e;
+    }
+
+    // create it now.
+    _e = BigNumber("2.718281828459045235360287471352662497757247093699959574966967627724076630353547594571382178525166427427466391932003059921817413596629043572900334295260");
+
+    // return it
+    return _e;
   }
 }// namespace MyOddWeb

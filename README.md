@@ -65,6 +65,9 @@ Double
 - Ceil() : Round the number up (2.1 = 3 / -2.1 = -2)
 - Floor() : Round the number down (2.1 = 2 / -2.1 = -3)
 
+## Constants ##
+- e() : [Euler's number](https://en.wikipedia.org/wiki/E_%28mathematical_constant%29) (to 1000 decimals) 
+
 # Todo #
 
 ## Functions to do ##
@@ -76,6 +79,7 @@ Double
 	- Compare( number ) - Compare '*this*' number to the given number, (-1 / 0 / 1 )
 - Div( number ) : Divide '*this*' by '*number*' number.
 - Pow( number ) : Raise '*this*' by the '*number*' power (n * n * n * ...)
+- Exp() : e raised to the power '*this*'
 
 ### Other functions ###
 - ToUInt()

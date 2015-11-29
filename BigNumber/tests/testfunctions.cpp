@@ -552,3 +552,17 @@ TEST(FunctionBigNumber, FloorNegativeRealNumber)
   }
 }
 
+TEST(FunctionBigNumber, GetNaturalETo1000places)
+{
+  MyOddWeb::BigNumber e1 = MyOddWeb::BigNumber::e();
+
+  // one zero at the end is dropped...
+  std::string se = "2.71828182845904523536028747135266249775724709369995957496696762772407663035354759457138217852516642742746639193200305992181741359662904357290033429526";
+
+  //
+  ASSERT_EQ(se, e1.ToString());
+
+  //  get it againn
+  MyOddWeb::BigNumber e2 = MyOddWeb::BigNumber::e();
+  ASSERT_EQ(se, e2.ToString());
+}
