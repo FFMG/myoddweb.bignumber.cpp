@@ -30,7 +30,7 @@
 // Author: Florent Guelfucci
 
 #include <gtest/gtest.h>
-#include "BigNumber.h"
+#include "../BigNumber.h"
 
 //
 //  --gtest_filter=FunctionBigNumber*CompareSameNumbers

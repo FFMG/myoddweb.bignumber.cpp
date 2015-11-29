@@ -160,10 +160,10 @@
     <ClCompile Include="BigNumber.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="testadd.cpp" />
-    <ClCompile Include="testfunctions.cpp" />
-    <ClCompile Include="testmul.cpp" />
-    <ClCompile Include="testsub.cpp" />
+    <ClCompile Include="tests\testadd.cpp" />
+    <ClCompile Include="tests\testfunctions.cpp" />
+    <ClCompile Include="tests\testmul.cpp" />
+    <ClCompile Include="tests\testsub.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\googletest\googletest.vcxproj">

@@ -30,7 +30,7 @@
 // Author: Florent Guelfucci
 
 #include <gtest/gtest.h>
-#include "BigNumber.h"
+#include "../BigNumber.h"
 
 TEST(SubtractBigNumber, SubstractNegativeNumber ) {
   int num = MyOddWeb::BigNumber("17").Sub(MyOddWeb::BigNumber("-26")).ToInt();

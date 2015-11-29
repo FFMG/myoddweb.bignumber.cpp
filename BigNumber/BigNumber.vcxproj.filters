@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="tests">
+      <UniqueIdentifier>{bf33a5b5-c9d9-4725-8790-02ee3600b839}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -35,17 +38,17 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="testadd.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="tests\testadd.cpp">
+      <Filter>tests</Filter>
     </ClCompile>
-    <ClCompile Include="testfunctions.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="tests\testfunctions.cpp">
+      <Filter>tests</Filter>
     </ClCompile>
-    <ClCompile Include="testsub.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="tests\testmul.cpp">
+      <Filter>tests</Filter>
     </ClCompile>
-    <ClCompile Include="testmul.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="tests\testsub.cpp">
+      <Filter>tests</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
