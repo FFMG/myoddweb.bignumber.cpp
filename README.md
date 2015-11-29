@@ -3,8 +3,23 @@ Yet another C++ BigNumber implementation with focus on switching between languag
 
 The main purpose of this class is to make it easier to write big number functions for scripting languages, (like Javascript or php ).
 
-# Example #
-## Include file ##
+# Usage #
+## In your project ##
+
+Simply include the files and "src/BigNumber.h" and "src/BigNumber.cpp" in your project.    
+The other files are just testing and this project.
+
+    // in your script
+    #include "path/to/code/BigNumber.h"
+   
+    // use it
+    MyOddWeb::BigNumber lhs = 10;
+    MyOddWeb::BigNumber rhs = 10;
+	MyOddWeb::BigNumber sum = lhs.Add( rhs );	// = 20
+
+    // good times...
+
+## Example ##
 
     #include "BigNumber.h"
 

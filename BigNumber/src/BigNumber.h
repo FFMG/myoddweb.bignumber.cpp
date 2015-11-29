@@ -46,6 +46,7 @@ namespace MyOddWeb
 
     ~BigNumber();
 
+    static BigNumber AbsDiv(const BigNumber& lhs, const BigNumber& rhs);
     static BigNumber AbsAdd(const BigNumber& lhs, const BigNumber& rhs);
     static BigNumber AbsSub(const BigNumber& lhs, const BigNumber& rhs);
     static BigNumber AbsMul(const BigNumber& lhs, const BigNumber& rhs);

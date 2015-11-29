@@ -16,6 +16,9 @@
     <Filter Include="tests">
       <UniqueIdentifier>{bf33a5b5-c9d9-4725-8790-02ee3600b839}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{40fbd497-9fb4-43ef-b68a-ddd3b9ff50c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -24,15 +27,12 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BigNumber.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\BigNumber.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BigNumber.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
@@ -49,6 +49,9 @@
     </ClCompile>
     <ClCompile Include="tests\testsub.cpp">
       <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BigNumber.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

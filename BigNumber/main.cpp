@@ -32,7 +32,7 @@
 #include "stdafx.h"
 #include <gtest\gtest.h>
 
-#include "BigNumber.h"
+#include "src/BigNumber.h"
 
 int main(int argc, char** argv)
 {

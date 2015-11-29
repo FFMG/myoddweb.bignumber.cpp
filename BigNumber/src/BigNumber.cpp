@@ -516,7 +516,7 @@ namespace MyOddWeb
       }
 
       // then add the number to our current total.
-      c = AbsAdd(c, BigNumber(numbers, 0, false));
+      c = BigNumber::AbsAdd(c, BigNumber(numbers, 0, false));
     }
 
     // this is the number with no multipliers.
@@ -535,7 +535,7 @@ namespace MyOddWeb
     if (BigNumber::AbsCompare(lhs, rhs) < 0 )
     {
       // swap the two values to get a positive result.
-      BigNumber c = AbsSub(rhs, lhs);
+      BigNumber c = BigNumber::AbsSub(rhs, lhs);
 
       // but we know it is negative
       c._neg = true;

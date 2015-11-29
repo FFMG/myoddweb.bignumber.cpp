@@ -30,7 +30,7 @@
 // Author: Florent Guelfucci
 
 #include <gtest/gtest.h>
-#include "../BigNumber.h"
+#include "../src/BigNumber.h"
 
 double fRand(double fMin, double fMax)
 {
