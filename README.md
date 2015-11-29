@@ -60,6 +60,10 @@ Double
 - ToInt() : convert to int
 - ToDouble() : convert to double
 - ToString() : convert to string.
+- Abs() : Get the absolute value of the number
+- Trunc() : Truncate the number, strip the decimals. (+/-n.xyz = n)
+- Ceil() : Round the number up (2.1 = 3 / -2.1 = -2)
+- Floor() : Round the number down (2.1 = 2 / -2.1 = -3)
 
 # Todo #
 
@@ -67,8 +71,11 @@ Double
 - Factorial() : The factorial of decimal numbers.
 
 ### Math functions ###
-- Eq( ) - If '*this*' number is equal to another.
+- Eq( number ) - If '*this*' number is equal to another.
+	- NEq( number ) - If '*this*' number is **not** equal to another.
+	- Compare( number ) - Compare '*this*' number to the given number, (-1 / 0 / 1 )
 - Div( number ) : Divide '*this*' by '*number*' number.
+- Pow( number ) : Raise '*this*' by the '*number*' power (n * n * n * ...)
 
 ### Other functions ###
 - ToUInt()

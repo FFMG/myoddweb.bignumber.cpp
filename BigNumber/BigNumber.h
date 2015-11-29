@@ -59,6 +59,9 @@ namespace MyOddWeb
     BigNumber Quotient(const BigNumber& denominator) const;
       
     BigNumber& Abs();
+    BigNumber& Trunc();
+    BigNumber& Ceil();
+    BigNumber& Floor();
 
     bool Zero() const;
     bool Nan() const;

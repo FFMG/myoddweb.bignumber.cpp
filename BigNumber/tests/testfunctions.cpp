@@ -369,3 +369,186 @@ TEST(FunctionBigNumber, BigFractorial)
   std::string x = c.Factorial().ToString();
   ASSERT_EQ(std::string("2432902008176640000"), x);
 }
+
+TEST(FunctionBigNumber, TruncatePositiveInteger)
+{
+  MyOddWeb::BigNumber c(20);
+  double d = c.Trunc().ToDouble();  //  use a double so we don't truncate it.
+  ASSERT_EQ( 20.0 , d );
+}
+
+TEST(FunctionBigNumber, TruncateNegativeInteger)
+{
+  MyOddWeb::BigNumber c(20);
+  double d = c.Trunc().ToDouble();  //  use a double so we don't truncate it.
+  ASSERT_EQ(20.0, d);
+}
+
+TEST(FunctionBigNumber, TruncatePositiveRealNumber)
+{
+  {
+    MyOddWeb::BigNumber c(2.3);
+    double d = c.Trunc().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(2.0, d);
+  }
+
+  {
+    MyOddWeb::BigNumber c(7.999);
+    double d = c.Trunc().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(7.0, d);
+  }
+
+  {
+    MyOddWeb::BigNumber c(12.5);
+    double d = c.Trunc().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(12.0, d);
+  }
+}
+
+TEST(FunctionBigNumber, TruncateNegativeRealNumber)
+{
+  {
+    MyOddWeb::BigNumber c(-2.3);
+    double d = c.Trunc().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(-2.0, d);
+  }
+
+  {
+    MyOddWeb::BigNumber c(-7.999);
+    double d = c.Trunc().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(-7.0, d);
+  }
+
+  {
+    MyOddWeb::BigNumber c(-12.5);
+    double d = c.Trunc().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(-12.0, d);
+  }
+}
+
+TEST(FunctionBigNumber, TruncateZero)
+{
+  MyOddWeb::BigNumber c( 0.0 );
+  double d = c.Trunc().ToDouble();  //  use a double so we don't truncate it.
+  ASSERT_EQ( 0.0, d);
+}
+
+TEST(FunctionBigNumber, CeilZero)
+{
+  MyOddWeb::BigNumber c(0.0);
+  double d = c.Ceil().ToDouble();  //  use a double so we don't truncate it.
+  ASSERT_EQ(0.0, d);
+}
+
+TEST(FunctionBigNumber, CeilPositiveInteger)
+{
+  MyOddWeb::BigNumber c(12.0);
+  double d = c.Ceil().ToDouble();  //  use a double so we don't truncate it.
+  ASSERT_EQ(12.0, d);
+}
+
+TEST(FunctionBigNumber, CeilNegativeInteger)
+{
+  MyOddWeb::BigNumber c( -12.0);
+  double d = c.Ceil().ToDouble();  //  use a double so we don't truncate it.
+  ASSERT_EQ( -12.0, d);
+}
+
+TEST(FunctionBigNumber, CeilPositiveRealNumber)
+{
+  {
+    MyOddWeb::BigNumber c(2.3);
+    double d = c.Ceil().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(3.0, d);
+  }
+
+  {
+    MyOddWeb::BigNumber c(7.999);
+    double d = c.Ceil().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(8.0, d);
+  }
+
+  {
+    MyOddWeb::BigNumber c(12.5);
+    double d = c.Ceil().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(13.0, d);
+  }
+}
+
+TEST(FunctionBigNumber, CeilNegativeRealNumber)
+{
+  {
+    MyOddWeb::BigNumber c(-2.3);
+    double d = c.Ceil().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(-2.0, d);
+  }
+
+  {
+    MyOddWeb::BigNumber c(-7.999);
+    double d = c.Ceil().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(-7.0, d);
+  }
+
+  {
+    MyOddWeb::BigNumber c(-12.5);
+    double d = c.Ceil().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ( -12.0, d);
+  }
+}
+
+TEST(FunctionBigNumber, FloorPositiveInteger)
+{
+  MyOddWeb::BigNumber c(12.0);
+  double d = c.Floor().ToDouble();  //  use a double so we don't truncate it.
+  ASSERT_EQ(12.0, d);
+}
+
+TEST(FunctionBigNumber, FloorNegativeInteger)
+{
+  MyOddWeb::BigNumber c(-12.0);
+  double d = c.Floor().ToDouble();  //  use a double so we don't truncate it.
+  ASSERT_EQ(-12.0, d);
+}
+
+TEST(FunctionBigNumber, FloorPositiveRealNumber)
+{
+  {
+    MyOddWeb::BigNumber c(2.3);
+    double d = c.Floor().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(2.0, d);
+  }
+
+  {
+    MyOddWeb::BigNumber c(7.999);
+    double d = c.Floor().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(7.0, d);
+  }
+
+  {
+    MyOddWeb::BigNumber c(12.5);
+    double d = c.Floor().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(12.0, d);
+  }
+}
+
+TEST(FunctionBigNumber, FloorNegativeRealNumber)
+{
+  {
+    MyOddWeb::BigNumber c(-2.3);
+    double d = c.Floor().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(-3.0, d);
+  }
+
+  {
+    MyOddWeb::BigNumber c(-7.999);
+    double d = c.Floor().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(-8.0, d);
+  }
+
+  {
+    MyOddWeb::BigNumber c(-12.5);
+    double d = c.Floor().ToDouble();  //  use a double so we don't truncate it.
+    ASSERT_EQ(-13.0, d);
+  }
+}
+

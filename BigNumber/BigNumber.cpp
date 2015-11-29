@@ -265,6 +265,73 @@ namespace MyOddWeb
   }
 
   /**
+  * Truncate the number
+  * @return const BigNumber& the truncated number.
+  */
+  BigNumber& BigNumber::Trunc()
+  {
+    //  strip all the decimal.
+    while (_decimals > 0)
+    {
+      _numbers.erase(_numbers.begin());
+      --_decimals;
+    }
+
+    // done.
+    return *this;
+  }
+
+  /**
+   * Round up the number
+   * @return const BigNumber& the number rounded up.
+   */
+  BigNumber& BigNumber::Ceil()
+  {
+    // if we have no decimal, then we have nothing to do.
+    if (_decimals == 0)
+    {
+      return *this;
+    }
+
+    //  strip all the decimal.
+    Trunc();
+
+    // if it positive then we need to go up one more
+    if (!Neg())
+    {
+      Add(1);
+    }
+
+    // done.
+    return PerformPostOperations();
+  }
+
+  /**
+   * Round down the number
+   * @return const BigNumber& the number rounded up.
+   */
+  BigNumber& BigNumber::Floor()
+  {
+    // if we have no decimal, then we have nothing to do.
+    if (_decimals == 0)
+    {
+      return *this;
+    }
+
+    //  strip all the decimal.
+    Trunc();
+
+    // if it negative then we need to subtract one more.
+    if (Neg())
+    {
+      Sub(1);
+    }
+
+    // done.
+    return PerformPostOperations();
+  }
+
+  /**
    * Clean up the number to remove leading zeros and uneeded trailling zeros, (for decimals).
    * @return BigNumber& the number we cleaned up.
    */
