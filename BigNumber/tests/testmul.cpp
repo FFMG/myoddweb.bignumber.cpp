@@ -223,3 +223,12 @@ TEST(MultiplyBigNumber, MultiplyPositiveDecimalNumbersOneNegative) {
     ASSERT_EQ(de, dr);
   }
 }
+
+TEST(MultiplyBigNumber, RaiseSmallPositveNumberToPower) {
+  {
+    MyOddWeb::BigNumber x(2);
+    MyOddWeb::BigNumber y = x.Pow(10);
+    int num = x.Mul(y).ToInt();
+    ASSERT_EQ(1024, num);
+  }
+}

@@ -94,7 +94,10 @@ Double
 	- NEq( number ) - If '*this*' number is **not** equal to another.
 	- Compare( number ) - Compare '*this*' number to the given number, (-1 / 0 / 1 )
 - Pow( number ) : Raise '*this*' by the '*number*' power (n * n * n * ...)
+	- Pow( number ) - negative numbers.
+	- Pow( number ) - decimal numbers.
 - Exp() : e raised to the power '*this*'
+- Ln( ... )/Log( ... )
 
 ### Other functions ###
 - ToUInt()
@@ -106,6 +109,7 @@ Double
 
 ## Misc ##
 
+- Mod(2) is often used to check for odd/even, maybe we should short cut those?
 - ToDouble( ... ) and ToInt( ... ) do not check if limits are reached.
 - Optimise Multiplication and Divisions, (especially division). Currently they are doing long division and long multiplication. This is not efficient.
 - Do some speed tests / benchmarks / comparison.

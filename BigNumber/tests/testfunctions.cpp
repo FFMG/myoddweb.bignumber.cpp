@@ -552,6 +552,22 @@ TEST(FunctionBigNumber, FloorNegativeRealNumber)
   }
 }
 
+TEST(FunctionBigNumber, CreateNaN)
+{
+  MyOddWeb::BigNumber n( "NaN" );
+  ASSERT_TRUE(n.Nan());
+}
+
+TEST(FunctionBigNumber, CreateWithNullString)
+{
+  EXPECT_THROW(MyOddWeb::BigNumber( (const char*)NULL), std::runtime_error);
+}
+
+TEST(FunctionBigNumber, TheGivenStringIsInvalid)
+{
+  EXPECT_THROW(MyOddWeb::BigNumber(" Hello World"), std::runtime_error);
+}
+
 TEST(FunctionBigNumber, GetNaturalETo1000places)
 {
   MyOddWeb::BigNumber e1 = MyOddWeb::BigNumber::e();
@@ -565,4 +581,12 @@ TEST(FunctionBigNumber, GetNaturalETo1000places)
   //  get it againn
   MyOddWeb::BigNumber e2 = MyOddWeb::BigNumber::e();
   ASSERT_EQ(se, e2.ToString());
+}
+
+TEST(FunctionBigNumber, SimpleMod)
+{
+  MyOddWeb::BigNumber x("5.23");
+  MyOddWeb::BigNumber y(0.23);
+  std::string z = x.Mod(y).ToString();
+  ASSERT_EQ("0.17", z );
 }

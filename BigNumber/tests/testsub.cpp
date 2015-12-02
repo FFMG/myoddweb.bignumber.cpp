@@ -191,27 +191,42 @@ TEST(SubtractBigNumber, SubtractTwoNegativeDecimalNumbers) {
 }
 
 TEST(SubtractBigNumber, SubtractTwoDecimalNumbersWithLongDecimals) {
-  double dx = 83.635975218970302;
-  double dy = 93.908505508590963;
-  MyOddWeb::BigNumber x(dx);
-  MyOddWeb::BigNumber y(dy);
+  MyOddWeb::BigNumber x("93.908505508590963");
+  MyOddWeb::BigNumber y("83.635975218970302");
 
-  x.Add(y);
+  x.Sub(y);
 
-  double a = 177.54448072756131; // double zz = dx + dy; // = 177.54448072756128 because of binary rounding...
-  double b = x.ToDouble();
+  std::string a = "10.272530289620661"; // double zz = dx - dy; // = because of binary rounding...
+  std::string b = x.ToString();
   ASSERT_EQ(a, b);
 }
 
 TEST(SubtractBigNumber, SubtractTwoDecimalNumbersWithLongNegativeDecimals) {
-  double dx = -83.635975218970302;
-  double dy = -93.908505508590963;
-  MyOddWeb::BigNumber x(dx);
-  MyOddWeb::BigNumber y(dy);
+  MyOddWeb::BigNumber x("-83.635975218970302");
+  MyOddWeb::BigNumber y("-93.908505508590963");
 
-  x.Add(y);
+  x.Sub(y);
 
-  double a = -177.54448072756131; // double zz = dx + dy; // = -177.54448072756128 because of binary rounding...
-  double b = x.ToDouble();
+  std::string a = "10.272530289620661"; // double zz = dx - dy; // = because of binary rounding...
+  std::string b = x.ToString();
+
   ASSERT_EQ(a, b);
+}
+
+TEST(SubtractBigNumber, SubtractZeroFromLhs ) {
+  MyOddWeb::BigNumber x(12345);
+  MyOddWeb::BigNumber y(0);
+
+  x.Sub(y);
+
+  ASSERT_EQ(12345, x.ToInt() );
+}
+
+TEST(SubtractBigNumber, SubtractZeroFromRhs) {
+  MyOddWeb::BigNumber x(0);
+  MyOddWeb::BigNumber y(12345);
+
+  x.Sub(y);
+
+  ASSERT_EQ(-12345, x.ToInt());
 }

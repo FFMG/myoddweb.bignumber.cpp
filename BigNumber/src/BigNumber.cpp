@@ -182,10 +182,31 @@ namespace MyOddWeb
     PerformPostOperations();
   }
 
+  /**
+   * Parse a string a create a number from it.
+   * @throw std::runtime_error if the value is invalid.
+   * @param const char* source the string we would like to use as a number.
+   */
   void BigNumber::Parse(const char* source)
   {
     //  reset all
     Default();
+
+    // sanity check
+    if (NULL == source)
+    {
+      throw std::runtime_error("The given value is not a valid string.");
+    }
+
+    // is it NaN?
+    if (strcmp(source, "NaN") == 0) 
+    {
+      // not a number
+      _nan = true;
+
+      // done
+      return;
+    }
 
     // allow sign
     bool allowSign = true;
@@ -281,7 +302,7 @@ namespace MyOddWeb
     }
 
     // done.
-    return *this;
+    return PerformPostOperations();
   }
 
   /**
@@ -486,6 +507,35 @@ namespace MyOddWeb
   }
 
   /**
+   * Calculate the power of 'base' raised to 'exp' or x^y, (base^exp)
+   * @param const BigNumber& base the base we want to raise.
+   * @param const BigNumber& exp the exponent we are raising the base to.
+   * @return BigNumber the base raised to the exp.
+   */
+  BigNumber BigNumber::AbsPow(const BigNumber& base, const BigNumber& exp)
+  {
+    // copy the base and exponent
+    BigNumber copyBase = base;
+    BigNumber copyExp = exp;
+
+    // the current result.
+    BigNumber result = 1;
+
+    // the number two that we will be using a lot.
+    const BigNumber two = 2;
+    while (!copyExp.Zero() )
+    {
+      if (copyExp.Mod(two).Zero())
+      {
+        result = BigNumber::AbsMul(result, copyBase);
+      }
+      copyExp = BigNumber::AbsDiv(copyExp, two, DEFAULT_PRECISION).Trunc();
+      copyBase = BigNumber::AbsMul(copyBase, copyBase);
+    }
+    return result;
+  }
+
+  /**
    * Multiply 2 absolute numbers together.
    * @param const BigNumber& rhs the number been multiplied
    * @param const BigNumber& rhs the number multipling
@@ -499,6 +549,17 @@ namespace MyOddWeb
     {
       //  zero * anything = zero.
       return BigNumber(0);
+    }
+
+    // anything multiplied by one == anything
+    static const BigNumber one(1);
+    if (AbsCompare(lhs, 1) == 0) // 1 x rhs = rhs
+    {
+      return rhs;
+    }
+    if (AbsCompare(rhs, 1) == 0) // lhs x 1 = lhs
+    {
+      return lhs;
     }
 
     int maxDecimals = (int)(lhs._decimals >= rhs._decimals ? lhs._decimals : rhs._decimals);
@@ -612,6 +673,12 @@ namespace MyOddWeb
 
       // return the number
       return c.PerformPostOperations();
+    }
+
+    // if we want to subtract zero from the lhs, then the result is rhs
+    if (rhs.Zero() )
+    {
+      return lhs;
     }
 
     // we know that lhs is greater than rhs.
@@ -924,6 +991,20 @@ namespace MyOddWeb
   }
 
   /**
+   * Raise this number to the given exponent.
+   * @param const BigNumber& the exponent.
+   * @return BigNumber& this number.
+   */
+  BigNumber& BigNumber::Pow(const BigNumber& exp)
+  {
+    // just multiply
+    *this = BigNumber::AbsPow(*this, exp );
+
+    // return this/cleaned up.
+    return PerformPostOperations();
+  }
+
+  /**
    * Multiply this number to the given number.
    * @param const BigNumber& the number we are multiplying to.
    * @return BigNumber& this number.
@@ -1028,6 +1109,7 @@ namespace MyOddWeb
 
   /**
    * Calculate the quotien and remainder of a division
+   * @see https://en.wikipedia.org/wiki/Modulo_operation
    * @param const BigNumber& numerator the numerator been devided.
    * @param const BigNumber& denominator the denominator dividing the number.
    * @param BigNumber& quotient the quotient of the division
@@ -1035,6 +1117,8 @@ namespace MyOddWeb
    */
   void BigNumber::QuotientAndRemainder(const BigNumber& numerator, const BigNumber& denominator, BigNumber& quotient, BigNumber& remainder)
   {
+    // check if we can actually do this, it should work for all
+    // but we need to test it first...
     if (numerator._base != 10 || numerator._base != denominator._base)
     {
       throw std::runtime_error("This function was only tested with base 10!");
@@ -1043,68 +1127,76 @@ namespace MyOddWeb
     // are we trying to divide by zero?
     if (denominator.Zero())
     {
-      remainder = BigNumber();
-      remainder._nan = true;
-
-      quotient = BigNumber();
-      quotient._nan = true;
+      // those are not value numbers.
+      remainder = BigNumber( "NaN" );
+      quotient = BigNumber( "NaN" );
       return;
     }
 
-    //  reset the quotient to 0.
+    // reset the quotient to 0.
     quotient = BigNumber(0);
 
+    // and set the current reaimined to be the numerator.
+    // that way we know that we can return now something valid.
     // 20 % 5 = 0 ('cause 5*4 = 20 remainder = 0)
     remainder = numerator;
 
-    // if we have more numbers to divide from than we are dividing with
-    // then we can try and do it the quick way multiplying by base.
-    // so if we have 10000 mod 5
-    // we can subtract 10000 - 5-5-5-5-5-5-5-5-5 ...
-    //        or do it faster with 10000-5000-5000 = 0
-    NUMBERS denominatorWithZeros = denominator._numbers;
-    NUMBERS quotienWithZeros; quotienWithZeros.push_back(1);
-
-    for (int i = 0; denominator._numbers.size() < remainder._numbers.size() ; ++i)
+    // if the numerator is greatter than the denominator
+    // then there is nothint more to do, we will never be able to 
+    // divide anything and have a quotient
+    // the the remainder has to be the number and the quotient has to be '0'
+    // so 5 % 20 = 5 ( remainder = 5 / quotien=0 = 0*20 + 5)
+    if (AbsCompare(numerator, denominator) < 0)
     {
-      BigNumber d(denominatorWithZeros, 0, false);
-      if (AbsCompare(d, remainder) >= 0)
+      return;
+    }
+
+    // do a 'quick' remainder calculatation.
+    //
+    // 1- look for the 'max' denominator.
+    BigNumber max_denominator = denominator;
+
+    while (AbsCompare(max_denominator, numerator) < 0)
+    {
+      max_denominator.MultiplyByBase(1);
+    }
+
+    // 2- subtract, (if need be, then update the quotient accordingly).
+    for (;;)
+    {
+      // if the max denominator is greater than the remained
+      // then we must devide by 10
+      int compare = AbsCompare(max_denominator, remainder);
+      if (compare == 0)
       {
-        // one zero was too many, so take a step back.
-        denominatorWithZeros.erase(denominatorWithZeros.begin());
-        quotienWithZeros.erase(quotienWithZeros.begin());
+        //  it is the same!
+        // the remainder has to be zero
+        remainder = 0;
+        quotient.Add(1);
+        break;
+      }
 
-        // now re-create the 'big' denominator.
-        BigNumber d(denominatorWithZeros, 0, false);
-        BigNumber e(quotienWithZeros, 0, false);
+      if (compare == 1)
+      {
+        // it is too big, we must remove 10.
+        max_denominator.DevideByBase(1);
 
-        // but to prevent to much recursion
-        // lets try and do that more than once
-        for (;;)
+        // if the max denominaor is now smaller than the one we were
+        // given, then we must stop right away.
+        if (AbsCompare(max_denominator, denominator) <= 0)
         {
-          // as with the example above, if we have 40000 mod 5
-          // we will 'find' 5000 as a number we can use.
-          // but we can use is more than once, in fact, 
-          // we can use it 4 times, so we might as well do it.
-          if (AbsCompare(d, remainder) >= 0)
-          {
-            break;
-          }
-          remainder = BigNumber::AbsSub(remainder, d);
-          quotient.Add(e);
+          break;
         }
-
-        // we start all over again.
-        denominatorWithZeros = denominator._numbers;
-        quotienWithZeros.clear(); quotienWithZeros.push_back(1);
         continue;
       }
 
-      //  add one more zero.
-      denominatorWithZeros.insert(denominatorWithZeros.begin(), 0);
-      quotienWithZeros.insert(quotienWithZeros.begin(), 0);
+      // we can still remove this amount from the loop.
+      remainder.Sub(max_denominator);
+
+      // and add the quotien.
+      quotient.Add(max_denominator);
     }
- 
+        
     for (;;)
     {
       BigNumber f = BigNumber::AbsSub(remainder, denominator);
@@ -1246,6 +1338,7 @@ namespace MyOddWeb
     if (multiplier == _decimals)
     {
       _decimals = 0;
+      PerformPostOperations();
       return;
     }
 
@@ -1261,6 +1354,9 @@ namespace MyOddWeb
     {
       _numbers.insert( _numbers.begin(), 0);
     }
+
+    //  clean up
+    PerformPostOperations();
   }
 
   /** 
@@ -1280,5 +1376,50 @@ namespace MyOddWeb
 
     // return it
     return _e;
+  }
+
+  BigNumber& BigNumber::Ln(size_t precision )
+  {
+    //  we must make sure that *is 
+    BigNumber x(*this);
+    const BigNumber base = x.Sub( 1 );  // Base of the numerator; exponent will be explicit
+    int den = 1;                        // Denominator of the nth term
+    bool neg = false;                   // start positive.
+    
+    //                  (x-1)^2    (x-1)^3   (x-1)^4 
+    // ln(x) = (x-1) - --------- + ------- - ------- ...
+    //                     2          3         4
+    BigNumber result = base;            // Kick it off
+    BigNumber baseRaised = base;
+    for ( size_t i = 0; i < MAX_LN_ITERATIONS; ++i )
+    {
+      // next donominator
+      ++den;
+
+      // swap operation
+      neg = !neg;
+
+      // the denominator+power is the same thing
+      baseRaised.Mul(base);
+
+      // now devide it
+      BigNumber currentBase = BigNumber::AbsDiv(baseRaised, den, (precision + 5) );
+
+      // and add it/subtract it from the result.
+      if (neg)
+      {
+        result.Sub(currentBase);
+      }
+      else
+      {
+        result.Add(currentBase);
+      }
+    }
+
+    // done
+    *this = result;
+
+    // clean up and done.
+    return PerformPostOperations();
   }
 }// namespace MyOddWeb

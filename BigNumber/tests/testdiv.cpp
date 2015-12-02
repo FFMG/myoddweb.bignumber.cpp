@@ -73,7 +73,7 @@ TEST(DivBigNumber, DevideRationalPositiveNumbers) {
   ASSERT_EQ(2.5, num);
 }
 
-TEST(DivBigNumber, SmallNumberDevidedByLargeNumberRecuringResult) {
+TEST(DivBigNumber, SmallNumberDividedByLargeNumberRecuringResult) {
   MyOddWeb::BigNumber x = 1234;
   MyOddWeb::BigNumber y = 3456;
 
@@ -84,4 +84,65 @@ TEST(DivBigNumber, SmallNumberDevidedByLargeNumberRecuringResult) {
   std::string numB = MyOddWeb::BigNumber(x).Div(y, 615 ).ToString();
   std::string b = "0.357060185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185185";
   ASSERT_EQ( b, numB );
+}
+
+TEST(DivBigNumber, DivisionNonRecuring) {
+  {
+    MyOddWeb::BigNumber x("0.125");
+    MyOddWeb::BigNumber y(2);
+
+    std::string z = x.Div(y).ToString();
+    ASSERT_EQ("0.0625", z);
+  }
+
+  {
+    MyOddWeb::BigNumber x("1.25");
+    MyOddWeb::BigNumber y(2);
+
+    std::string z = x.Div(y).ToString();
+    ASSERT_EQ("0.625", z);
+  }
+
+  {
+    MyOddWeb::BigNumber x = 0.625;
+    MyOddWeb::BigNumber y = x.Div(2);
+    std::string z = y.ToString();
+    ASSERT_EQ("0.3125", z);
+  }
+
+}
+
+TEST(DivBigNumber, DivideExactSameWholeNumber) {
+  MyOddWeb::BigNumber x = 12345;
+  MyOddWeb::BigNumber y = 12345;
+  int z = x.Div(y).ToInt();
+  ASSERT_EQ(1, z);
+}
+
+TEST(DivBigNumber, DivideExactSameRealNumber) {
+  MyOddWeb::BigNumber x = 12345.678;
+  MyOddWeb::BigNumber y = 12345.678;
+  int z = x.Div(y).ToInt();
+  ASSERT_EQ(1, z);
+}
+
+TEST(DivBigNumber, ModuloWithDenominatorLargerThanNuumerator) {
+  MyOddWeb::BigNumber x = 5;
+  MyOddWeb::BigNumber y = 20;
+  int z = x.Mod( y ).ToInt();
+  ASSERT_EQ( 5, z );
+}
+
+TEST(DivBigNumber, ModExactSameWholeNumber) {
+  MyOddWeb::BigNumber x = 12345;
+  MyOddWeb::BigNumber y = 12345;
+  int z = x.Mod(y).ToInt();
+  ASSERT_EQ(0, z);
+}
+
+TEST(DivBigNumber, ModExactSameRealNumber) {
+  MyOddWeb::BigNumber x = 12345.678;
+  MyOddWeb::BigNumber y = 12345.678;
+  int z = x.Mod(y).ToInt();
+  ASSERT_EQ(0, z);
 }

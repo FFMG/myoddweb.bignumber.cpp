@@ -35,6 +35,7 @@
 // the precision we want to stop at, by default.
 // so we  don't devide for ever and ever...
 #define DEFAULT_PRECISION ((size_t)100)
+#define MAX_LN_ITERATIONS ((size_t)100)
 
 namespace MyOddWeb
 {
@@ -54,12 +55,15 @@ namespace MyOddWeb
     static BigNumber AbsAdd(const BigNumber& lhs, const BigNumber& rhs);
     static BigNumber AbsSub(const BigNumber& lhs, const BigNumber& rhs);
     static BigNumber AbsMul(const BigNumber& lhs, const BigNumber& rhs);
+    static BigNumber AbsPow(const BigNumber& base, const BigNumber& exp);
     static int AbsCompare(const BigNumber& lhs, const BigNumber& rhs); //  greater or equal
 
+    BigNumber& Pow(const BigNumber& exp );
     BigNumber& Add(const BigNumber& rhs);
     BigNumber& Sub(const BigNumber& rhs);
     BigNumber& Mul(const BigNumber& rhs);
     BigNumber& Div(const BigNumber& rhs, size_t precision = DEFAULT_PRECISION);
+    BigNumber& Ln(size_t precision = DEFAULT_PRECISION );
     BigNumber& Factorial();
     BigNumber Mod(const BigNumber& denominator) const;
     BigNumber Quotient(const BigNumber& denominator) const;
