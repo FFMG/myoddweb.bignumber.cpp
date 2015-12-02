@@ -232,3 +232,17 @@ TEST(MultiplyBigNumber, RaiseSmallPositveNumberToPower) {
     ASSERT_EQ(1024, num);
   }
 }
+
+TEST(MultiplyBigNumber, AnyNumberRaisedToZero) {
+  int r = (rand() % 32767);
+  MyOddWeb::BigNumber x( r );
+  MyOddWeb::BigNumber y = x.Pow(0);
+  ASSERT_EQ( 1, y.ToInt() );
+}
+
+TEST(MultiplyBigNumber, AnyNumberRaisedToOne) {
+  int r = (rand() % 32767);
+  MyOddWeb::BigNumber x(r);
+  MyOddWeb::BigNumber y = x.Pow(1);
+  ASSERT_EQ(r, y.ToInt());
+}

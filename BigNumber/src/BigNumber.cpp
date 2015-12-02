@@ -514,6 +514,17 @@ namespace MyOddWeb
    */
   BigNumber BigNumber::AbsPow(const BigNumber& base, const BigNumber& exp)
   {
+    if( exp.Zero() )
+    {
+      return BigNumber(1);
+    }
+
+    // +ve 1 exp = x
+    if ( !exp.Neg() && 0 == BigNumber::AbsCompare(exp, 1 ) )
+    {
+      return base;
+    }
+
     // copy the base and exponent
     BigNumber copyBase = base;
     BigNumber copyExp = exp;
@@ -522,14 +533,20 @@ namespace MyOddWeb
     BigNumber result = 1;
 
     // the number two that we will be using a lot.
-    const BigNumber two = 2;
+    static const BigNumber two = 2;
+
+    // until we reach zero.
     while (!copyExp.Zero() )
     {
       if (copyExp.Mod(two).Zero())
       {
         result = BigNumber::AbsMul(result, copyBase);
       }
-      copyExp = BigNumber::AbsDiv(copyExp, two, DEFAULT_PRECISION).Trunc();
+
+      // devide by 2 with no decimal places.
+      copyExp = BigNumber::AbsDiv(copyExp, two, 0);
+
+      // multiply the base by itself.
       copyBase = BigNumber::AbsMul(copyBase, copyBase);
     }
     return result;
