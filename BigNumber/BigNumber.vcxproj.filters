@@ -57,4 +57,9 @@
       <Filter>tests</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="BigNumber.natvis">
+      <Filter>src</Filter>
+    </Natvis>
+  </ItemGroup>
 </Project>
