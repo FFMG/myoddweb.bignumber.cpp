@@ -81,6 +81,14 @@ Double
 - Ceil() : Round the number up (2.1 = 3 / -2.1 = -2)
 - Floor() : Round the number down (2.1 = 2 / -2.1 = -3)
 
+- Compare( number ) : -ve = smaller / +ve = greater / 0 = same.
+	- Equal( number ) : Equal to '*number*'.
+	- Unequal( number ) : Unequal to '*number*'.
+	- Greater( number ) : greater than '*number*'.
+	- Less( number ) : less than '*number*'.
+	- GreaterEqual( number ) : greater or equal to '*number*'.
+	- LessEqual( number ) : less or equal to '*number*'.
+
 ## Constants ##
 - e() : [Euler's number](https://en.wikipedia.org/wiki/E_%28mathematical_constant%29) (to 1000 decimals) 
 
@@ -90,9 +98,6 @@ Double
 - Factorial() : The factorial of decimal numbers.
 
 ### Math functions ###
-- Eq( number ) - If '*this*' number is equal to another.
-	- NEq( number ) - If '*this*' number is **not** equal to another.
-	- Compare( number ) - Compare '*this*' number to the given number, (-1 / 0 / 1 )
 - Pow( number ) : Raise '*this*' by the '*number*' power (n * n * n * ...)
 	- Pow( number ) - negative numbers.
 	- Pow( number ) - decimal numbers.

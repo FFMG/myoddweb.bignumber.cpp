@@ -51,13 +51,8 @@ namespace MyOddWeb
 
     ~BigNumber();
 
-    static BigNumber AbsDiv(const BigNumber& lhs, const BigNumber& rhs, size_t precision );
-    static BigNumber AbsAdd(const BigNumber& lhs, const BigNumber& rhs);
-    static BigNumber AbsSub(const BigNumber& lhs, const BigNumber& rhs);
-    static BigNumber AbsMul(const BigNumber& lhs, const BigNumber& rhs);
-    static BigNumber AbsPow(const BigNumber& base, const BigNumber& exp);
-    static int AbsCompare(const BigNumber& lhs, const BigNumber& rhs); //  greater or equal
-
+    //
+    // Math
     BigNumber& Pow(const BigNumber& exp );
     BigNumber& Add(const BigNumber& rhs);
     BigNumber& Sub(const BigNumber& rhs);
@@ -68,6 +63,8 @@ namespace MyOddWeb
     BigNumber Mod(const BigNumber& denominator) const;
     BigNumber Quotient(const BigNumber& denominator) const;
       
+    //
+    // manipulation
     BigNumber& Abs();
     BigNumber& Trunc();
     BigNumber& Ceil();
@@ -75,13 +72,33 @@ namespace MyOddWeb
 
     static const BigNumber& e();
 
+    //
+    // Helper
     bool Zero() const;
     bool Nan() const;
     bool Neg() const;
 
+    int Compare(const BigNumber& rhs) const;
+    bool Equal(const BigNumber& rhs) const;
+    bool Unequal(const BigNumber& rhs) const;
+    bool Greater(const BigNumber& rhs) const;
+    bool Less(const BigNumber& rhs) const;
+    bool GreaterEqual(const BigNumber& rhs) const;
+    bool LessEqual(const BigNumber& rhs) const;
+
+    //
+    // conversion.
     int ToInt() const;
     double ToDouble() const;
     std::string ToString() const;
+
+  protected:
+    static BigNumber AbsDiv(const BigNumber& lhs, const BigNumber& rhs, size_t precision);
+    static BigNumber AbsAdd(const BigNumber& lhs, const BigNumber& rhs);
+    static BigNumber AbsSub(const BigNumber& lhs, const BigNumber& rhs);
+    static BigNumber AbsMul(const BigNumber& lhs, const BigNumber& rhs);
+    static BigNumber AbsPow(const BigNumber& base, const BigNumber& exp);
+    static int AbsCompare(const BigNumber& lhs, const BigNumber& rhs); //  greater or equal
 
   protected:
     static void QuotientAndRemainder(const BigNumber& numerator, const BigNumber& denominator, BigNumber& quotient, BigNumber& remainder);

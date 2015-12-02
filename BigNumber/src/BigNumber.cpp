@@ -868,6 +868,174 @@ namespace MyOddWeb
   }
 
   /**
+   * Compare this number to the number given
+   * @see AbsCompare( ... )
+   * +ve = *this > rhs 
+   * -ve = *this < rhs
+   *   0 = *this == rhs
+   * @param const BigNumber& the number we are comparing to.
+   * @return int the comparaisong, +/- or zero.
+   */
+  int BigNumber::Compare(const BigNumber& rhs) const
+  {
+    // do an absolute value comare.
+    int compare = BigNumber::AbsCompare(*this, rhs);
+
+    switch ( compare )
+    {
+    case 0:
+      // they look the same, but if their signs are not the same
+      // then they are not really the same.
+      if (Neg() != rhs.Neg())
+      {
+        // the Abs value is the same, but not the sign
+        // -2 != 2 or 2 != -2
+        if (Neg())
+        {
+          // we are negative, rhs is not, so we are less.
+          compare = -1;
+        }
+        else
+        {
+          // we are positive, rhs is not, so we are more.
+          compare = 1;
+        }
+      }
+      break;
+
+    case 1:
+      //  it looks like we are greater
+      // but if the sign is not the same we might actualy be smaller.
+      if (Neg() != rhs.Neg())
+      {
+        // -2 < 1 or 2 != -2
+        if (Neg())
+        {
+          // whatever the number, we are smaller.
+          compare = -1;
+        }
+        else
+        {
+          // we are indeed bigger, because the other number is even smaller, (negative).
+          compare = 1;
+        }
+      }
+      else
+      {
+        // negative numbers are oposite.
+        // -5 < -3 but |-5| > |-3|
+        if (Neg())
+        {
+          compare = -1;
+        }
+      }
+      break;
+
+    case -1:
+      // it looks like we are smaller
+      // but if the sign is not the same we might actualy be smaller.
+      if (Neg() != rhs.Neg())
+      {
+        // -5 < 6
+        if (Neg())
+        {
+          // whatever the number, we are indeed smaller.
+          compare = -1;
+        }
+        else
+        {
+          // we are bigger because rhs is negative
+          // 5 > -7
+          compare = 1;
+        }
+      }
+      else
+      {
+        // negative numbers are oposite.
+        // -3 > -5 but |-3| < |-5|
+        if (Neg())
+        {
+          compare = 1;
+        }
+      }
+      break;
+
+    default:
+      break;
+    }
+
+    return compare;
+  }
+
+  /**
+   * Check if this number is equal to the given number.
+   * @see BigNumber::Compare( ... )
+   * @param const BigNumber& rhs the number we are comparing to.
+   * @return bool if the 2 numbers are the same.
+   */
+  bool BigNumber::Equal(const BigNumber& rhs) const
+  {
+    return (0 == Compare(rhs));
+  }
+
+  /**
+   * Check is a number does not equal another number.
+   * @see BigNumber::Compare( ... )
+   * @param const BigNumber& rhs the number we are comparing to.
+   * @return bool if the 2 numbers are not the same.
+   */
+  bool BigNumber::Unequal(const BigNumber& rhs) const
+  {
+    return (0 != Compare(rhs));
+  }
+
+  /**
+   * Check if this number is greater than the one given.
+   * @see BigNumber::Compare( ... )
+   * @param const BigNumber& rhs the number we are comparing to.
+   * @return bool if this number is greater than the given number
+   */
+  bool BigNumber::Greater(const BigNumber& rhs) const
+  {
+    return (1 == Compare(rhs));
+  }
+
+  /**
+   * Check if this number is smaler than the one given.
+   * @see BigNumber::Compare( ... )
+   * @param const BigNumber& rhs the number we are comparing to.
+   * @return bool if this number is smaller
+   */
+  bool BigNumber::Less(const BigNumber& rhs) const
+  {
+    return (-1 == Compare(rhs));
+  }
+
+  /**
+   * Check if this number is greater or equal to the rhs
+   * @see BigNumber::Compare( ... )
+   * @param const BigNumber& rhs the number we are comparing to.
+   * @return bool
+   */
+  bool BigNumber::GreaterEqual(const BigNumber& rhs) const
+  {
+    int compare = Compare(rhs);
+    return (compare == 0 || compare == 1);
+  }
+
+  /**
+   * Compare if a number is less or equal
+   * @see BigNumber::Compare( ... )
+   * @param const BigNumber& rhs the number we are comparing to.
+   * @return bool if this number is smaller or equal to this number.
+   */
+  bool BigNumber::LessEqual(const BigNumber& rhs) const
+  {
+    int compare = Compare(rhs);
+    return (compare == 0 || compare == -1);
+  }
+
+  /**
    * Add a big number to this number.
    * @param const BigNumber& rhs the number we want to add.
    * @return BigNumber& *this number to allow chainning

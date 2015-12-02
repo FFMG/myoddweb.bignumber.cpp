@@ -83,42 +83,42 @@ TEST(FunctionBigNumber, CreateFromChar) {
 TEST(FunctionBigNumber, CompareSameNumbers) {
   MyOddWeb::BigNumber lhs("123");
   MyOddWeb::BigNumber rhs("123");
-  int geq = MyOddWeb::BigNumber::AbsCompare(lhs, rhs);
+  int geq = lhs.Compare( rhs);
   ASSERT_EQ( 0, geq );
 }
 
 TEST(FunctionBigNumber, LhsGreaterThanRhsButClose) {
   MyOddWeb::BigNumber lhs("124");
   MyOddWeb::BigNumber rhs("123");
-  int geq = MyOddWeb::BigNumber::AbsCompare(lhs, rhs);
+  int geq = lhs.Compare(rhs);
   ASSERT_EQ(1, geq);
 }
 
 TEST(FunctionBigNumber, LhsSmallerThanRhsButClose) {
   MyOddWeb::BigNumber lhs("123");
   MyOddWeb::BigNumber rhs("124");
-  int geq = MyOddWeb::BigNumber::AbsCompare(lhs, rhs);
+  int geq = lhs.Compare(rhs);
   ASSERT_EQ(-1, geq);
 }
 
 TEST(FunctionBigNumber, LhsGreaterThanRhsNotClose) {
   MyOddWeb::BigNumber lhs("924");
   MyOddWeb::BigNumber rhs("123");
-  int geq = MyOddWeb::BigNumber::AbsCompare(lhs, rhs);
+  int geq = lhs.Compare(rhs);
   ASSERT_EQ(1, geq);
 }
 
 TEST(FunctionBigNumber, LhsGreaterThanRhsByLen) {
   MyOddWeb::BigNumber lhs("1234");
   MyOddWeb::BigNumber rhs("456");
-  int geq = MyOddWeb::BigNumber::AbsCompare(lhs, rhs);
+  int geq = lhs.Compare(rhs);
   ASSERT_EQ(1, geq);
 }
 
 TEST(FunctionBigNumber, BothItemsAreZeroLength) {
   MyOddWeb::BigNumber lhs;
   MyOddWeb::BigNumber rhs;
-  int geq = MyOddWeb::BigNumber::AbsCompare(lhs, rhs);
+  int geq = lhs.Compare(rhs);
   ASSERT_EQ(0, geq);
 }
 
@@ -130,7 +130,7 @@ TEST(FunctionBigNumber, CompareTwoDecimalNumbersSameInteger) {
     MyOddWeb::BigNumber lhs(dx);
     MyOddWeb::BigNumber rhs(dy);
 
-    int geq = MyOddWeb::BigNumber::AbsCompare(lhs, rhs);
+    int geq = lhs.Compare(rhs);
     ASSERT_EQ(1, geq);  //  lhs is greater
   }
 
@@ -141,7 +141,7 @@ TEST(FunctionBigNumber, CompareTwoDecimalNumbersSameInteger) {
     MyOddWeb::BigNumber lhs(dx);
     MyOddWeb::BigNumber rhs(dy);
 
-    int geq = MyOddWeb::BigNumber::AbsCompare(lhs, rhs);
+    int geq = lhs.Compare(rhs);
     ASSERT_EQ(-1, geq);  //  rhs is greater
   }
 }
@@ -154,7 +154,7 @@ TEST(FunctionBigNumber, CompareTwoDecimalNumbers) {
     MyOddWeb::BigNumber lhs(dx);
     MyOddWeb::BigNumber rhs(dy);
 
-    int geq = MyOddWeb::BigNumber::AbsCompare(lhs, rhs);
+    int geq = lhs.Compare(rhs);
     ASSERT_EQ(1, geq);  //  lhs is greater
   }
 
@@ -165,7 +165,7 @@ TEST(FunctionBigNumber, CompareTwoDecimalNumbers) {
     MyOddWeb::BigNumber lhs(dx);
     MyOddWeb::BigNumber rhs(dy);
 
-    int geq = MyOddWeb::BigNumber::AbsCompare(lhs, rhs);
+    int geq = lhs.Compare(rhs);
     ASSERT_EQ(-1, geq);  //  rhs is greater
   }
 }
@@ -589,4 +589,324 @@ TEST(FunctionBigNumber, SimpleMod)
   MyOddWeb::BigNumber y(0.23);
   std::string z = x.Mod(y).ToString();
   ASSERT_EQ("0.17", z );
+}
+
+TEST(FunctionBigNumber, CompareSamNumberDifferentSign)
+{
+  {
+    int xrand = (rand() % 32767);
+    MyOddWeb::BigNumber x(xrand);
+    MyOddWeb::BigNumber y(-1 * xrand);
+
+    // we are greater.
+    ASSERT_EQ(1, x.Compare(y));
+  }
+
+  {
+    int xrand = (rand() % 32767);
+    MyOddWeb::BigNumber x(-1 * xrand);
+    MyOddWeb::BigNumber y(xrand);
+
+    // we are smaller.
+    ASSERT_EQ( -1, x.Compare(y));
+  }
+}
+
+TEST(FunctionBigNumber, CompareRhsAndLhsDifferentSignsButGreaterByAbsolutValue)
+{
+  {
+    // by Absolute value we are greater.
+    // but by sign, we are not.
+    MyOddWeb::BigNumber x( -5 );
+    MyOddWeb::BigNumber y( 3 );
+
+    // we are smaller.
+    ASSERT_EQ(-1, x.Compare(y));
+  }
+
+  {
+    // by absolute value and by sign, we are greater.
+    MyOddWeb::BigNumber x( 5 );
+    MyOddWeb::BigNumber y( -3 );
+
+    // we are greater.
+    ASSERT_EQ( 1, x.Compare(y));
+  }
+}
+
+TEST(FunctionBigNumber, CompareRhsAndLhsDifferentSignsButSmallerByAbsolutValue)
+{
+  {
+    // by Absolute value we are greater.
+    // but by sign, we are not.
+    MyOddWeb::BigNumber x(-3);
+    MyOddWeb::BigNumber y(5);
+
+    // we are smaller.
+    ASSERT_EQ(-1, x.Compare(y));
+  }
+
+  {
+    // by absolute value and by sign, we are greater.
+    MyOddWeb::BigNumber x(3);
+    MyOddWeb::BigNumber y(-5);
+
+    // we are greater.
+    ASSERT_EQ(1, x.Compare(y));
+  }
+}
+
+TEST(FunctionBigNumber, CompareRhsAndLhsBothNegative )
+{
+  // Absolute value is greater, but because of sign
+  // we are not greater.
+  {
+    MyOddWeb::BigNumber x(-5);
+    MyOddWeb::BigNumber y(-3);
+
+    // we are smaller.
+    ASSERT_EQ(-1, x.Compare(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-3);
+    MyOddWeb::BigNumber y(-5);
+
+    // we are greater.
+    ASSERT_EQ( 1, x.Compare(y));
+  }
+}
+
+TEST(FunctionBigNumber, EqualNumbers)
+{
+  {
+    MyOddWeb::BigNumber x(-3);
+    MyOddWeb::BigNumber y(-3);
+    ASSERT_TRUE(x.Equal(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-3.1234);
+    MyOddWeb::BigNumber y(-3.1234);
+    ASSERT_TRUE(x.Equal(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(3);
+    MyOddWeb::BigNumber y(3);
+    ASSERT_TRUE(x.Equal(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(3);
+    MyOddWeb::BigNumber y(-3);
+    ASSERT_FALSE(x.Equal(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(30);
+    MyOddWeb::BigNumber y(3);
+    ASSERT_FALSE(x.Equal(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(3.1234);
+    MyOddWeb::BigNumber y(3.12345);
+    ASSERT_FALSE(x.Equal(y));
+  }
+}
+
+TEST(FunctionBigNumber, UnEqualNumbers)
+{
+  {
+    MyOddWeb::BigNumber x(-3);
+    MyOddWeb::BigNumber y(-3);
+    ASSERT_FALSE(x.Unequal(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-3.1234);
+    MyOddWeb::BigNumber y(-3.1234);
+    ASSERT_FALSE(x.Unequal(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(3);
+    MyOddWeb::BigNumber y(3);
+    ASSERT_FALSE(x.Unequal(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(3);
+    MyOddWeb::BigNumber y(-3);
+    ASSERT_TRUE(x.Unequal(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(30);
+    MyOddWeb::BigNumber y(3);
+    ASSERT_TRUE(x.Unequal(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(3.1234);
+    MyOddWeb::BigNumber y(3.12345);
+    ASSERT_TRUE(x.Unequal(y));
+  }
+}
+
+TEST(FunctionBigNumber, GreaterNumbers)
+{
+  {
+    MyOddWeb::BigNumber x(-3);
+    MyOddWeb::BigNumber y(-3);
+    ASSERT_FALSE(x.Greater(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-3);
+    MyOddWeb::BigNumber y(-5);
+    ASSERT_TRUE(x.Greater(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(5);
+    MyOddWeb::BigNumber y(3);
+    ASSERT_TRUE(x.Greater(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(3);
+    MyOddWeb::BigNumber y(5);
+    ASSERT_FALSE(x.Greater(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-5);
+    MyOddWeb::BigNumber y(-3);
+    ASSERT_FALSE(x.Greater(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-3.2);
+    MyOddWeb::BigNumber y(-3.5);
+    ASSERT_TRUE(x.Greater(y));
+  }
+}
+
+TEST(FunctionBigNumber, GreaterEqualNumbers)
+{
+  {
+    MyOddWeb::BigNumber x(-3);
+    MyOddWeb::BigNumber y(-3);
+    ASSERT_TRUE(x.GreaterEqual(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-3);
+    MyOddWeb::BigNumber y(-5);
+    ASSERT_TRUE(x.GreaterEqual(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(5);
+    MyOddWeb::BigNumber y(3);
+    ASSERT_TRUE(x.GreaterEqual(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(3);
+    MyOddWeb::BigNumber y(5);
+    ASSERT_FALSE(x.GreaterEqual(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-5);
+    MyOddWeb::BigNumber y(-3);
+    ASSERT_FALSE(x.GreaterEqual(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-3.2);
+    MyOddWeb::BigNumber y(-3.5);
+    ASSERT_TRUE(x.GreaterEqual(y));
+  }
+}
+
+TEST(FunctionBigNumber, LessNumbers)
+{
+  {
+    MyOddWeb::BigNumber x(-3);
+    MyOddWeb::BigNumber y(-3);
+    ASSERT_FALSE(x.Less(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-5);
+    MyOddWeb::BigNumber y(-3);
+    ASSERT_TRUE(x.Less(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(3);
+    MyOddWeb::BigNumber y(5);
+    ASSERT_TRUE(x.Less(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(5);
+    MyOddWeb::BigNumber y(3);
+    ASSERT_FALSE(x.Less(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-3);
+    MyOddWeb::BigNumber y(-5);
+    ASSERT_FALSE(x.Less(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-3.4);
+    MyOddWeb::BigNumber y(-3.2);
+    ASSERT_TRUE(x.Less(y));
+  }
+}
+
+TEST(FunctionBigNumber, LessOrEqualNumbers)
+{
+  {
+    MyOddWeb::BigNumber x(-3);
+    MyOddWeb::BigNumber y(-3);
+    ASSERT_TRUE(x.LessEqual(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-5);
+    MyOddWeb::BigNumber y(-3);
+    ASSERT_TRUE(x.LessEqual(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(3);
+    MyOddWeb::BigNumber y(5);
+    ASSERT_TRUE(x.LessEqual(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(5);
+    MyOddWeb::BigNumber y(3);
+    ASSERT_FALSE(x.LessEqual(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-3);
+    MyOddWeb::BigNumber y(-5);
+    ASSERT_FALSE(x.LessEqual(y));
+  }
+
+  {
+    MyOddWeb::BigNumber x(-3.4);
+    MyOddWeb::BigNumber y(-3.2);
+    ASSERT_TRUE(x.LessEqual(y));
+  }
 }
