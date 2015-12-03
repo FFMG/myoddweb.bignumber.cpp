@@ -36,6 +36,7 @@
 // so we  don't devide for ever and ever...
 #define DEFAULT_PRECISION ((size_t)100)
 #define MAX_LN_ITERATIONS ((size_t)100)
+#define MAX_EXP_ITERATIONS ((size_t)100)
 
 namespace MyOddWeb
 {
@@ -59,6 +60,8 @@ namespace MyOddWeb
     BigNumber& Mul(const BigNumber& rhs);
     BigNumber& Div(const BigNumber& rhs, size_t precision = DEFAULT_PRECISION);
     BigNumber& Ln(size_t precision = DEFAULT_PRECISION );
+    BigNumber& Exp(size_t precision = DEFAULT_PRECISION);
+    BigNumber& Log( const BigNumber& exponent, size_t precision = DEFAULT_PRECISION);
     BigNumber& Factorial();
     BigNumber Mod(const BigNumber& denominator) const;
     BigNumber Quotient(const BigNumber& denominator) const;
@@ -66,7 +69,7 @@ namespace MyOddWeb
     //
     // manipulation
     BigNumber& Abs();
-    BigNumber& Trunc();
+    BigNumber& Trunc( size_t precision = 0 );
     BigNumber& Ceil();
     BigNumber& Floor();
 
@@ -77,6 +80,8 @@ namespace MyOddWeb
     bool Zero() const;
     bool Nan() const;
     bool Neg() const;
+    bool Odd() const;
+    bool Even() const;
 
     int Compare(const BigNumber& rhs) const;
     bool Equal(const BigNumber& rhs) const;

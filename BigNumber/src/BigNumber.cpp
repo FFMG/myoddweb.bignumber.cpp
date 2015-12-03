@@ -290,12 +290,13 @@ namespace MyOddWeb
 
   /**
   * Truncate the number
+  * @param size_t precision the max number of decimals.
   * @return const BigNumber& the truncated number.
   */
-  BigNumber& BigNumber::Trunc()
+  BigNumber& BigNumber::Trunc( size_t precision )
   {
     //  strip all the decimal.
-    while (_decimals > 0)
+    while (_decimals > precision)
     {
       _numbers.erase(_numbers.begin());
       --_decimals;
@@ -469,6 +470,7 @@ namespace MyOddWeb
 
     // the number we are working with.
     BigNumber number(lhs);
+    number._neg;
 
     // quotien/remainder we will use.
     BigNumber quotient;
@@ -520,7 +522,7 @@ namespace MyOddWeb
     }
 
     // +ve 1 exp = x
-    if ( !exp.Neg() && 0 == BigNumber::AbsCompare(exp, 1 ) )
+    if ( 0 == exp.Compare( 1 ) )
     {
       return base;
     }
@@ -538,13 +540,18 @@ namespace MyOddWeb
     // until we reach zero.
     while (!copyExp.Zero() )
     {
-      if (copyExp.Mod(two).Zero())
+      // if it is odd...
+      if ( copyExp.Odd() )
       {
         result = BigNumber::AbsMul(result, copyBase);
       }
 
       // devide by 2 with no decimal places.
       copyExp = BigNumber::AbsDiv(copyExp, two, 0);
+      if (copyExp.Zero())
+      {
+        break;
+      }
 
       // multiply the base by itself.
       copyBase = BigNumber::AbsMul(copyBase, copyBase);
@@ -570,11 +577,11 @@ namespace MyOddWeb
 
     // anything multiplied by one == anything
     static const BigNumber one(1);
-    if (AbsCompare(lhs, 1) == 0) // 1 x rhs = rhs
+    if (BigNumber::AbsCompare(lhs, 1) == 0) // 1 x rhs = rhs
     {
       return rhs;
     }
-    if (AbsCompare(rhs, 1) == 0) // lhs x 1 = lhs
+    if (BigNumber::AbsCompare(rhs, 1) == 0) // lhs x 1 = lhs
     {
       return lhs;
     }
@@ -711,7 +718,7 @@ namespace MyOddWeb
     NUMBERS numbers;
     for (size_t i = 0;; ++i)
     {
-      if ((i + lhsDecimalsOffset) >= ll && (i + rhsDecimalsOffset) >= rl)
+      if ((i - lhsDecimalsOffset) >= ll && (i - rhsDecimalsOffset) >= rl)
       {
         break;
       }
@@ -867,6 +874,43 @@ namespace MyOddWeb
     return 0;
   }
 
+  /**
+   * Fast check if we are an odd number.
+   
+   * @return bool if this is an odd or even number.
+   */
+  bool BigNumber::Odd() const
+  {
+    // if we are NaN then we ar not odd or even
+    if (Nan())
+    {
+      return false;
+    }
+
+    //  if we are not even, we are odd.
+    return !Even();
+  }
+
+  /**
+  * Fast check if we are an even number.
+  * Faster than using Mod(2).Zero() as it does not do a full divide.
+  * @return bool if this is an odd or even number.
+  */
+  bool BigNumber::Even() const
+  {
+    // if we are NaN then we ar not odd or even
+    if (Nan())
+    {
+      return false;
+    }
+
+    // get the first non decimal number.
+    const char& c = *(_numbers.begin() + _decimals);
+
+    // is that number even?
+    return ((c % 2) == 0);
+  }
+  
   /**
    * Compare this number to the number given
    * @see AbsCompare( ... )
@@ -1185,6 +1229,14 @@ namespace MyOddWeb
     // just multiply
     *this = BigNumber::AbsPow(*this, exp );
 
+    // if the exponent is negative 
+    // then we need to divide.
+    if (exp.Neg())
+    {
+      // x^(-1) = 1/(x^y)
+      *this = BigNumber(1).Div(*this);
+    }
+
     // return this/cleaned up.
     return PerformPostOperations();
   }
@@ -1276,7 +1328,7 @@ namespace MyOddWeb
     // 
     BigNumber c = *this;
 
-    while ( AbsCompare(*this, one ) == 1 )
+    while (BigNumber::AbsCompare(*this, one ) == 1 )
     {
       // subtract one.
       Sub(one);
@@ -1324,14 +1376,16 @@ namespace MyOddWeb
     // and set the current reaimined to be the numerator.
     // that way we know that we can return now something valid.
     // 20 % 5 = 0 ('cause 5*4 = 20 remainder = 0)
+    // we need the number to be positive for now.
     remainder = numerator;
+    remainder._neg = false;
 
     // if the numerator is greatter than the denominator
     // then there is nothint more to do, we will never be able to 
     // divide anything and have a quotient
     // the the remainder has to be the number and the quotient has to be '0'
     // so 5 % 20 = 5 ( remainder = 5 / quotien=0 = 0*20 + 5)
-    if (AbsCompare(numerator, denominator) < 0)
+    if (BigNumber::AbsCompare(numerator, denominator) < 0)
     {
       return;
     }
@@ -1339,11 +1393,15 @@ namespace MyOddWeb
     // do a 'quick' remainder calculatation.
     //
     // 1- look for the 'max' denominator.
+    //    we need the number to be positive.
     BigNumber max_denominator = denominator;
+    max_denominator._neg = false;
+    BigNumber base_multiplier = 1;
 
-    while (AbsCompare(max_denominator, numerator) < 0)
+    while ( BigNumber::AbsCompare(max_denominator, numerator) < 0)
     {
       max_denominator.MultiplyByBase(1);
+      base_multiplier.MultiplyByBase(1);
     }
 
     // 2- subtract, (if need be, then update the quotient accordingly).
@@ -1351,13 +1409,13 @@ namespace MyOddWeb
     {
       // if the max denominator is greater than the remained
       // then we must devide by 10
-      int compare = AbsCompare(max_denominator, remainder);
+      int compare = BigNumber::AbsCompare(max_denominator, remainder);
       if (compare == 0)
       {
         //  it is the same!
         // the remainder has to be zero
         remainder = 0;
-        quotient.Add(1);
+        quotient.Add(base_multiplier);
         break;
       }
 
@@ -1365,13 +1423,17 @@ namespace MyOddWeb
       {
         // it is too big, we must remove 10.
         max_denominator.DevideByBase(1);
-
+        
         // if the max denominaor is now smaller than the one we were
         // given, then we must stop right away.
-        if (AbsCompare(max_denominator, denominator) <= 0)
+        if (BigNumber::AbsCompare(max_denominator, denominator) <= 0)
         {
           break;
         }
+
+        // we need to update the base as well.
+        base_multiplier.DevideByBase(1);
+
         continue;
       }
 
@@ -1379,7 +1441,7 @@ namespace MyOddWeb
       remainder.Sub(max_denominator);
 
       // and add the quotien.
-      quotient.Add(max_denominator);
+      quotient.Add(base_multiplier);
     }
         
     for (;;)
@@ -1509,6 +1571,7 @@ namespace MyOddWeb
       _numbers.push_back( 0 );
       ++l;
     }
+    PerformPostOperations();
   }
 
   /**
@@ -1556,11 +1619,44 @@ namespace MyOddWeb
       return _e;
     }
 
-    // create it now.
-    _e = BigNumber("2.718281828459045235360287471352662497757247093699959574966967627724076630353547594571382178525166427427466391932003059921817413596629043572900334295260");
+    // create it now using {}, it is slightly faster than using the string parsing, (just a little).
+    // uncomment the code below if that causes an error.
+    NUMBERS numbers = {6,2,5,9,2,4,3,3,0,0,9,2,7,5,3,4,0,9,2,6,6,9,5,3,1,4,7,1,8,1,2,9,9,5,0,3,0,0,2,3,9,1,9,3,6,6,4,7,2,4,7,2,4,6,6,1,5,2,5,8,7,1,2,8,3,1,7,5,4,9,5,7,4,5,3,5,3,0,3,6,6,7,0,4,2,7,7,2,6,7,6,9,6,6,9,4,7,5,9,5,9,9,9,6,3,9,0,7,4,2,7,5,7,7,9,4,2,6,6,2,5,3,1,7,4,7,8,2,0,6,3,5,3,2,5,4,0,9,5,4,8,2,8,1,8,2,8,1,7,2};
+    _e = BigNumber(numbers, 149, false);
+
+    // in case you cannot use NUMBERS numbers = {}
+    // _e = BigNumber("2.718281828459045235360287471352662497757247093699959574966967627724076630353547594571382178525166427427466391932003059921817413596629043572900334295260");
 
     // return it
     return _e;
+  }
+
+  BigNumber& BigNumber::Log(const BigNumber& exponent, size_t precision )
+  {
+    // clean up and done.
+    return PerformPostOperations();
+  }
+
+  /**
+   * Raise e to the power of this.
+   * @param size_t precision the presision we want to return this to (default = DEFAULT_PRECISION).
+   * @return BigNumber& e raised to the power of *this.
+   */
+  BigNumber& BigNumber::Exp( size_t precision )
+  {
+    // get the value of e
+    BigNumber e = BigNumber::e();
+    
+    // truncate the presision so we do not do too many multiplications.
+    // add a bit of room for more accurate precision.
+    e.Trunc(precision + 5);
+
+    // then raise it to the given power
+    // and truncate it again.
+    *this = e.Pow(*this).Trunc( precision );
+
+    // clean up and return.
+    return PerformPostOperations();
   }
 
   BigNumber& BigNumber::Ln(size_t precision )

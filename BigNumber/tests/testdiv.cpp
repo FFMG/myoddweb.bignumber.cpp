@@ -146,3 +146,110 @@ TEST(DivBigNumber, ModExactSameRealNumber) {
   int z = x.Mod(y).ToInt();
   ASSERT_EQ(0, z);
 }
+
+TEST(DivBigNumber, OneOverADecimalNumber) {
+  MyOddWeb::BigNumber x = 1;
+  MyOddWeb::BigNumber y = 244.140625;
+  double z = x.Div(y).ToDouble();
+  ASSERT_EQ(0.004096, z);
+}
+
+TEST(DivBigNumber, DecimalDivision) {
+  {
+    MyOddWeb::BigNumber x = 93;
+    std::string z = x.Div(1.5).ToString();
+    ASSERT_EQ("62", z);
+  }
+  {
+    MyOddWeb::BigNumber x = 9.3;
+    std::string z = x.Div(1.5).ToString();
+    ASSERT_EQ("6.2", z);
+  }
+}
+
+TEST(DivBigNumber, ExactDivision) {
+  {
+    MyOddWeb::BigNumber x = 20;
+    std::string z = x.Div(2).ToString();
+    ASSERT_EQ("10", z);
+  }
+  {
+    MyOddWeb::BigNumber x = 100;
+    std::string z = x.Div(100).ToString();
+    ASSERT_EQ("1", z);
+  }
+}
+
+TEST(DivBigNumber, MultipleLevelDivisions) {
+  {
+    MyOddWeb::BigNumber x = 1;
+    std::string z = x.Div(244.140625).ToString();  //  0.004096
+    ASSERT_EQ("0.004096", z);
+  }
+  {
+    MyOddWeb::BigNumber x = 10;
+    std::string z = x.Div(244.140625).ToString();  //  0.04096
+    ASSERT_EQ("0.04096", z);
+  }
+  {
+    MyOddWeb::BigNumber x = 100;
+    std::string z = x.Div(244.140625).ToString();  //  0.4096
+    ASSERT_EQ("0.4096", z);
+  }
+  {
+    MyOddWeb::BigNumber x = 1000;
+    std::string z = x.Div(244.140625).ToString();  //  4.096
+    ASSERT_EQ("4.096", z);
+  }
+  {
+    MyOddWeb::BigNumber x = 10000;
+    std::string z = x.Div(244.140625).ToString();  //  40.96
+    ASSERT_EQ("40.96", z);
+  }
+  {
+    MyOddWeb::BigNumber x = 100000;
+    std::string z = x.Div(244.140625).ToString();  //  409.6
+    ASSERT_EQ("409.6", z);
+  }
+  {
+    MyOddWeb::BigNumber x = 1000000;
+    std::string z = x.Div(244.140625).ToString();  //  4096
+    ASSERT_EQ("4096", z);
+  }
+}
+
+TEST(DivBigNumber, NegativeNumberDividedByPositiveNumber) {
+  {
+    MyOddWeb::BigNumber x = -20;
+    std::string z = x.Div(2).ToString();
+    ASSERT_EQ("-10", z);
+  }
+  {
+    MyOddWeb::BigNumber x = -100;
+    std::string z = x.Div(100).ToString();
+    ASSERT_EQ("-1", z);
+  }
+  {
+    MyOddWeb::BigNumber x = -1000000;
+    std::string z = x.Div(244.140625).ToString();  //  4096
+    ASSERT_EQ("-4096", z);
+  }
+}
+
+TEST(DivBigNumber, PositiveNumberDividedByNegativeNumber) {
+  {
+    MyOddWeb::BigNumber x = 20;
+    std::string z = x.Div(-2).ToString();
+    ASSERT_EQ("-10", z);
+  }
+  {
+    MyOddWeb::BigNumber x = 100;
+    std::string z = x.Div(-100).ToString();
+    ASSERT_EQ("-1", z);
+  }
+  {
+    MyOddWeb::BigNumber x = 1000000;
+    std::string z = x.Div(-244.140625).ToString();  //  4096
+    ASSERT_EQ("-4096", z);
+  }
+}

@@ -225,11 +225,22 @@ TEST(MultiplyBigNumber, MultiplyPositiveDecimalNumbersOneNegative) {
 }
 
 TEST(MultiplyBigNumber, RaiseSmallPositveNumberToPower) {
+  MyOddWeb::BigNumber x(2);
+  MyOddWeb::BigNumber y = x.Pow(10);
+  ASSERT_EQ(1024, y.ToInt());
+}
+
+TEST(MultiplyBigNumber, SimpleSquare) {
   {
     MyOddWeb::BigNumber x(2);
-    MyOddWeb::BigNumber y = x.Pow(10);
-    int num = x.Mul(y).ToInt();
-    ASSERT_EQ(1024, num);
+    MyOddWeb::BigNumber y = x.Pow(2);
+    ASSERT_EQ(4, y.ToInt() );
+  }
+
+  {
+    MyOddWeb::BigNumber x(3);
+    MyOddWeb::BigNumber y = x.Pow(2);
+    ASSERT_EQ(9, y.ToInt());
   }
 }
 
@@ -240,9 +251,42 @@ TEST(MultiplyBigNumber, AnyNumberRaisedToZero) {
   ASSERT_EQ( 1, y.ToInt() );
 }
 
+TEST(MultiplyBigNumber, ZeroRaisedToZero) {
+  MyOddWeb::BigNumber x(0);
+  MyOddWeb::BigNumber y = x.Pow(0);
+  ASSERT_EQ(1, y.ToInt());
+}
+
+TEST(MultiplyBigNumber, SmallNumberRaisedToLargeNumber) {
+  MyOddWeb::BigNumber x(2);
+  MyOddWeb::BigNumber y = x.Pow(128);
+  ASSERT_EQ("340282366920938463463374607431768211456", y.ToString());
+}
+
+TEST(MultiplyBigNumber, SmallNumberRaisedToLargeNegativeNumber) {
+  MyOddWeb::BigNumber x(2);
+  MyOddWeb::BigNumber y = x.Pow(-40);
+  std::string z = y.ToString();
+  ASSERT_EQ("0.0000000000009094947017729282379150390625", z );
+}
+
 TEST(MultiplyBigNumber, AnyNumberRaisedToOne) {
   int r = (rand() % 32767);
   MyOddWeb::BigNumber x(r);
   MyOddWeb::BigNumber y = x.Pow(1);
   ASSERT_EQ(r, y.ToInt());
+}
+
+TEST(MultiplyBigNumber, NegativeWholePowerPositiveNumber) {
+  {
+    MyOddWeb::BigNumber x = 2;
+    double z = x.Pow(-3).ToDouble();
+    ASSERT_EQ(0.125, z);
+  }
+
+  {
+    MyOddWeb::BigNumber x = 2.5;
+    double z = x.Pow(-6).ToDouble();
+    ASSERT_EQ(0.004096, z);
+  }
 }

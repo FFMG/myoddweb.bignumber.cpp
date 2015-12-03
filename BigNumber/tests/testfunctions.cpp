@@ -210,6 +210,12 @@ TEST(FunctionBigNumber, ModulusZero) {
   ASSERT_EQ(0, mod.ToInt());
 }
 
+TEST(FunctionBigNumber, ModulusDecimalNumber) {
+  MyOddWeb::BigNumber src(1000);
+  MyOddWeb::BigNumber mod = src.Mod(244.14025);
+  ASSERT_EQ(23.439, mod.ToDouble());
+}
+
 TEST(FunctionBigNumber, ModulusZeroNegativeDivisor) {
   MyOddWeb::BigNumber src(20);
   MyOddWeb::BigNumber mod = src.Mod(-5);
@@ -909,4 +915,74 @@ TEST(FunctionBigNumber, LessOrEqualNumbers)
     MyOddWeb::BigNumber y(-3.2);
     ASSERT_TRUE(x.LessEqual(y));
   }
+}
+
+TEST(FunctionBigNumber, NaNIsNeitherOddNorEven )
+{
+  MyOddWeb::BigNumber x("NaN");
+  ASSERT_FALSE(x.Odd());
+  ASSERT_FALSE(x.Even());
+}
+
+TEST(FunctionBigNumber, ZeroIsEven)
+{
+  MyOddWeb::BigNumber x(0);
+  ASSERT_FALSE(x.Odd());
+  ASSERT_TRUE(x.Even());
+}
+
+TEST(FunctionBigNumber, EvenWholeNumber)
+{
+  MyOddWeb::BigNumber x( 1234 );
+  ASSERT_FALSE(x.Odd());
+  ASSERT_TRUE(x.Even());
+}
+
+TEST(FunctionBigNumber, EvenDecimalNumber)
+{
+  MyOddWeb::BigNumber x(1234.135799);
+  ASSERT_FALSE(x.Odd());
+  ASSERT_TRUE(x.Even());
+}
+
+TEST(FunctionBigNumber, EvenBigWholeNumber)
+{
+  MyOddWeb::BigNumber x("1234567890987654321123456780");
+  ASSERT_FALSE(x.Odd());
+  ASSERT_TRUE(x.Even());
+}
+
+TEST(FunctionBigNumber, OddWholeNumber)
+{
+  MyOddWeb::BigNumber x(1235);
+  ASSERT_TRUE(x.Odd());
+  ASSERT_FALSE(x.Even());
+}
+
+TEST(FunctionBigNumber, OddDecimalNumber)
+{
+  MyOddWeb::BigNumber x(1235.246);
+  ASSERT_TRUE(x.Odd());
+  ASSERT_FALSE(x.Even());
+}
+
+TEST(FunctionBigNumber, OddBigWholeNumber)
+{
+  MyOddWeb::BigNumber x("1234567890987654321123456781");
+  ASSERT_TRUE(x.Odd());
+  ASSERT_FALSE(x.Even());
+}
+
+TEST(FunctionBigNumber, OddBigDecimalNumber)
+{
+  MyOddWeb::BigNumber x("1234567890987654321123456781.2468008642");
+  ASSERT_TRUE(x.Odd());
+  ASSERT_FALSE(x.Even());
+}
+
+TEST(FunctionBigNumber, EvenBigDecimalNumber)
+{
+  MyOddWeb::BigNumber x("1234567890987654321123456780.1357997531");
+  ASSERT_FALSE(x.Odd());
+  ASSERT_TRUE(x.Even());
 }

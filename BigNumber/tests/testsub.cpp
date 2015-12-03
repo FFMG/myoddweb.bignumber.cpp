@@ -230,3 +230,15 @@ TEST(SubtractBigNumber, SubtractZeroFromRhs) {
 
   ASSERT_EQ(-12345, x.ToInt());
 }
+
+TEST(SubtractBigNumber, SubtractMoreDecimalsInTheItemBeenSubtracted ) {
+  MyOddWeb::BigNumber x = "2343.75";
+  std::string z = x.Sub("244.140625").ToString();
+  ASSERT_EQ("2099.609375", z);
+}
+
+TEST(SubtractBigNumber, SubtractLessDecimalsInTheItemBeenSubtracted) {
+  MyOddWeb::BigNumber x = "2343.140625";
+  std::string z = x.Sub("244.75").ToString();
+  ASSERT_EQ("2098.390625", z);
+}

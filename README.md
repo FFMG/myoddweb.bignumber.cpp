@@ -68,6 +68,9 @@ Double
 - Factorial() : The factorial of this number, (!n)
 - Mod( number ) : The mod of '*this*' number, (n % m). The remainder of the division. 
 - Quotient( number ) : : The quotient of dividing '*this*' number with this '*number*'.
+- Pow( number ) : '*this*' raised to '*number*' (n * n * n * ...).
+	- Negative number.
+- Exp() : e raised to the power '*this*'
 
 ### Other functions ###
 - Neg() : If '*this*' number is negative or not.
@@ -80,7 +83,8 @@ Double
 - Trunc() : Truncate the number, strip the decimals. (+/-n.xyz = n)
 - Ceil() : Round the number up (2.1 = 3 / -2.1 = -2)
 - Floor() : Round the number down (2.1 = 2 / -2.1 = -3)
-
+- Odd() : Check if a number is Odd.
+- Even() : Check of a number is Even.
 - Compare( number ) : -ve = smaller / +ve = greater / 0 = same.
 	- Equal( number ) : Equal to '*number*'.
 	- Unequal( number ) : Unequal to '*number*'.
@@ -95,13 +99,13 @@ Double
 # Todo #
 
 ## Functions to do ##
-- Factorial() : The factorial of decimal numbers.
 
 ### Math functions ###
-- Pow( number ) : Raise '*this*' by the '*number*' power (n * n * n * ...)
-	- Pow( number ) - negative numbers.
+- Sqrt() : The square root of '*this*' number.
+- Root( number ) : The nth root of '*this*' number.
+- Factorial() : The factorial of decimal numbers.
+- <s>Pow( number ) : Raise '*this*' by the '*number*' power (n * n * n * ...)</s>
 	- Pow( number ) - decimal numbers.
-- Exp() : e raised to the power '*this*'
 - Ln( ... )/Log( ... )
 
 ### Other functions ###
@@ -114,9 +118,9 @@ Double
 
 ## Misc ##
 
-- Mod(2) is often used to check for odd/even, maybe we should short cut those?
+- <s>Mod(2) is often used to check for odd/even, maybe we should short cut those?</s>
 - ToDouble( ... ) and ToInt( ... ) do not check if limits are reached.
-- Optimise Multiplication and Divisions, (especially division). Currently they are doing long division and long multiplication. This is not efficient.
+- Optimise Multiplication and Divisions, (especially **division**). Currently they are doing long division and long multiplication. This is not efficient.
 - Do some speed tests / benchmarks / comparison.
 
 - Specifically for C++ enable operators
