@@ -107,6 +107,7 @@ namespace MyOddWeb
 
   protected:
     static void QuotientAndRemainder(const BigNumber& numerator, const BigNumber& denominator, BigNumber& quotient, BigNumber& remainder);
+    static void AbsQuotientAndRemainder(const BigNumber& numerator, const BigNumber& denominator, BigNumber& quotient, BigNumber& remainder);
 
   protected:
     void Parse(const char* source);

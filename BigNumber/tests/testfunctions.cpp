@@ -986,3 +986,81 @@ TEST(FunctionBigNumber, EvenBigDecimalNumber)
   ASSERT_FALSE(x.Odd());
   ASSERT_TRUE(x.Even());
 }
+
+TEST(FunctionBigNumber, ModuloDivisorGreaterThanNumber)
+{
+  MyOddWeb::BigNumber x("10");
+  int mod = x.Mod(20).ToInt();
+  ASSERT_EQ( 10, mod );
+}
+
+TEST(FunctionBigNumber, NegativeModuloDenominatorSmallerThanNumerator)
+{
+  MyOddWeb::BigNumber x("10");
+  int mod = x.Mod(-3).ToInt();
+  ASSERT_EQ( 1, mod);
+}
+
+TEST(FunctionBigNumber, NegativeModuloDenominatorGreaterThanNumerator)
+{
+  MyOddWeb::BigNumber x("10");
+  int mod = x.Mod( -20 ).ToInt();
+  ASSERT_EQ( 10, mod);
+}
+
+TEST(FunctionBigNumber, ModuloAllCasesSmallerDenominator)
+{
+  {
+    // 10 % 3 = 1
+    MyOddWeb::BigNumber x("10");
+    int mod = x.Mod(3).ToInt();
+    ASSERT_EQ(1, mod);
+  }
+  {
+    // 10 % -3 = 1
+    MyOddWeb::BigNumber x("10");
+    int mod = x.Mod(-3).ToInt();
+    ASSERT_EQ(1, mod);
+  }
+  {
+    // -10 % -3 = -1
+    MyOddWeb::BigNumber x("-10");
+    int mod = x.Mod(-3).ToInt();
+    ASSERT_EQ(-1, mod);
+  }
+  {
+    // -10 % 3 = -1
+    MyOddWeb::BigNumber x("-10");
+    int mod = x.Mod(3).ToInt();
+    ASSERT_EQ(-1, mod);
+  }
+}
+
+TEST(FunctionBigNumber, ModuloAllCasesGreaterDenominator)
+{
+  {
+    // 10 % 20 = 10
+    MyOddWeb::BigNumber x("10");
+    int mod = x.Mod(20).ToInt();
+    ASSERT_EQ(10, mod);
+  }
+  {
+    // 10 % -20 = 10
+    MyOddWeb::BigNumber x("10");
+    int mod = x.Mod(-20).ToInt();
+    ASSERT_EQ(10, mod);
+  }
+  {
+    // -10 % -20 = -10
+    MyOddWeb::BigNumber x("-10");
+    int mod = x.Mod(-20).ToInt();
+    ASSERT_EQ(-10, mod);
+  }
+  {
+    // -10 % 20 = -10
+    MyOddWeb::BigNumber x("-10");
+    int mod = x.Mod(20).ToInt();
+    ASSERT_EQ(-10, mod);
+  }
+}
+

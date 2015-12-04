@@ -1354,6 +1354,30 @@ namespace MyOddWeb
    */
   void BigNumber::QuotientAndRemainder(const BigNumber& numerator, const BigNumber& denominator, BigNumber& quotient, BigNumber& remainder)
   {
+    // do it all positive
+    BigNumber::AbsQuotientAndRemainder(numerator, denominator, quotient, remainder);
+
+    // clean up the quotient and the remainder.
+    if ( !denominator.Zero())
+    {
+      if (numerator.Neg())
+      {
+        // 10 modulo -3 = -2
+        remainder._neg = true;
+      }
+    }
+  }
+
+  /**
+  * Calculate the quotien and remainder of a division
+  * @see https://en.wikipedia.org/wiki/Modulo_operation
+  * @param const BigNumber& numerator the numerator been devided.
+  * @param const BigNumber& denominator the denominator dividing the number.
+  * @param BigNumber& quotient the quotient of the division
+  * @param BigNumber& remainder the remainder.
+  */
+  void BigNumber::AbsQuotientAndRemainder(const BigNumber& numerator, const BigNumber& denominator, BigNumber& quotient, BigNumber& remainder)
+  {
     // check if we can actually do this, it should work for all
     // but we need to test it first...
     if (numerator._base != 10 || numerator._base != denominator._base)
@@ -1434,6 +1458,7 @@ namespace MyOddWeb
         // we need to update the base as well.
         base_multiplier.DevideByBase(1);
 
+        // go around again.
         continue;
       }
 
@@ -1661,6 +1686,8 @@ namespace MyOddWeb
 
   BigNumber& BigNumber::Ln(size_t precision )
   {
+    // @see https://www.quora.com/How-can-we-calculate-the-logarithms-by-hand-without-using-any-calculatorhttps://www.quora.com/How-can-we-calculate-the-logarithms-by-hand-without-using-any-calculator
+
     //  we must make sure that *is 
     BigNumber x(*this);
     const BigNumber base = x.Sub( 1 );  // Base of the numerator; exponent will be explicit
@@ -1684,7 +1711,14 @@ namespace MyOddWeb
       baseRaised.Mul(base);
 
       // now devide it
-      BigNumber currentBase = BigNumber::AbsDiv(baseRaised, den, (precision + 5) );
+      BigNumber currentBase = BigNumber::AbsDiv(baseRaised, den, precision );
+
+      // there is no need to go further, with this presision 
+      // and with this number of iterations we will keep adding/subtrating zeros.
+      if (currentBase.Zero())
+      {
+        break;
+      }
 
       // and add it/subtract it from the result.
       if (neg)
@@ -1698,6 +1732,7 @@ namespace MyOddWeb
     }
 
     // done
+    result.Trunc(precision);
     *this = result;
 
     // clean up and done.
