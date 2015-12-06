@@ -1173,3 +1173,59 @@ TEST(FunctionBigNumber, FractionOfPositiveNumber)
     ASSERT_EQ("0.23456", fraction);
   }
 }
+
+TEST(FunctionBigNumber, RoundPositiveNumberNoDecimalsShouldRoundDown )
+{
+  MyOddWeb::BigNumber x("12.23456");
+  std::string fraction = x.Round().ToString();
+  ASSERT_EQ("12", fraction);
+}
+
+TEST(FunctionBigNumber, RoundNegativeNumberNoDecimalsShouldRoundDown)
+{
+  MyOddWeb::BigNumber x("-12.23456");
+  std::string fraction = x.Round().ToString();
+  ASSERT_EQ("-12", fraction);
+}
+
+TEST(FunctionBigNumber, RoundPositiveDefaultNoDecimals)
+{
+  MyOddWeb::BigNumber x("12.23456");
+  std::string fraction = x.Round().ToString();
+  ASSERT_EQ("12", fraction);
+}
+
+TEST(FunctionBigNumber, RoundNegativeDefaultNoDecimals)
+{
+  MyOddWeb::BigNumber x("-12.23456");
+  std::string fraction = x.Round().ToString();
+  ASSERT_EQ("-12", fraction);
+}
+
+TEST(FunctionBigNumber, RoundPositiveNumberNoDecimalsShouldRoundUp)
+{
+  MyOddWeb::BigNumber x("12.63456");
+  std::string fraction = x.Round().ToString();
+  ASSERT_EQ("13", fraction);
+}
+
+TEST(FunctionBigNumber, RoundNegativeNumberNoDecimalsShouldRoundUp)
+{
+  MyOddWeb::BigNumber x("-12.63456");
+  std::string fraction = x.Round().ToString();
+  ASSERT_EQ("-13", fraction);
+}
+
+TEST(FunctionBigNumber, RoundPositiveNumberWithPrecision)
+{
+  MyOddWeb::BigNumber x("12.63456"); 
+  std::string fraction = x.Round(3).ToString();
+  ASSERT_EQ("12.635", fraction);
+}
+
+TEST(FunctionBigNumber, RoundNegativeNumberWithPrecision)
+{
+  MyOddWeb::BigNumber x("-12.63456");
+  std::string fraction = x.Round(3).ToString();
+  ASSERT_EQ("-12.635", fraction);
+}

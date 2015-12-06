@@ -158,7 +158,7 @@ namespace MyOddWeb
   {
     // convert to char
     std::ostringstream strs;
-    strs.precision(std::numeric_limits<double>::digits10 );
+    strs.precision(std::numeric_limits<double>::digits10);
     if (!(strs << source))
     {
       throw std::runtime_error("There was a problem converting the double to a bigNumber");
@@ -166,7 +166,7 @@ namespace MyOddWeb
     std::string str = strs.str();
 
     // parse it as a char.
-    Parse( str.c_str() );
+    Parse(str.c_str());
   }
 
   void BigNumber::Parse(int source)
@@ -230,7 +230,7 @@ namespace MyOddWeb
     }
 
     // is it NaN?
-    if (strcmp(source, "NaN") == 0) 
+    if (strcmp(source, "NaN") == 0)
     {
       // not a number
       _nan = true;
@@ -276,7 +276,7 @@ namespace MyOddWeb
       }
 
       // decimal
-      if (decimalPoint == -1 && *c == '.' )
+      if (decimalPoint == -1 && *c == '.')
       {
         decimalPoint = (int)_numbers.size();
         if (decimalPoint == 0)
@@ -301,7 +301,7 @@ namespace MyOddWeb
 
     // get the number of decimals.
     _decimals = (decimalPoint == -1) ? 0 : _numbers.size() - (size_t)decimalPoint;
-    
+
     // clean it all up.
     PerformPostOperations();
   }
@@ -332,7 +332,7 @@ namespace MyOddWeb
     {
       size_t l = _numbers.size();
       _numbers.erase(_numbers.begin() + _decimals, _numbers.end());
-      _numbers.push_back( 0 );
+      _numbers.push_back(0);
     }
     // truncate and return, the sign is kept.
     return PerformPostOperations();
@@ -356,8 +356,14 @@ namespace MyOddWeb
   * @param size_t precision the max number of decimals.
   * @return const BigNumber& the truncated number.
   */
-  BigNumber& BigNumber::Trunc( size_t precision )
+  BigNumber& BigNumber::Trunc(size_t precision)
   {
+    // does anything need to be done.
+    if (_decimals <= precision)
+    {
+      return *this;
+    }
+
     //  strip all the decimal.
     while (_decimals > precision)
     {
@@ -370,24 +376,51 @@ namespace MyOddWeb
   }
 
   /**
+   * Round a number to the nearest int, ( 1.2 > 1 && 1.8 > 2)
+   * @param size_t precision the rounding prescision
+   * @return BigNumber& this number rounded to 'x' precision.
+   */
+  BigNumber& BigNumber::Round(size_t precision)
+  {
+    if (Neg())
+    {
+      _neg = false;
+      Round(precision);
+      _neg = true;
+
+      // already cleaned up.
+      return *this;
+    }
+
+    // add 0.5 and floor(...) it.
+    BigNumber number = 5;
+    number.DevideByBase( (precision+1));
+    *this = AbsAdd(number, *this).Floor( precision );
+
+    // clean up.
+    return PerformPostOperations();
+  }
+
+  /**
    * Round up the number
+   * @param size_t precision the precision we want to set.
    * @return const BigNumber& the number rounded up.
    */
-  BigNumber& BigNumber::Ceil()
+  BigNumber& BigNumber::Ceil(size_t precision )
   {
-    // if we have no decimal, then we have nothing to do.
-    if (_decimals == 0)
+    // does anything need to be done.
+    if (_decimals <= precision)
     {
       return *this;
     }
 
     //  strip all the decimal.
-    Trunc();
+    Trunc( precision );
 
     // if it positive then we need to go up one more
     if (!Neg())
     {
-      Add(1);
+      Add( _one );
     }
 
     // done.
@@ -396,23 +429,24 @@ namespace MyOddWeb
 
   /**
    * Round down the number
+   * @param size_t precision the precision we want to set.
    * @return const BigNumber& the number rounded up.
    */
-  BigNumber& BigNumber::Floor()
+  BigNumber& BigNumber::Floor(size_t precision )
   {
-    // if we have no decimal, then we have nothing to do.
-    if (_decimals == 0)
+    // does anything need to be done.
+    if (_decimals <= precision)
     {
       return *this;
     }
 
     //  strip all the decimal.
-    Trunc();
+    Trunc( precision );
 
     // if it negative then we need to subtract one more.
     if (Neg())
     {
-      Sub(1);
+      Sub( _one );
     }
 
     // done.
@@ -544,7 +578,7 @@ namespace MyOddWeb
       BigNumber::QuotientAndRemainder(number, rhs, quotient, remainder);
 
       // add the quotien to the current number.
-      c.insert(c.begin(), quotient._numbers.begin(), quotient._numbers.end());
+      c.insert( c.begin(), quotient._numbers.begin(), quotient._numbers.end());
 
       //  are we done?
       if (remainder.Zero())
@@ -566,7 +600,7 @@ namespace MyOddWeb
       ++decimals;
     }
 
-    // set the decimal places.
+    // then create the result with the known number of decimals.
     return BigNumber( c, decimals, false );
   }
 
@@ -601,7 +635,7 @@ namespace MyOddWeb
     if (copyExp._decimals > 0)
     {
       copyBase.Ln(precision +  DEFAULT_PRECISION_CORRECTION); //  we need the correction, do we don't loose it too quick.
-      copyBase.Mul(copyExp);
+      copyBase.Mul( copyExp, precision + DEFAULT_PRECISION_CORRECTION);
       result = copyBase.Exp( precision );
     }
     else
@@ -615,7 +649,7 @@ namespace MyOddWeb
         // if it is odd...
         if (copyExp.Odd())
         {
-          result = BigNumber::AbsMul(result, copyBase);
+          result = BigNumber::AbsMul(result, copyBase, precision+DEFAULT_PRECISION_CORRECTION);
         }
 
         // devide by 2 with no decimal places.
@@ -626,7 +660,7 @@ namespace MyOddWeb
         }
 
         // multiply the base by itself.
-        copyBase = BigNumber::AbsMul(copyBase, copyBase);
+        copyBase = BigNumber::AbsMul(copyBase, copyBase, precision+DEFAULT_PRECISION_CORRECTION);
       }
     }
 
@@ -638,9 +672,10 @@ namespace MyOddWeb
    * Multiply 2 absolute numbers together.
    * @param const BigNumber& rhs the number been multiplied
    * @param const BigNumber& rhs the number multipling
+   * @param size_t precision the max precision we want to use.
    * @return BigNumber the product of the two numbers.
    */
-  BigNumber BigNumber::AbsMul(const BigNumber& lhs, const BigNumber& rhs)
+  BigNumber BigNumber::AbsMul(const BigNumber& lhs, const BigNumber& rhs, size_t precision)
   {
     // if either number is zero, then the total is zero
     // that's the rule.
@@ -682,13 +717,13 @@ namespace MyOddWeb
       trhs.MultiplyByBase(rhs._decimals);
 
       // do the multiplication without any decimals.
-      BigNumber c = BigNumber::AbsMul(tlhs, trhs);
+      BigNumber c = BigNumber::AbsMul(tlhs, trhs, 0);
 
       //  set the current number of decimals.
       c.DevideByBase( decimals );
 
       // return the value.
-      return c.PerformPostOperations();
+      return c.PerformPostOperations().Trunc(precision);
     }
 
     //  15 * 5  = 5*5 = 25 = push(5) carry_over = 2
@@ -709,39 +744,49 @@ namespace MyOddWeb
 
     // the return number
     BigNumber c;
-    for (size_t x = 0; x < ll; x++)
+    static const size_t shift = 7;
+    static unsigned long long max_base = 10000000;
+
+    NUMBERS shifts;
+    for (size_t x = 0; x < ll; x+= shift)
     {
       // this number
       NUMBERS numbers;
 
       // and the carry over.
-      unsigned char carryOver = 0;
+      unsigned long long carryOver = 0;
 
-      // shift it the amount of base number.
-      // this is not multiplyed by 10 because of base 10
-      // this is because we are shifting it 1x to the left.
-      for (size_t shift = 0; shift < x; ++shift)
+      // get the numbers.
+      unsigned long long lhs_number = lhs._MakeNumberAtIndex( x, shift );
+
+      for (size_t y = 0; y < rl; y += shift)
       {
-        numbers.push_back(0);
-      }
-      unsigned char lhs_number = lhs._numbers[x];
-      for (size_t y = 0; y < rl; y++)
-      {
-        unsigned char rhs_number = rhs._numbers[y];
-        unsigned char sum = lhs_number * rhs_number + carryOver;
-        carryOver = 0;
-        while (sum >= lhs._base)
+        unsigned long long rhs_number = rhs._MakeNumberAtIndex(y, shift);
+        unsigned long long sum = lhs_number * rhs_number + carryOver;
+        carryOver = static_cast<unsigned long long>(sum / max_base);
+
+        for (size_t z = 0; z < shift; ++z )
         {
-          sum -= lhs._base;
-          ++carryOver;
+          unsigned char s = sum % rhs._base;
+          numbers.push_back(s);
+
+          sum = static_cast<unsigned long long>(sum / rhs._base);
         }
-        numbers.push_back(sum);
       }
 
       // add the carry over if we have one
-      if (carryOver > 0)
+      while (carryOver > 0)
       {
-        numbers.push_back(carryOver);
+        unsigned char s = carryOver % rhs._base;
+        numbers.push_back(s);
+        carryOver = static_cast<unsigned long long>(carryOver / rhs._base);
+      }
+
+      // shift everything
+      numbers.insert(numbers.begin(), shifts.begin(), shifts.end() );
+
+      for (unsigned int z = 0; z < shift; ++z) {
+        shifts.push_back(0);
       }
 
       // then add the number to our current total.
@@ -749,7 +794,23 @@ namespace MyOddWeb
     }
 
     // this is the number with no multipliers.
-    return c.PerformPostOperations();
+    return c.PerformPostOperations().Trunc( precision );
+  }
+
+  unsigned long long BigNumber::_MakeNumberAtIndex(size_t index, size_t length) const
+  {
+    unsigned long long number = 0;
+    size_t l = _numbers.size();
+    for (long long i = (length-1); i >= 0; --i)
+    {
+      unsigned long long pos = (i + index);
+      if (pos >= l)
+      {
+        continue;
+      }
+      number = (number * _base) + _numbers[ (size_t)pos];
+    }
+    return number;
   }
 
   /**
@@ -1294,7 +1355,30 @@ namespace MyOddWeb
   }
 
   /**
+   * Calculate the square root of this number
+   * @see http://mathworld.wolfram.com/SquareRoot.html
+   * @see http://brownmath.com/alge/expolaws.htm
+   * @param size_t precision the number of decimals.
+   * @return BigNumber& this number square root.
+   */
+  BigNumber& BigNumber::Sqrt( size_t precision )
+  {
+    //  sqrt = x^(1/2)
+    static const BigNumber half("0.5");
+
+    // calculate it, use the correction to make sure we are well past
+    // the actual value we want to set is as.
+    // the rounding will then take care of the rest.
+    *this = Pow(half, precision + DEFAULT_PRECISION_CORRECTION ).Round( precision );
+
+    // return this/cleaned up.
+    // we already truncated it.
+    return PerformPostOperations();
+  }
+
+  /**
    * Raise this number to the given exponent.
+   * @see http://brownmath.com/alge/expolaws.htm
    * @param const BigNumber& the exponent.
    * @param size_t precision the precision we want to use.
    * @return BigNumber& this number.
@@ -1308,20 +1392,21 @@ namespace MyOddWeb
     // then we need to divide.
     if (exp.Neg())
     {
-      // x^(-1) = 1/(x^y)
-      *this = BigNumber(1).Div(*this, precision );
+      // x^(-y) = 1/^|y|
+      *this = BigNumber(_one).Div(*this, precision );
     }
 
     // return this/cleaned up.
-    return PerformPostOperations();
+    return PerformPostOperations().Trunc( precision );
   }
 
   /**
    * Multiply this number to the given number.
    * @param const BigNumber& the number we are multiplying to.
+   * @param size_t precision the presision we want to use.
    * @return BigNumber& this number.
    */
-  BigNumber& BigNumber::Mul(const BigNumber& rhs)
+  BigNumber& BigNumber::Mul(const BigNumber& rhs, size_t precision)
   {
     // if one of them is negative, but not both, then it is negative
     // if they are both the same, then it is positive.
@@ -1329,7 +1414,7 @@ namespace MyOddWeb
     bool neg = (rhs.Neg() != Neg());
 
     // just multiply
-    *this = BigNumber::AbsMul(*this, rhs);
+    *this = BigNumber::AbsMul(*this, rhs, precision );
 
     // set the sign.
     _neg = neg;
@@ -1745,7 +1830,7 @@ namespace MyOddWeb
     if (Zero())
     {
       // reset this to 1
-      *this = 1;
+      *this = _one;
 
       //  done
       return PerformPostOperations();
@@ -1760,7 +1845,7 @@ namespace MyOddWeb
     fraction.Frac();
 
     // reset this to 1
-    *this = 1;
+    *this = _one;
 
     // the two sides of the equation
     // the whole number.
@@ -1782,11 +1867,11 @@ namespace MyOddWeb
       //     x^1   x^2   x^3
       // 1 + --- + --- + --- ...
       //      1!    2!    3!
-      BigNumber fact(1);
+      BigNumber fact( _one );
       const BigNumber base(fraction);
       BigNumber power(base);
 
-      BigNumber result = 1;
+      BigNumber result = _one;
       for (size_t i = 1; i < MAX_EXP_ITERATIONS; ++i)
       {
         //  calculate the number up to the precision we are after.
@@ -1800,10 +1885,10 @@ namespace MyOddWeb
         result.Add( calulatedNumber );
 
         // x * x * x ...
-        power = BigNumber::AbsMul(power, base );
+        power = BigNumber::AbsMul(power, base, precision+DEFAULT_PRECISION_CORRECTION );
 
         //  1 * 2 * 3 ...
-        fact = BigNumber::AbsMul(fact, (int)(i+1) );
+        fact = BigNumber::AbsMul(fact, (int)(i+1), precision+DEFAULT_PRECISION_CORRECTION );
       }
 
       //  the decimal part of the number.
@@ -1849,12 +1934,12 @@ namespace MyOddWeb
     long long counter2 = 0;
     while (Compare(2) > 0)
     {
-      Div(2);
+      Div(2, precision + DEFAULT_PRECISION_CORRECTION);
       ++counter2;
     }
     while (Compare(1.1) > 0)
     {
-      Div(1.1);
+      Div(1.1, precision+DEFAULT_PRECISION_CORRECTION);
       ++counter1;
     }
 

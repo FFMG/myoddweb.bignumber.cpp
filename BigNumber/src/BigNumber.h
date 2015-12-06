@@ -57,9 +57,10 @@ namespace MyOddWeb
     //
     // Math
     BigNumber& Pow(const BigNumber& exp, size_t precision = DEFAULT_PRECISION);
+    BigNumber& Sqrt(size_t precision = DEFAULT_PRECISION);
     BigNumber& Add(const BigNumber& rhs);
     BigNumber& Sub(const BigNumber& rhs);
-    BigNumber& Mul(const BigNumber& rhs);
+    BigNumber& Mul(const BigNumber& rhs, size_t precision = DEFAULT_PRECISION);
     BigNumber& Div(const BigNumber& rhs, size_t precision = DEFAULT_PRECISION);
     BigNumber& Ln(size_t precision = DEFAULT_PRECISION );
     BigNumber& Exp(size_t precision = DEFAULT_PRECISION);
@@ -74,8 +75,9 @@ namespace MyOddWeb
     BigNumber& Integer();
     BigNumber& Frac();
     BigNumber& Trunc( size_t precision = 0 );
-    BigNumber& Ceil();
-    BigNumber& Floor();
+    BigNumber& Round(size_t precision = 0);
+    BigNumber& Ceil(size_t precision = 0);
+    BigNumber& Floor(size_t precision = 0);
 
     static const BigNumber& e();
 
@@ -105,7 +107,7 @@ namespace MyOddWeb
     static BigNumber AbsDiv(const BigNumber& lhs, const BigNumber& rhs, size_t precision);
     static BigNumber AbsAdd(const BigNumber& lhs, const BigNumber& rhs);
     static BigNumber AbsSub(const BigNumber& lhs, const BigNumber& rhs);
-    static BigNumber AbsMul(const BigNumber& lhs, const BigNumber& rhs);
+    static BigNumber AbsMul(const BigNumber& lhs, const BigNumber& rhs, size_t precision);
     static BigNumber AbsPow(const BigNumber& base, const BigNumber& exp, size_t precision);
     static int AbsCompare(const BigNumber& lhs, const BigNumber& rhs); //  greater or equal
 
@@ -159,5 +161,7 @@ namespace MyOddWeb
     static BigNumber _e;
     static BigNumber _one;
 
+  protected:
+    unsigned long long _MakeNumberAtIndex(size_t index, size_t length) const;
   };
 }// namespace MyOddWeb

@@ -80,9 +80,9 @@ Double
 - ToDouble() : convert to double
 - ToString() : convert to string.
 - Abs() : Get the absolute value of the number
-- Trunc() : Truncate the number, strip the decimals. (+/-n.xyz = n)
-- Ceil() : Round the number up (2.1 = 3 / -2.1 = -2)
-- Floor() : Round the number down (2.1 = 2 / -2.1 = -3)
+- Trunc( precision ) : Truncate the number, strip the decimals. (+/-n.xyz = n)
+- Ceil( precision ) : Round the number up (2.1 = 3 / -2.1 = -2)
+- Floor( precision ) : Round the number down (2.1 = 2 / -2.1 = -3)
 - Odd() : Check if a number is Odd.
 - Even() : Check of a number is Even.
 - Compare( number ) : -ve = smaller / +ve = greater / 0 = same.
@@ -109,8 +109,9 @@ Double
 - <s>Pow( number ) : Raise '*this*' by the '*number*' power (n * n * n * ...)</s>
 	- <s>Pow( number ) - decimal numbers.</s>
 	- <s>Pow( nmuber ) - negative numbs</s>
-- Ln( ... )/Log( ... )
+- <s>Ln( ... )</s>/Log( ... )
 - Gamma()
+- Round( precision ) : round a number up/down
 
 ### Other functions ###
 - ToUInt()
