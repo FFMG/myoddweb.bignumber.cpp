@@ -92,6 +92,8 @@ Double
 	- Less( number ) : less than '*number*'.
 	- GreaterEqual( number ) : greater or equal to '*number*'.
 	- LessEqual( number ) : less or equal to '*number*'.
+- Frac() : convert this to a fraction , (-1.2 => -0.2)
+- Integer() : convert this to a integer, (1.2 => 1)
 
 ## Constants ##
 - e() : [Euler's number](https://en.wikipedia.org/wiki/E_%28mathematical_constant%29) (to 1000 decimals) 
@@ -105,8 +107,10 @@ Double
 - Root( number ) : The nth root of '*this*' number.
 - Factorial() : The factorial of decimal numbers.
 - <s>Pow( number ) : Raise '*this*' by the '*number*' power (n * n * n * ...)</s>
-	- Pow( number ) - decimal numbers.
+	- <s>Pow( number ) - decimal numbers.</s>
+	- <s>Pow( nmuber ) - negative numbs</s>
 - Ln( ... )/Log( ... )
+- Gamma()
 
 ### Other functions ###
 - ToUInt()
@@ -120,8 +124,9 @@ Double
 
 - <s>Mod(2) is often used to check for odd/even, maybe we should short cut those?</s>
 - ToDouble( ... ) and ToInt( ... ) do not check if limits are reached.
-- Optimise Multiplication and Divisions, (especially **division**). Currently they are doing long division and long multiplication. This is not efficient.
-- Do some speed tests / benchmarks / comparison.
+- Optimise:
+	- Multiplication and Divisions, (especially **division**). Currently they are doing long division and long multiplication. This is not efficient.
+	- Factorial, the current implementation does 1*2*3*... and this is slow, (of course). Use the **Gamma** function.
 
 - Specifically for C++ enable operators
 	- operator+
@@ -130,3 +135,4 @@ Double
 	- operator%
 	- operator*
 
+- Do some speed tests / benchmarks / comparison.

@@ -167,6 +167,7 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="tests\testadd.cpp" />
     <ClCompile Include="tests\testdiv.cpp" />
+    <ClCompile Include="tests\testexp.cpp" />
     <ClCompile Include="tests\testfunctions.cpp" />
     <ClCompile Include="tests\testln.cpp" />
     <ClCompile Include="tests\testmul.cpp" />

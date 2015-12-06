@@ -33,65 +33,26 @@
 #include "../src/BigNumber.h"
 
 //
-//  --gtest_filter=LogBigNumber*
+//  --gtest_filter=ExpBigNumber*
 //
-TEST(LogBigNumber, SmallPositiveLnCalculations ) {
-  {
-    MyOddWeb::BigNumber x(1.22);
-    x.Ln(15);
-    std::string z = x.ToString(); // 0.1988508587451651901326 
-    ASSERT_EQ("0.198850858745165", z);
-  }
-
-  {
-    MyOddWeb::BigNumber x(1.2);
-    x.Ln(15);
-    std::string z = x.ToString(); // 0.182321556793954 
-    ASSERT_EQ("0.182321556793954", z);
-  }
-
-  {
-    MyOddWeb::BigNumber x(1.5);
-    x.Ln(25);
-    std::string z = x.ToString(); // 0.4054651081081643819780131
-    ASSERT_EQ("0.4054651081081643819780131", z);
-  }
-  {
-    MyOddWeb::BigNumber x(1.5);
-    x.Ln(5);
-    std::string z = x.ToString(); // 0.40546
-    ASSERT_EQ("0.40546", z);
-  }
-}
-
-TEST(LogBigNumber, CalculatePowerEquivalentNumberGreaterThanOne) {
-  //  calculate x=7^1.3
-  MyOddWeb::BigNumber x(7);
-  x.Ln(10);   // force the extra precision!
-  x.Mul(1.3); // 
-  x.Exp(5);  // 12.549529737646980598220200633200402683967766747447055117776 
+TEST(ExpBigNumber, PositiveNumberLessThanOne ) {
+  MyOddWeb::BigNumber x(0.208);
+  x.Exp( 15 ); // 1.2312131695488677213420252053753917669206249629911152630668
   std::string z = x.ToString();
-  ASSERT_EQ("12.54952", z);
+  ASSERT_EQ("1.231213169548867", z);
 }
 
-TEST(LogBigNumber, CalculatePowerEquivalentNumberSmallerThanOne) {
-  //  calculate x=7^0.3
-  MyOddWeb::BigNumber x(7);
-  x.Ln(15);   // 1.945910149055313305105352743443179729637084729581861188459
-  x.Mul(0.3); // 0.583773044716593991531605823032953918891125418874558356537
-  x.Exp(10);  // 1.792789962520997228317171519028628954852538106778150731110
-  std::string z = x.ToString();
-  ASSERT_EQ("1.7927899625", z);
-}
-
-TEST(LogBigNumber, NegativeNumber) {
-  MyOddWeb::BigNumber x(-7);
-  x.Ln();
-  ASSERT_TRUE(x.Nan());
-}
-
-TEST(LogBigNumber, NegativeFractionalNumber) {
-  MyOddWeb::BigNumber x(-0.1234);
-  x.Ln();
-  ASSERT_TRUE(x.Nan());
+TEST(ExpBigNumber, PositiveNumberGreaterThanOne) {
+  {
+    MyOddWeb::BigNumber x(1.208);
+    x.Exp(15); // 3.3467843857441526240940403951701183080591879679251946131127
+    std::string z = x.ToString();
+    ASSERT_EQ("3.346784385744152", z);
+  }
+  {
+    MyOddWeb::BigNumber x(2.208);
+    x.Exp(15); // 9.0975031795387977613874046439943215436120987224030888958893
+    std::string z = x.ToString();
+    ASSERT_EQ("9.097503179538797", z);
+  }
 }

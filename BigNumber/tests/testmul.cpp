@@ -290,3 +290,17 @@ TEST(MultiplyBigNumber, NegativeWholePowerPositiveNumber) {
     ASSERT_EQ(0.004096, z);
   }
 }
+
+TEST(MultiplyBigNumber, DecimalPowerNumberSmallerThan1) {
+  MyOddWeb::BigNumber x(7);
+  x.Pow(0.3, 10 ); //  1.7927899625209972283171715190286289548525381067781507311109
+  std::string z = x.ToString();
+  ASSERT_EQ("1.7927899625", z);
+}
+
+TEST(MultiplyBigNumber, NegativeOnePower) {
+  MyOddWeb::BigNumber x(7);
+  x.Pow(-1, 10); //  0.14285714285714285714285714285714
+  std::string z = x.ToString();
+  ASSERT_EQ("0.1428571428", z);
+}

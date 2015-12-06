@@ -1064,3 +1064,112 @@ TEST(FunctionBigNumber, ModuloAllCasesGreaterDenominator)
   }
 }
 
+TEST(FunctionBigNumber, IntegerOfPositiveNumber)
+{
+  {
+    MyOddWeb::BigNumber x("1.2");
+    double integer = x.Integer().ToDouble();
+    ASSERT_EQ(1, integer);
+  }
+  {
+    MyOddWeb::BigNumber x("12345.2");
+    double integer = x.Integer().ToDouble();
+    ASSERT_EQ(12345, integer);
+  }
+  {
+    MyOddWeb::BigNumber x("12");
+    double integer = x.Integer().ToDouble();
+    ASSERT_EQ(12, integer);
+  }
+  {
+    MyOddWeb::BigNumber x("0.23456");
+    double integer = x.Integer().ToDouble();
+    ASSERT_EQ(0, integer);
+    ASSERT_TRUE( x.Zero() );
+  }
+}
+
+TEST(FunctionBigNumber, IntegerOfNegativeNumber)
+{
+  {
+    MyOddWeb::BigNumber x("-1.2");
+    double integer = x.Integer().ToDouble();
+    ASSERT_EQ(-1, integer);
+  }
+  {
+    MyOddWeb::BigNumber x("-12345.2");
+    double integer = x.Integer().ToDouble();
+    ASSERT_EQ(-12345, integer);
+  }
+  {
+    MyOddWeb::BigNumber x("-12");
+    double integer = x.Integer().ToDouble();
+    ASSERT_EQ(-12, integer);
+  }
+  {
+    MyOddWeb::BigNumber x("-0.23456");
+    double integer = x.Integer().ToDouble();
+    ASSERT_EQ(0, integer);
+    ASSERT_TRUE(x.Zero());
+  }
+}
+
+TEST(FunctionBigNumber, FractionOfNegativeNumber)
+{
+  {
+    MyOddWeb::BigNumber x("-1.2");
+    std::string fraction = x.Frac().ToString();
+    ASSERT_EQ("-0.2", fraction);
+  }
+  {
+    MyOddWeb::BigNumber x("-12345.678");
+    std::string fraction = x.Frac().ToString();
+    ASSERT_EQ("-0.678", fraction);
+  }
+  {
+    MyOddWeb::BigNumber x("-12345.2");
+    std::string fraction = x.Frac().ToString();
+    ASSERT_EQ("-0.2", fraction);
+  }
+  {
+    MyOddWeb::BigNumber x("-12");
+    std::string fraction = x.Frac().ToString();
+    ASSERT_EQ( "0", fraction);
+    ASSERT_TRUE(x.Zero());
+  }
+  {
+    MyOddWeb::BigNumber x("-0.23456");
+    std::string fraction = x.Frac().ToString();
+    ASSERT_EQ("-0.23456", fraction);
+  }
+}
+
+TEST(FunctionBigNumber, FractionOfPositiveNumber)
+{
+  {
+    MyOddWeb::BigNumber x("1.2");
+    std::string fraction = x.Frac().ToString();
+    ASSERT_EQ("0.2", fraction);
+  }
+  {
+    MyOddWeb::BigNumber x("12345.678");
+    std::string fraction = x.Frac().ToString();
+    ASSERT_EQ("0.678", fraction);
+  }
+  {
+    MyOddWeb::BigNumber x("12345.2");
+    std::string fraction = x.Frac().ToString();
+    ASSERT_EQ("0.2", fraction);
+  }
+  {
+    MyOddWeb::BigNumber x("12");
+    std::string fraction = x.Frac().ToString();
+    ASSERT_EQ("0", fraction);
+    ASSERT_TRUE(x.Zero());
+  }
+  {
+    MyOddWeb::BigNumber x("0.23456");
+    std::string fraction = x.Frac().ToString();
+    ASSERT_EQ("0.23456", fraction);
+  }
+}

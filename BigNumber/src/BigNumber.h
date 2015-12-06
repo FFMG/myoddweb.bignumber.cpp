@@ -35,6 +35,7 @@
 // the precision we want to stop at, by default.
 // so we  don't devide for ever and ever...
 #define DEFAULT_PRECISION ((size_t)100)
+#define DEFAULT_PRECISION_CORRECTION ((size_t)5)
 #define MAX_LN_ITERATIONS ((size_t)100)
 #define MAX_EXP_ITERATIONS ((size_t)100)
 
@@ -46,6 +47,7 @@ namespace MyOddWeb
     BigNumber();
     BigNumber(const char* source);
     BigNumber(int source);
+    BigNumber(long long source);
     BigNumber(double source);
     BigNumber(const BigNumber& source);
     BigNumber& operator=(const BigNumber& rhs);
@@ -54,7 +56,7 @@ namespace MyOddWeb
 
     //
     // Math
-    BigNumber& Pow(const BigNumber& exp );
+    BigNumber& Pow(const BigNumber& exp, size_t precision = DEFAULT_PRECISION);
     BigNumber& Add(const BigNumber& rhs);
     BigNumber& Sub(const BigNumber& rhs);
     BigNumber& Mul(const BigNumber& rhs);
@@ -69,6 +71,8 @@ namespace MyOddWeb
     //
     // manipulation
     BigNumber& Abs();
+    BigNumber& Integer();
+    BigNumber& Frac();
     BigNumber& Trunc( size_t precision = 0 );
     BigNumber& Ceil();
     BigNumber& Floor();
@@ -102,7 +106,7 @@ namespace MyOddWeb
     static BigNumber AbsAdd(const BigNumber& lhs, const BigNumber& rhs);
     static BigNumber AbsSub(const BigNumber& lhs, const BigNumber& rhs);
     static BigNumber AbsMul(const BigNumber& lhs, const BigNumber& rhs);
-    static BigNumber AbsPow(const BigNumber& base, const BigNumber& exp);
+    static BigNumber AbsPow(const BigNumber& base, const BigNumber& exp, size_t precision);
     static int AbsCompare(const BigNumber& lhs, const BigNumber& rhs); //  greater or equal
 
   protected:
@@ -112,6 +116,7 @@ namespace MyOddWeb
   protected:
     void Parse(const char* source);
     void Parse(int source);
+    void Parse(long long source);
     void Parse(double source);
 
     // the numbers.
@@ -152,5 +157,7 @@ namespace MyOddWeb
 
     // constant values
     static BigNumber _e;
+    static BigNumber _one;
+
   };
 }// namespace MyOddWeb
