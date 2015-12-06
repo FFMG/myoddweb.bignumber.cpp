@@ -111,7 +111,7 @@ Double
 	- <s>Pow( nmuber ) - negative numbs</s>
 - <s>Ln( ... )</s>/Log( ... )
 - Gamma()
-- Round( precision ) : round a number up/down
+- <s>Round( precision ) : round a number up/down</s>
 
 ### Other functions ###
 - ToUInt()
