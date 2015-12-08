@@ -55,7 +55,7 @@ namespace MyOddWeb
   BigNumber::BigNumber(int source) : _base(10)
   {
     Default();
-    Parse(source);
+    Parse( (long long) source);
   }
 
   BigNumber::BigNumber(long long source) : _base(10)
@@ -84,7 +84,7 @@ namespace MyOddWeb
     _numbers = numbers;
 
     // clean up if need be.
-    PerformPostOperations();
+    PerformPostOperations(decimals);
   }
 
   BigNumber::BigNumber(const BigNumber& source) : _base(source._base)
@@ -168,29 +168,7 @@ namespace MyOddWeb
     // parse it as a char.
     Parse(str.c_str());
   }
-
-  void BigNumber::Parse(int source)
-  {
-    //  reset all
-    Default();
-
-    // positive
-    _neg = (source < 0);
-
-    // make it positive.
-    int c = abs(source);
-    while (c > 0)
-    {
-      unsigned char s = c % _base;
-      _numbers.push_back(s);
-
-      c = static_cast<int>(c / _base);
-    }
-
-    // clean it all up
-    PerformPostOperations();
-  }
-
+  
   void BigNumber::Parse(long long source)
   {
     //  reset all
@@ -210,7 +188,7 @@ namespace MyOddWeb
     }
 
     // clean it all up
-    PerformPostOperations();
+    PerformPostOperations( 0 );
   }
 
   /**
@@ -303,7 +281,7 @@ namespace MyOddWeb
     _decimals = (decimalPoint == -1) ? 0 : _numbers.size() - (size_t)decimalPoint;
 
     // clean it all up.
-    PerformPostOperations();
+    PerformPostOperations( _decimals );
   }
 
   /**
@@ -314,7 +292,7 @@ namespace MyOddWeb
   BigNumber& BigNumber::Integer()
   {
     // truncate and return, the sign is kept.
-    return Trunc().PerformPostOperations();
+    return PerformPostOperations( 0 );
   }
 
   /**
@@ -334,8 +312,9 @@ namespace MyOddWeb
       _numbers.erase(_numbers.begin() + _decimals, _numbers.end());
       _numbers.push_back(0);
     }
+
     // truncate and return, the sign is kept.
-    return PerformPostOperations();
+    return PerformPostOperations( _decimals );
   }
 
   /**
@@ -365,14 +344,15 @@ namespace MyOddWeb
     }
 
     //  strip all the decimal.
-    while (_decimals > precision)
+    if (_decimals > precision)
     {
-      _numbers.erase(_numbers.begin());
-      --_decimals;
+      size_t end = _decimals - precision;
+      _numbers.erase(_numbers.begin(), _numbers.begin() + end );
+      _decimals -= end;
     }
 
     // done.
-    return PerformPostOperations();
+    return PerformPostOperations( _decimals );
   }
 
   /**
@@ -398,7 +378,7 @@ namespace MyOddWeb
     *this = AbsAdd(number, *this).Floor( precision );
 
     // clean up.
-    return PerformPostOperations();
+    return PerformPostOperations( precision );
   }
 
   /**
@@ -424,7 +404,7 @@ namespace MyOddWeb
     }
 
     // done.
-    return PerformPostOperations();
+    return PerformPostOperations( precision );
   }
 
   /**
@@ -450,15 +430,22 @@ namespace MyOddWeb
     }
 
     // done.
-    return PerformPostOperations();
+    return PerformPostOperations( precision );
   }
 
   /**
    * Clean up the number to remove leading zeros and uneeded trailling zeros, (for decimals).
+   * @param size_t precision the max precision we want to set.
    * @return BigNumber& the number we cleaned up.
    */
-  BigNumber& BigNumber::PerformPostOperations()
+  BigNumber& BigNumber::PerformPostOperations(size_t precision)
   {
+    if (_decimals > precision)
+    {
+      // trunc will call this function again.
+      return Trunc(precision);
+    }
+
     // assume that we are not zero
     _zero = false;
 
@@ -636,7 +623,7 @@ namespace MyOddWeb
     {
       copyBase.Ln(precision +  DEFAULT_PRECISION_CORRECTION); //  we need the correction, do we don't loose it too quick.
       copyBase.Mul( copyExp, precision + DEFAULT_PRECISION_CORRECTION);
-      result = copyBase.Exp( precision );
+      result = copyBase.Exp( precision + DEFAULT_PRECISION_CORRECTION);
     }
     else
     {
@@ -665,7 +652,7 @@ namespace MyOddWeb
     }
 
     // clean up and return
-    return result.PerformPostOperations();
+    return result.PerformPostOperations( precision );
   }
 
   /**
@@ -723,7 +710,7 @@ namespace MyOddWeb
       c.DevideByBase( decimals );
 
       // return the value.
-      return c.PerformPostOperations().Trunc(precision);
+      return c.PerformPostOperations( precision );
     }
 
     //  15 * 5  = 5*5 = 25 = push(5) carry_over = 2
@@ -794,7 +781,7 @@ namespace MyOddWeb
     }
 
     // this is the number with no multipliers.
-    return c.PerformPostOperations().Trunc( precision );
+    return c.PerformPostOperations( precision );
   }
 
   unsigned long long BigNumber::_MakeNumberAtIndex(size_t index, size_t length) const
@@ -831,7 +818,7 @@ namespace MyOddWeb
       c._neg = true;
 
       // return the number
-      return c.PerformPostOperations();
+      return c.PerformPostOperations( c._decimals );
     }
 
     // if we want to subtract zero from the lhs, then the result is rhs
@@ -1234,7 +1221,7 @@ namespace MyOddWeb
       _neg = rhs._neg;
 
       // return this/cleaned up.
-      return PerformPostOperations();
+      return PerformPostOperations( _decimals );
     }
 
     // both numbers are not the same sign
@@ -1253,7 +1240,7 @@ namespace MyOddWeb
       _neg = neg;
 
       // return this/cleaned up.
-      return PerformPostOperations();
+      return PerformPostOperations( _decimals );
     }
 
     //  save the sign
@@ -1267,7 +1254,7 @@ namespace MyOddWeb
     _neg = neg;
 
     // return this/cleaned up.
-    return PerformPostOperations();
+    return PerformPostOperations( _decimals );
   }
 
   /**
@@ -1292,7 +1279,7 @@ namespace MyOddWeb
       _neg = neg;
 
       // return this/cleaned up.
-      return PerformPostOperations();
+      return PerformPostOperations( _decimals );
     }
 
     // both signs are the same, check if the absolute numbers.
@@ -1311,7 +1298,7 @@ namespace MyOddWeb
       _neg = neg;
 
       // return this/cleaned up.
-      return PerformPostOperations();
+      return PerformPostOperations( _decimals );
     }
 
     // in this case asb(rhs) is greater than abs(lhs)
@@ -1328,7 +1315,7 @@ namespace MyOddWeb
     _neg = !neg;
 
     // return this/cleaned up.
-    return PerformPostOperations();
+    return PerformPostOperations( _decimals );
   }
 
   /**
@@ -1351,7 +1338,7 @@ namespace MyOddWeb
     _neg = neg;
 
     // return this/cleaned up.
-    return PerformPostOperations();
+    return PerformPostOperations( precision );
   }
 
   /**
@@ -1361,19 +1348,74 @@ namespace MyOddWeb
    * @param size_t precision the number of decimals.
    * @return BigNumber& this number square root.
    */
-  BigNumber& BigNumber::Sqrt( size_t precision )
+  BigNumber& BigNumber::Sqrt(size_t precision)
   {
-    //  sqrt = x^(1/2)
-    static const BigNumber half("0.5");
+    // common number.
+    static const BigNumber number_two = 2;
+    
+    // get the nroot=2
+    // sqrt = x ^ (1 / 2)
+    return Root(number_two, precision);
+  }
 
-    // calculate it, use the correction to make sure we are well past
-    // the actual value we want to set is as.
-    // the rounding will then take care of the rest.
-    *this = Pow(half, precision + DEFAULT_PRECISION_CORRECTION ).Round( precision );
+  /**
+   * Calculate the nth root of this number
+   * @see http://www.mathwords.com/r/radical_rules.htm
+   * @param size_t precision the number of decimals.
+   * @param const BigNumber& nthroot the nth root we want to calculate.
+   * @return BigNumber& this numbers nth root.
+   */
+  BigNumber& BigNumber::Root(const BigNumber& nthroot, size_t precision )
+  {
+    // sanity checks, even nthroots cannot get negative nuber
+    // Root( 4, -24 ) is not posible as nothing x * x * x  * x can give a negative result
+    if ( Neg() && nthroot.Even() )
+    {
+      // sqrt(-x) == NaN
+      *this = BigNumber("NaN");
+
+      // all done
+      return PerformPostOperations( precision );
+    }
+
+    // the nth root cannot be zero.
+    if (nthroot.Zero())
+    {
+      // sqrt(-x) == NaN
+      *this = BigNumber("NaN");
+
+      // all done
+      return PerformPostOperations( precision );
+    }
+
+    // if the number is zero than this is unchanged.
+    // because for x*x*x = 0 then x = 0
+    if ( Zero() )
+    {
+      // sqrt(0) == 0 and we are already zero...
+      return PerformPostOperations( precision );
+    }
+
+    // if the number is one, then this number is one.
+    // it has to be as only 1*1 = 1 is the only posibility is.
+    if (Compare(_one) == 0)
+    {
+      *this = _one;
+    }
+    else
+    {
+      //  nthroot = x^( 1/nthroot)
+      const BigNumber number_one_over = BigNumber( _one).Div( nthroot, precision + DEFAULT_PRECISION_CORRECTION);
+
+      // calculate it, use the correction to make sure we are well past
+      // the actual value we want to set is as.
+      // the rounding will then take care of the rest.
+      *this = Pow(number_one_over, precision + DEFAULT_PRECISION_CORRECTION).Round(precision);
+    }
 
     // return this/cleaned up.
     // we already truncated it.
-    return PerformPostOperations();
+    return PerformPostOperations( precision );
   }
 
   /**
@@ -1397,7 +1439,7 @@ namespace MyOddWeb
     }
 
     // return this/cleaned up.
-    return PerformPostOperations().Trunc( precision );
+    return PerformPostOperations( precision );
   }
 
   /**
@@ -1420,7 +1462,7 @@ namespace MyOddWeb
     _neg = neg;
 
     // return this/cleaned up.
-    return PerformPostOperations();
+    return PerformPostOperations( precision );
   }
 
   /**
@@ -1495,7 +1537,7 @@ namespace MyOddWeb
     }
 
     // clean it all up and update our value.
-    *this = c.PerformPostOperations();
+    *this = c.PerformPostOperations( c._decimals );
 
     // return *this
     return *this;
@@ -1645,8 +1687,8 @@ namespace MyOddWeb
     }
 
     // clean up the quotient and the remainder.
-    remainder.PerformPostOperations();
-    quotient.PerformPostOperations();
+    remainder.PerformPostOperations( remainder._decimals );
+    quotient.PerformPostOperations( quotient._decimals );
   }
 
   /**
@@ -1753,7 +1795,7 @@ namespace MyOddWeb
       _numbers.push_back( 0 );
       ++l;
     }
-    PerformPostOperations();
+    PerformPostOperations( _decimals );
   }
 
   /**
@@ -1768,7 +1810,7 @@ namespace MyOddWeb
     if (multiplier == _decimals)
     {
       _decimals = 0;
-      PerformPostOperations();
+      PerformPostOperations( 0 );
       return;
     }
 
@@ -1786,7 +1828,7 @@ namespace MyOddWeb
     }
 
     //  clean up
-    PerformPostOperations();
+    PerformPostOperations( _decimals );
   }
 
   /** 
@@ -1813,10 +1855,15 @@ namespace MyOddWeb
     return _e;
   }
 
-  BigNumber& BigNumber::Log(const BigNumber& exponent, size_t precision )
+  BigNumber& BigNumber::Log(const BigNumber& base, size_t precision )
   {
+    BigNumber ln = *this;
+    BigNumber lnbase = base;
+    ln.Ln(precision + DEFAULT_PRECISION_CORRECTION);
+    lnbase.Ln(precision + DEFAULT_PRECISION_CORRECTION);
+    *this = ln.Div(lnbase, precision + DEFAULT_PRECISION_CORRECTION);
     // clean up and done.
-    return PerformPostOperations();
+    return PerformPostOperations( precision );
   }
 
   /**
@@ -1833,7 +1880,7 @@ namespace MyOddWeb
       *this = _one;
 
       //  done
-      return PerformPostOperations();
+      return PerformPostOperations( precision );
     }
 
     // get the integer part of the number.
@@ -1859,7 +1906,7 @@ namespace MyOddWeb
       e.Trunc(precision + DEFAULT_PRECISION_CORRECTION);
 
       //  then raise it.
-      *this = e.Pow(integer);
+      *this = e.Pow(integer, precision + DEFAULT_PRECISION_CORRECTION);
     }
 
     if (!fraction.Zero())
@@ -1895,11 +1942,11 @@ namespace MyOddWeb
       fraction = result;
 
       // multiply the decimal number with the fraction.
-      Mul(fraction);
+      Mul(fraction, precision + DEFAULT_PRECISION_CORRECTION);
     }
 
     // clean up and return.
-    return Trunc(precision).PerformPostOperations();
+    return PerformPostOperations( precision );
   }
 
   /**
@@ -1917,14 +1964,14 @@ namespace MyOddWeb
     if (Neg())
     {
       *this = BigNumber("NaN");
-      return PerformPostOperations();
+      return PerformPostOperations( precision );
     }
 
     //  if this is 1 then log 1 is zero.
     if (Compare(1) == 0 )
     {
       *this = 0;
-      return PerformPostOperations();
+      return PerformPostOperations( precision );
     }
 
     // @see https://www.quora.com/How-can-we-calculate-the-logarithms-by-hand-without-using-any-calculatorhttps://www.quora.com/How-can-we-calculate-the-logarithms-by-hand-without-using-any-calculator
@@ -1945,7 +1992,7 @@ namespace MyOddWeb
 
     //  we must make sure that *is 
     BigNumber x(*this);
-    const BigNumber base = x.Sub( 1 ).Trunc( precision+ DEFAULT_PRECISION_CORRECTION);  // Base of the numerator; exponent will be explicit
+    const BigNumber base = x.Sub( _one ).Trunc( precision+ DEFAULT_PRECISION_CORRECTION);  // Base of the numerator; exponent will be explicit
     int den = 1;                        // Denominator of the nth term
     bool neg = false;                   // start positive.
     
@@ -1963,7 +2010,7 @@ namespace MyOddWeb
       neg = !neg;
 
       // the denominator+power is the same thing
-      baseRaised.Mul(base).Trunc( precision+ DEFAULT_PRECISION_CORRECTION);
+      baseRaised.Mul(base, precision + DEFAULT_PRECISION_CORRECTION).Trunc( precision+ DEFAULT_PRECISION_CORRECTION);
 
       // now devide it
       BigNumber currentBase = BigNumber::AbsDiv(baseRaised, den, precision+ DEFAULT_PRECISION_CORRECTION);
@@ -1993,8 +2040,8 @@ namespace MyOddWeb
     // log rules are... ln(ab) = ln(a) + ln(b)
     BigNumber ln2_tmp = ln2;
     BigNumber ln11_tmp = ln11;
-    ln2_tmp.Trunc(precision+ DEFAULT_PRECISION_CORRECTION).Mul( counter2 );
-    ln11_tmp.Trunc( precision+ DEFAULT_PRECISION_CORRECTION).Mul( counter1 );
+    ln2_tmp.Mul( counter2, precision + DEFAULT_PRECISION_CORRECTION);
+    ln11_tmp.Mul( counter1, precision + DEFAULT_PRECISION_CORRECTION);
 
     result.Add(ln11_tmp);
     result.Add(ln2_tmp);
@@ -2003,6 +2050,6 @@ namespace MyOddWeb
     *this = result;
 
     // clean up and done.
-    return Trunc(precision).PerformPostOperations();
+    return PerformPostOperations( precision );
   }
 }// namespace MyOddWeb

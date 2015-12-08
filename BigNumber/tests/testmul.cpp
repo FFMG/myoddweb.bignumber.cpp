@@ -304,3 +304,87 @@ TEST(MultiplyBigNumber, NegativeOnePower) {
   std::string z = x.ToString();
   ASSERT_EQ("0.1428571428", z);
 }
+
+TEST(MultiplyBigNumber, SquareRootOfTwo) {
+  MyOddWeb::BigNumber x = 4;
+  MyOddWeb::BigNumber y = x.Sqrt();
+  std::string z = y.ToString(); //  2
+  ASSERT_EQ("2", z);
+}
+
+TEST(MultiplyBigNumber, SquareRootOfThree15DecimalPlaces) {
+  MyOddWeb::BigNumber x = 3;
+  MyOddWeb::BigNumber y = x.Sqrt( 15 );
+  std::string z = y.ToString(); //  1.7320508075688772935274463415058723669428052538103806280558 
+  ASSERT_EQ("1.732050807568877", z);
+}
+
+TEST(MultiplyBigNumber, SquareRootOfThree30DecimalPlaces) {
+  MyOddWeb::BigNumber x = 3;
+  MyOddWeb::BigNumber y = x.Sqrt(30);
+  std::string z = y.ToString(); //  1.7320508075688772935274463415058723669428052538103806280558 
+  ASSERT_EQ("1.732050807568877293527446341506", z);
+}
+
+TEST(MultiplyBigNumber, SquareRootOfSixteen) {
+  MyOddWeb::BigNumber x = 16;
+  MyOddWeb::BigNumber y = x.Sqrt();
+  std::string z = y.ToString(); //  4
+  ASSERT_EQ("4", z);
+}
+
+TEST(MultiplyBigNumber, SquareRootOfLargeNumber) {
+  MyOddWeb::BigNumber x = "18446744073709551616";
+  MyOddWeb::BigNumber y = x.Sqrt();
+  std::string z = y.ToString(); //  4
+  ASSERT_EQ("4294967296", z);
+}
+
+TEST(MultiplyBigNumber, SquareRootOfLargeNegativeNumber ) {
+  MyOddWeb::BigNumber x = "-18446744073709551616";
+  MyOddWeb::BigNumber y = x.Sqrt();
+  ASSERT_TRUE(y.Nan());
+}
+
+TEST(MultiplyBigNumber, SquareRootOfSmallNegativeNumber) {
+  MyOddWeb::BigNumber x = "-4";
+  MyOddWeb::BigNumber y = x.Sqrt();
+  ASSERT_TRUE(y.Nan());
+}
+
+TEST(MultiplyBigNumber, SquareRootOfZero) {
+  MyOddWeb::BigNumber x = "0";
+  MyOddWeb::BigNumber y = x.Sqrt();
+  std::string z = y.ToString();
+  ASSERT_EQ("0", z);
+  ASSERT_TRUE(y.Zero() );
+}
+
+TEST(MultiplyBigNumber, NthRootOfZero) {
+  MyOddWeb::BigNumber x = "0";
+  MyOddWeb::BigNumber y = x.Root( 17 );
+  std::string z = y.ToString();
+  ASSERT_EQ("0", z);
+  ASSERT_TRUE(y.Zero());
+}
+
+TEST(MultiplyBigNumber, NthRootIsZero) {
+  MyOddWeb::BigNumber x = 212;
+  MyOddWeb::BigNumber y = x.Root(0);
+  ASSERT_TRUE(y.Nan() );
+}
+
+TEST(MultiplyBigNumber, NthRootOfOne) {
+  int rnd = (rand() % 32767);
+  MyOddWeb::BigNumber x = 1;
+  MyOddWeb::BigNumber y = x.Root(rnd);
+  std::string z = y.ToString();
+  ASSERT_EQ("1", z);
+}
+
+TEST(MultiplyBigNumber, CubeRootOfTwentySeven) {
+  MyOddWeb::BigNumber x = 27;
+  MyOddWeb::BigNumber y = x.Root(3);
+  std::string z = y.ToString();
+  ASSERT_EQ("3", z);
+}

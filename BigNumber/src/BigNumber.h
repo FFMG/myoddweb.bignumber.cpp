@@ -58,6 +58,7 @@ namespace MyOddWeb
     // Math
     BigNumber& Pow(const BigNumber& exp, size_t precision = DEFAULT_PRECISION);
     BigNumber& Sqrt(size_t precision = DEFAULT_PRECISION);
+    BigNumber& Root(const BigNumber& nthroot, size_t precision = DEFAULT_PRECISION);
     BigNumber& Add(const BigNumber& rhs);
     BigNumber& Sub(const BigNumber& rhs);
     BigNumber& Mul(const BigNumber& rhs, size_t precision = DEFAULT_PRECISION);
@@ -117,7 +118,6 @@ namespace MyOddWeb
 
   protected:
     void Parse(const char* source);
-    void Parse(int source);
     void Parse(long long source);
     void Parse(double source);
 
@@ -149,7 +149,7 @@ namespace MyOddWeb
     BigNumber(const NUMBERS& numbers, size_t decimals, bool neg);
 
     // clean up everything.
-    BigNumber& PerformPostOperations();
+    BigNumber& PerformPostOperations(size_t precision);
 
     // multiply a number by the base.
     void MultiplyByBase(size_t multiplier );
