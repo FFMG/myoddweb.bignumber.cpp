@@ -38,6 +38,7 @@
 #define DEFAULT_PRECISION_CORRECTION ((size_t)5)
 #define MAX_LN_ITERATIONS ((size_t)100)
 #define MAX_EXP_ITERATIONS ((size_t)100)
+#define MAX_ROOT_ITERATIONS ((size_t)100)
 
 namespace MyOddWeb
 {
@@ -112,7 +113,7 @@ namespace MyOddWeb
     static BigNumber AbsPow(const BigNumber& base, const BigNumber& exp, size_t precision);
     static int AbsCompare(const BigNumber& lhs, const BigNumber& rhs); //  greater or equal
 
-  public:
+  protected:
     static void QuotientAndRemainder(const BigNumber& numerator, const BigNumber& denominator, BigNumber& quotient, BigNumber& remainder);
     static void AbsQuotientAndRemainder(const BigNumber& numerator, const BigNumber& denominator, BigNumber& quotient, BigNumber& remainder);
 
@@ -161,6 +162,9 @@ namespace MyOddWeb
     static BigNumber _e;
     static const BigNumber _one;
     static const BigNumber _two;
+
+  protected:
+    BigNumber& RootNewton( const BigNumber& nthroot, size_t precision);
 
   protected:
     unsigned long long _MakeNumberAtIndex(size_t index, size_t length) const;

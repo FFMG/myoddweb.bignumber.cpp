@@ -391,7 +391,8 @@ namespace MyOddWeb
     // add 0.5 and floor(...) it.
     BigNumber number = 5;
     number.DevideByBase( (precision+1));
-    *this = AbsAdd(number, *this).Floor( precision );
+    BigNumber x = AbsAdd(number, *this);
+    *this = x.Floor( precision );
 
     // clean up.
     return PerformPostOperations( precision );
@@ -585,6 +586,7 @@ namespace MyOddWeb
     // divide until we are done ... or we reached the presision limit.
     for (;;)
     {
+      // get the quotient and remainder.
       BigNumber::QuotientAndRemainder(number, rhs, quotient, remainder);
 
       // add the quotien to the current number.
@@ -1382,10 +1384,65 @@ namespace MyOddWeb
   }
 
   /**
+   * Calculate the nth root using the Newton alorithm
+   * @see https://en.wikipedia.org/wiki/Nth_root_algorithm
+   * @see https://en.wikipedia.org/wiki/Newton%27s_method
+   * @param const BigNumber& nthroot the nth root we want to calculate.
+   * @param size_t precision the number of decimals.
+   * @return BigNumber& this numbers nth root.
+   */
+  BigNumber& BigNumber::RootNewton( const BigNumber& nthroot, size_t precision)
+  {
+    if ( Compare(_one) == 0)
+    {
+      *this = _one;
+      return *this;
+    }
+
+    // the padded precision so we do not, slowly, loose our final precision.
+    const size_t padded_precision = precision + DEFAULT_PRECISION_CORRECTION;
+
+    // copy this number variable so it is easier to read.
+    BigNumber x = *this;
+
+    // values used a lot
+    const BigNumber r_less_one = BigNumber(nthroot).Sub(_one);
+    const BigNumber one_over_r = BigNumber(_one).Div(nthroot, padded_precision);
+
+    // calculate this over and over again.
+    for (size_t i = 0; i < MAX_ROOT_ITERATIONS; ++i)
+    {
+      //  y = n / pow( x, r_less_one)
+      BigNumber y1 = BigNumber(x).Pow(r_less_one, padded_precision);
+      BigNumber y = BigNumber(*this).Div(y1, padded_precision);
+
+      // x = one_over_r *(r_less_one * x +  y);
+      BigNumber x_temp = BigNumber(one_over_r).Mul(BigNumber(r_less_one).Mul(x, padded_precision).Add(y), padded_precision);
+
+      // if the calculation we just did, did not really change anything
+      // it means that we can stop here, there is no point in trying
+      // to refine this any further.
+      if (x_temp.Compare(x) == 0)
+      {
+        break;
+      }
+
+      // set *this to the the updated value.
+      x = x_temp;
+    }
+
+    // set the value.
+    *this = x.Round(precision);
+
+    // clean up.
+    return PerformPostOperations(precision);
+  }
+
+  /**
    * Calculate the nth root of this number
    * @see http://www.mathwords.com/r/radical_rules.htm
-   * @param size_t precision the number of decimals.
    * @param const BigNumber& nthroot the nth root we want to calculate.
+   * @param size_t precision the number of decimals.
    * @return BigNumber& this numbers nth root.
    */
   BigNumber& BigNumber::Root(const BigNumber& nthroot, size_t precision )
@@ -1427,7 +1484,14 @@ namespace MyOddWeb
     }
     else
     {
-      //  nthroot = x^( 1/nthroot)
+      // try and use some of the shortcuts... 
+      if (IsInteger())
+      {
+        return RootNewton( nthroot, precision);
+      }
+
+      // try and use the power of...
+      // nthroot = x^( 1/nthroot)
       const BigNumber number_one_over = BigNumber( _one).Div( nthroot, precision + DEFAULT_PRECISION_CORRECTION);
 
       // calculate it, use the correction to make sure we are well past
@@ -1692,7 +1756,7 @@ namespace MyOddWeb
       // and add the quotien.
       quotient.Add(base_multiplier);
     }
-        
+     
     for (;;)
     {
       BigNumber f = BigNumber::AbsSub(remainder, denominator);

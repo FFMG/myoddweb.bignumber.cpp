@@ -87,7 +87,7 @@ Double
 	- IsLessEqual( number ) : If '*this*' is less or equal to '*number*'.
 - IsInteger() : If '*this*' number is a whole number positive or negative. 
 
-- ToInt() : convert to int
+- ToInt() : convert to int.
 - ToDouble() : convert to double.
 - ToString() : convert to string.
 - Abs() : Get the absolute value of the number
