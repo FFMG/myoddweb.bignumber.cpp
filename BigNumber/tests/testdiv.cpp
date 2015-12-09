@@ -38,13 +38,13 @@
 
 TEST(DivBigNumber, DevideByZero) {
   MyOddWeb::BigNumber num = MyOddWeb::BigNumber("123").Div( 0 );
-  ASSERT_TRUE( num.Nan() );
+  ASSERT_TRUE( num.IsNan() );
 }
 
 TEST(DivBigNumber, ZeroDevidedByAnyNumber ) {
   int x = (rand() % 32767) + 1;
   MyOddWeb::BigNumber num = MyOddWeb::BigNumber(0).Div(x);
-  ASSERT_TRUE(num.Zero());
+  ASSERT_TRUE(num.IsZero());
 }
 
 TEST(DivBigNumber, DevideWholePositiveNumbers ) {

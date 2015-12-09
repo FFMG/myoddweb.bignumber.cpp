@@ -84,19 +84,18 @@ namespace MyOddWeb
 
     //
     // Helper
-    bool Zero() const;
-    bool Nan() const;
-    bool Neg() const;
-    bool Odd() const;
-    bool Even() const;
-
     int Compare(const BigNumber& rhs) const;
-    bool Equal(const BigNumber& rhs) const;
-    bool Unequal(const BigNumber& rhs) const;
-    bool Greater(const BigNumber& rhs) const;
-    bool Less(const BigNumber& rhs) const;
-    bool GreaterEqual(const BigNumber& rhs) const;
-    bool LessEqual(const BigNumber& rhs) const;
+    bool IsZero() const;
+    bool IsNan() const;
+    bool IsNeg() const;
+    bool IsOdd() const;
+    bool IsEven() const;
+    bool IsEqual(const BigNumber& rhs) const;
+    bool IsUnequal(const BigNumber& rhs) const;
+    bool IsGreater(const BigNumber& rhs) const;
+    bool IsLess(const BigNumber& rhs) const;
+    bool IsGreaterEqual(const BigNumber& rhs) const;
+    bool IsLessEqual(const BigNumber& rhs) const;
 
     //
     // conversion.

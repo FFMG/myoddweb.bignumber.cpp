@@ -276,13 +276,13 @@ TEST(FunctionBigNumber, ModulusOfLongLongNumberWithZeros) {
 TEST(FunctionBigNumber, ModulusWithZeroDivisor) {
   MyOddWeb::BigNumber src("10000000000000000000");
   MyOddWeb::BigNumber mod = src.Mod("0");
-  ASSERT_TRUE(mod.Nan());
+  ASSERT_TRUE(mod.IsNan());
 }
 
 TEST(FunctionBigNumber, DivDenominatorIsZero) {
   MyOddWeb::BigNumber src(38);
   MyOddWeb::BigNumber div = src.Quotient(0);
-  ASSERT_TRUE(div.Nan());
+  ASSERT_TRUE(div.IsNan());
 }
 
 TEST(FunctionBigNumber, DivDividendSmallerToDivisor) {
@@ -294,14 +294,14 @@ TEST(FunctionBigNumber, DivDividendSmallerToDivisor) {
 TEST(FunctionBigNumber, NotANumberToInt) {
   MyOddWeb::BigNumber src(38);
   MyOddWeb::BigNumber nan = src.Quotient(0);
-  ASSERT_TRUE(nan.Nan());
+  ASSERT_TRUE(nan.IsNan());
   ASSERT_EQ(0, nan.ToInt());
 }
 
 TEST(FunctionBigNumber, NotANumberToString) {
   MyOddWeb::BigNumber src(38);
   MyOddWeb::BigNumber nan = src.Quotient(0);
-  ASSERT_TRUE(nan.Nan());
+  ASSERT_TRUE(nan.IsNan());
   ASSERT_EQ("NaN", nan.ToString());
 }
 
@@ -359,7 +359,7 @@ TEST(FunctionBigNumber, FractorialOfNegativeNumber)
 {
   MyOddWeb::BigNumber c(-20 );
   c.Factorial();
-  ASSERT_TRUE( c.Nan() );
+  ASSERT_TRUE( c.IsNan() );
 }
 
 TEST(FunctionBigNumber, SmallFractorial)
@@ -561,7 +561,7 @@ TEST(FunctionBigNumber, FloorNegativeRealNumber)
 TEST(FunctionBigNumber, CreateNaN)
 {
   MyOddWeb::BigNumber n( "NaN" );
-  ASSERT_TRUE(n.Nan());
+  ASSERT_TRUE(n.IsNan());
 }
 
 TEST(FunctionBigNumber, CreateWithNullString)
@@ -688,37 +688,37 @@ TEST(FunctionBigNumber, EqualNumbers)
   {
     MyOddWeb::BigNumber x(-3);
     MyOddWeb::BigNumber y(-3);
-    ASSERT_TRUE(x.Equal(y));
+    ASSERT_TRUE(x.IsEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(-3.1234);
     MyOddWeb::BigNumber y(-3.1234);
-    ASSERT_TRUE(x.Equal(y));
+    ASSERT_TRUE(x.IsEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(3);
     MyOddWeb::BigNumber y(3);
-    ASSERT_TRUE(x.Equal(y));
+    ASSERT_TRUE(x.IsEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(3);
     MyOddWeb::BigNumber y(-3);
-    ASSERT_FALSE(x.Equal(y));
+    ASSERT_FALSE(x.IsEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(30);
     MyOddWeb::BigNumber y(3);
-    ASSERT_FALSE(x.Equal(y));
+    ASSERT_FALSE(x.IsEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(3.1234);
     MyOddWeb::BigNumber y(3.12345);
-    ASSERT_FALSE(x.Equal(y));
+    ASSERT_FALSE(x.IsEqual(y));
   }
 }
 
@@ -727,37 +727,37 @@ TEST(FunctionBigNumber, UnEqualNumbers)
   {
     MyOddWeb::BigNumber x(-3);
     MyOddWeb::BigNumber y(-3);
-    ASSERT_FALSE(x.Unequal(y));
+    ASSERT_FALSE(x.IsUnequal(y));
   }
 
   {
     MyOddWeb::BigNumber x(-3.1234);
     MyOddWeb::BigNumber y(-3.1234);
-    ASSERT_FALSE(x.Unequal(y));
+    ASSERT_FALSE(x.IsUnequal(y));
   }
 
   {
     MyOddWeb::BigNumber x(3);
     MyOddWeb::BigNumber y(3);
-    ASSERT_FALSE(x.Unequal(y));
+    ASSERT_FALSE(x.IsUnequal(y));
   }
 
   {
     MyOddWeb::BigNumber x(3);
     MyOddWeb::BigNumber y(-3);
-    ASSERT_TRUE(x.Unequal(y));
+    ASSERT_TRUE(x.IsUnequal(y));
   }
 
   {
     MyOddWeb::BigNumber x(30);
     MyOddWeb::BigNumber y(3);
-    ASSERT_TRUE(x.Unequal(y));
+    ASSERT_TRUE(x.IsUnequal(y));
   }
 
   {
     MyOddWeb::BigNumber x(3.1234);
     MyOddWeb::BigNumber y(3.12345);
-    ASSERT_TRUE(x.Unequal(y));
+    ASSERT_TRUE(x.IsUnequal(y));
   }
 }
 
@@ -766,37 +766,37 @@ TEST(FunctionBigNumber, GreaterNumbers)
   {
     MyOddWeb::BigNumber x(-3);
     MyOddWeb::BigNumber y(-3);
-    ASSERT_FALSE(x.Greater(y));
+    ASSERT_FALSE(x.IsGreater(y));
   }
 
   {
     MyOddWeb::BigNumber x(-3);
     MyOddWeb::BigNumber y(-5);
-    ASSERT_TRUE(x.Greater(y));
+    ASSERT_TRUE(x.IsGreater(y));
   }
 
   {
     MyOddWeb::BigNumber x(5);
     MyOddWeb::BigNumber y(3);
-    ASSERT_TRUE(x.Greater(y));
+    ASSERT_TRUE(x.IsGreater(y));
   }
 
   {
     MyOddWeb::BigNumber x(3);
     MyOddWeb::BigNumber y(5);
-    ASSERT_FALSE(x.Greater(y));
+    ASSERT_FALSE(x.IsGreater(y));
   }
 
   {
     MyOddWeb::BigNumber x(-5);
     MyOddWeb::BigNumber y(-3);
-    ASSERT_FALSE(x.Greater(y));
+    ASSERT_FALSE(x.IsGreater(y));
   }
 
   {
     MyOddWeb::BigNumber x(-3.2);
     MyOddWeb::BigNumber y(-3.5);
-    ASSERT_TRUE(x.Greater(y));
+    ASSERT_TRUE(x.IsGreater(y));
   }
 }
 
@@ -805,37 +805,37 @@ TEST(FunctionBigNumber, GreaterEqualNumbers)
   {
     MyOddWeb::BigNumber x(-3);
     MyOddWeb::BigNumber y(-3);
-    ASSERT_TRUE(x.GreaterEqual(y));
+    ASSERT_TRUE(x.IsGreaterEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(-3);
     MyOddWeb::BigNumber y(-5);
-    ASSERT_TRUE(x.GreaterEqual(y));
+    ASSERT_TRUE(x.IsGreaterEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(5);
     MyOddWeb::BigNumber y(3);
-    ASSERT_TRUE(x.GreaterEqual(y));
+    ASSERT_TRUE(x.IsGreaterEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(3);
     MyOddWeb::BigNumber y(5);
-    ASSERT_FALSE(x.GreaterEqual(y));
+    ASSERT_FALSE(x.IsGreaterEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(-5);
     MyOddWeb::BigNumber y(-3);
-    ASSERT_FALSE(x.GreaterEqual(y));
+    ASSERT_FALSE(x.IsGreaterEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(-3.2);
     MyOddWeb::BigNumber y(-3.5);
-    ASSERT_TRUE(x.GreaterEqual(y));
+    ASSERT_TRUE(x.IsGreaterEqual(y));
   }
 }
 
@@ -844,37 +844,37 @@ TEST(FunctionBigNumber, LessNumbers)
   {
     MyOddWeb::BigNumber x(-3);
     MyOddWeb::BigNumber y(-3);
-    ASSERT_FALSE(x.Less(y));
+    ASSERT_FALSE(x.IsLess(y));
   }
 
   {
     MyOddWeb::BigNumber x(-5);
     MyOddWeb::BigNumber y(-3);
-    ASSERT_TRUE(x.Less(y));
+    ASSERT_TRUE(x.IsLess(y));
   }
 
   {
     MyOddWeb::BigNumber x(3);
     MyOddWeb::BigNumber y(5);
-    ASSERT_TRUE(x.Less(y));
+    ASSERT_TRUE(x.IsLess(y));
   }
 
   {
     MyOddWeb::BigNumber x(5);
     MyOddWeb::BigNumber y(3);
-    ASSERT_FALSE(x.Less(y));
+    ASSERT_FALSE(x.IsLess(y));
   }
 
   {
     MyOddWeb::BigNumber x(-3);
     MyOddWeb::BigNumber y(-5);
-    ASSERT_FALSE(x.Less(y));
+    ASSERT_FALSE(x.IsLess(y));
   }
 
   {
     MyOddWeb::BigNumber x(-3.4);
     MyOddWeb::BigNumber y(-3.2);
-    ASSERT_TRUE(x.Less(y));
+    ASSERT_TRUE(x.IsLess(y));
   }
 }
 
@@ -883,108 +883,108 @@ TEST(FunctionBigNumber, LessOrEqualNumbers)
   {
     MyOddWeb::BigNumber x(-3);
     MyOddWeb::BigNumber y(-3);
-    ASSERT_TRUE(x.LessEqual(y));
+    ASSERT_TRUE(x.IsLessEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(-5);
     MyOddWeb::BigNumber y(-3);
-    ASSERT_TRUE(x.LessEqual(y));
+    ASSERT_TRUE(x.IsLessEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(3);
     MyOddWeb::BigNumber y(5);
-    ASSERT_TRUE(x.LessEqual(y));
+    ASSERT_TRUE(x.IsLessEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(5);
     MyOddWeb::BigNumber y(3);
-    ASSERT_FALSE(x.LessEqual(y));
+    ASSERT_FALSE(x.IsLessEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(-3);
     MyOddWeb::BigNumber y(-5);
-    ASSERT_FALSE(x.LessEqual(y));
+    ASSERT_FALSE(x.IsLessEqual(y));
   }
 
   {
     MyOddWeb::BigNumber x(-3.4);
     MyOddWeb::BigNumber y(-3.2);
-    ASSERT_TRUE(x.LessEqual(y));
+    ASSERT_TRUE(x.IsLessEqual(y));
   }
 }
 
 TEST(FunctionBigNumber, NaNIsNeitherOddNorEven )
 {
   MyOddWeb::BigNumber x("NaN");
-  ASSERT_FALSE(x.Odd());
-  ASSERT_FALSE(x.Even());
+  ASSERT_FALSE(x.IsOdd());
+  ASSERT_FALSE(x.IsEven());
 }
 
 TEST(FunctionBigNumber, ZeroIsEven)
 {
   MyOddWeb::BigNumber x(0);
-  ASSERT_FALSE(x.Odd());
-  ASSERT_TRUE(x.Even());
+  ASSERT_FALSE(x.IsOdd());
+  ASSERT_TRUE(x.IsEven());
 }
 
 TEST(FunctionBigNumber, EvenWholeNumber)
 {
   MyOddWeb::BigNumber x( 1234 );
-  ASSERT_FALSE(x.Odd());
-  ASSERT_TRUE(x.Even());
+  ASSERT_FALSE(x.IsOdd());
+  ASSERT_TRUE(x.IsEven());
 }
 
 TEST(FunctionBigNumber, EvenDecimalNumber)
 {
   MyOddWeb::BigNumber x(1234.135799);
-  ASSERT_FALSE(x.Odd());
-  ASSERT_TRUE(x.Even());
+  ASSERT_FALSE(x.IsOdd());
+  ASSERT_TRUE(x.IsEven());
 }
 
 TEST(FunctionBigNumber, EvenBigWholeNumber)
 {
   MyOddWeb::BigNumber x("1234567890987654321123456780");
-  ASSERT_FALSE(x.Odd());
-  ASSERT_TRUE(x.Even());
+  ASSERT_FALSE(x.IsOdd());
+  ASSERT_TRUE(x.IsEven());
 }
 
 TEST(FunctionBigNumber, OddWholeNumber)
 {
   MyOddWeb::BigNumber x(1235);
-  ASSERT_TRUE(x.Odd());
-  ASSERT_FALSE(x.Even());
+  ASSERT_TRUE(x.IsOdd());
+  ASSERT_FALSE(x.IsEven());
 }
 
 TEST(FunctionBigNumber, OddDecimalNumber)
 {
   MyOddWeb::BigNumber x(1235.246);
-  ASSERT_TRUE(x.Odd());
-  ASSERT_FALSE(x.Even());
+  ASSERT_TRUE(x.IsOdd());
+  ASSERT_FALSE(x.IsEven());
 }
 
 TEST(FunctionBigNumber, OddBigWholeNumber)
 {
   MyOddWeb::BigNumber x("1234567890987654321123456781");
-  ASSERT_TRUE(x.Odd());
-  ASSERT_FALSE(x.Even());
+  ASSERT_TRUE(x.IsOdd());
+  ASSERT_FALSE(x.IsEven());
 }
 
 TEST(FunctionBigNumber, OddBigDecimalNumber)
 {
   MyOddWeb::BigNumber x("1234567890987654321123456781.2468008642");
-  ASSERT_TRUE(x.Odd());
-  ASSERT_FALSE(x.Even());
+  ASSERT_TRUE(x.IsOdd());
+  ASSERT_FALSE(x.IsEven());
 }
 
 TEST(FunctionBigNumber, EvenBigDecimalNumber)
 {
   MyOddWeb::BigNumber x("1234567890987654321123456780.1357997531");
-  ASSERT_FALSE(x.Odd());
-  ASSERT_TRUE(x.Even());
+  ASSERT_FALSE(x.IsOdd());
+  ASSERT_TRUE(x.IsEven());
 }
 
 TEST(FunctionBigNumber, ModuloDivisorGreaterThanNumber)
@@ -1085,7 +1085,7 @@ TEST(FunctionBigNumber, IntegerOfPositiveNumber)
     MyOddWeb::BigNumber x("0.23456");
     double integer = x.Integer().ToDouble();
     ASSERT_EQ(0, integer);
-    ASSERT_TRUE( x.Zero() );
+    ASSERT_TRUE( x.IsZero() );
   }
 }
 
@@ -1110,7 +1110,7 @@ TEST(FunctionBigNumber, IntegerOfNegativeNumber)
     MyOddWeb::BigNumber x("-0.23456");
     double integer = x.Integer().ToDouble();
     ASSERT_EQ(0, integer);
-    ASSERT_TRUE(x.Zero());
+    ASSERT_TRUE(x.IsZero());
   }
 }
 
@@ -1135,7 +1135,7 @@ TEST(FunctionBigNumber, FractionOfNegativeNumber)
     MyOddWeb::BigNumber x("-12");
     std::string fraction = x.Frac().ToString();
     ASSERT_EQ( "0", fraction);
-    ASSERT_TRUE(x.Zero());
+    ASSERT_TRUE(x.IsZero());
   }
   {
     MyOddWeb::BigNumber x("-0.23456");
@@ -1165,7 +1165,7 @@ TEST(FunctionBigNumber, FractionOfPositiveNumber)
     MyOddWeb::BigNumber x("12");
     std::string fraction = x.Frac().ToString();
     ASSERT_EQ("0", fraction);
-    ASSERT_TRUE(x.Zero());
+    ASSERT_TRUE(x.IsZero());
   }
   {
     MyOddWeb::BigNumber x("0.23456");

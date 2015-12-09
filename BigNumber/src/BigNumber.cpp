@@ -118,9 +118,9 @@ namespace MyOddWeb
       }
       _numbers.clear();
       _numbers = rhs._numbers;
-      _neg = rhs.Neg();
-      _nan = rhs.Nan();
-      _zero = rhs.Zero();
+      _neg = rhs.IsNeg();
+      _nan = rhs.IsNan();
+      _zero = rhs.IsZero();
       _decimals = rhs._decimals;
     }
     return *this;
@@ -134,7 +134,7 @@ namespace MyOddWeb
    * return if the number is zero or not
    * @return bool
    */
-  bool BigNumber::Zero() const
+  bool BigNumber::IsZero() const
   {
     return _zero;
   }
@@ -143,7 +143,7 @@ namespace MyOddWeb
    * return if the number is not a number.
    * @return bool
    */
-  bool BigNumber::Nan() const
+  bool BigNumber::IsNan() const
   {
     return _nan;
   }
@@ -152,7 +152,7 @@ namespace MyOddWeb
    * return if the number is negative or not
    * @return bool
    */
-  bool BigNumber::Neg() const
+  bool BigNumber::IsNeg() const
   {
     return _neg;
   }
@@ -365,7 +365,7 @@ namespace MyOddWeb
    */
   BigNumber& BigNumber::Round(size_t precision)
   {
-    if (Neg())
+    if ( IsNeg() )
     {
       _neg = false;
       Round(precision);
@@ -401,7 +401,7 @@ namespace MyOddWeb
     Trunc( precision );
 
     // if it positive then we need to go up one more
-    if (!Neg())
+    if (!IsNeg())
     {
       Add( _one );
     }
@@ -427,7 +427,7 @@ namespace MyOddWeb
     Trunc( precision );
 
     // if it negative then we need to subtract one more.
-    if (Neg())
+    if (IsNeg())
     {
       Sub( _one );
     }
@@ -533,7 +533,7 @@ namespace MyOddWeb
   BigNumber BigNumber::AbsDiv(const BigNumber& lhs, const BigNumber& rhs, size_t precision)
   {
     // lhs / 0 = nan
-    if ( rhs.Zero())
+    if ( rhs.IsZero())
     {
       // lhs / 0 = nan
       BigNumber c;
@@ -542,7 +542,7 @@ namespace MyOddWeb
     }
 
     // 0 / n = 0
-    if (lhs.Zero())
+    if (lhs.IsZero())
     {
       // lhs / 0 = nan
       return BigNumber(0);
@@ -578,7 +578,7 @@ namespace MyOddWeb
       c.insert( c.begin(), quotient._numbers.begin(), quotient._numbers.end());
 
       //  are we done?
-      if (remainder.Zero())
+      if (remainder.IsZero())
       {
         break;
       }
@@ -610,7 +610,7 @@ namespace MyOddWeb
    */
   BigNumber BigNumber::AbsPow(const BigNumber& base, const BigNumber& exp, size_t precision)
   {
-    if( exp.Zero() )
+    if( exp.IsZero() )
     {
       return _one;
     }
@@ -641,17 +641,17 @@ namespace MyOddWeb
       static const BigNumber two = 2;
 
       // until we reach zero.
-      while (!copyExp.Zero())
+      while (!copyExp.IsZero())
       {
         // if it is odd...
-        if (copyExp.Odd())
+        if (copyExp.IsOdd())
         {
           result = BigNumber::AbsMul(result, copyBase, precision+DEFAULT_PRECISION_CORRECTION);
         }
 
         // devide by 2 with no decimal places.
         copyExp = BigNumber::AbsDiv(copyExp, two, 0);
-        if (copyExp.Zero())
+        if (copyExp.IsZero())
         {
           break;
         }
@@ -676,7 +676,7 @@ namespace MyOddWeb
   {
     // if either number is zero, then the total is zero
     // that's the rule.
-    if (lhs.Zero() || rhs.Zero())
+    if (lhs.IsZero() || rhs.IsZero())
     {
       //  zero * anything = zero.
       return BigNumber(0);
@@ -832,7 +832,7 @@ namespace MyOddWeb
     }
 
     // if we want to subtract zero from the lhs, then the result is rhs
-    if (rhs.Zero() )
+    if (rhs.IsZero() )
     {
       return lhs;
     }
@@ -1011,27 +1011,27 @@ namespace MyOddWeb
    
    * @return bool if this is an odd or even number.
    */
-  bool BigNumber::Odd() const
+  bool BigNumber::IsOdd() const
   {
     // if we are NaN then we ar not odd or even
-    if (Nan())
+    if (IsNan())
     {
       return false;
     }
 
     //  if we are not even, we are odd.
-    return !Even();
+    return !IsEven();
   }
 
   /**
   * Fast check if we are an even number.
-  * Faster than using Mod(2).Zero() as it does not do a full divide.
+  * Faster than using Mod(2).IsZero() as it does not do a full divide.
   * @return bool if this is an odd or even number.
   */
-  bool BigNumber::Even() const
+  bool BigNumber::IsEven() const
   {
     // if we are NaN then we ar not odd or even
-    if (Nan())
+    if (IsNan())
     {
       return false;
     }
@@ -1062,11 +1062,11 @@ namespace MyOddWeb
     case 0:
       // they look the same, but if their signs are not the same
       // then they are not really the same.
-      if (Neg() != rhs.Neg())
+      if (IsNeg() != rhs.IsNeg())
       {
         // the Abs value is the same, but not the sign
         // -2 != 2 or 2 != -2
-        if (Neg())
+        if (IsNeg())
         {
           // we are negative, rhs is not, so we are less.
           compare = -1;
@@ -1082,10 +1082,10 @@ namespace MyOddWeb
     case 1:
       //  it looks like we are greater
       // but if the sign is not the same we might actualy be smaller.
-      if (Neg() != rhs.Neg())
+      if (IsNeg() != rhs.IsNeg())
       {
         // -2 < 1 or 2 != -2
-        if (Neg())
+        if (IsNeg())
         {
           // whatever the number, we are smaller.
           compare = -1;
@@ -1100,7 +1100,7 @@ namespace MyOddWeb
       {
         // negative numbers are oposite.
         // -5 < -3 but |-5| > |-3|
-        if (Neg())
+        if (IsNeg())
         {
           compare = -1;
         }
@@ -1110,10 +1110,10 @@ namespace MyOddWeb
     case -1:
       // it looks like we are smaller
       // but if the sign is not the same we might actualy be smaller.
-      if (Neg() != rhs.Neg())
+      if (IsNeg() != rhs.IsNeg())
       {
         // -5 < 6
-        if (Neg())
+        if (IsNeg())
         {
           // whatever the number, we are indeed smaller.
           compare = -1;
@@ -1129,7 +1129,7 @@ namespace MyOddWeb
       {
         // negative numbers are oposite.
         // -3 > -5 but |-3| < |-5|
-        if (Neg())
+        if (IsNeg())
         {
           compare = 1;
         }
@@ -1149,7 +1149,7 @@ namespace MyOddWeb
    * @param const BigNumber& rhs the number we are comparing to.
    * @return bool if the 2 numbers are the same.
    */
-  bool BigNumber::Equal(const BigNumber& rhs) const
+  bool BigNumber::IsEqual(const BigNumber& rhs) const
   {
     return (0 == Compare(rhs));
   }
@@ -1160,7 +1160,7 @@ namespace MyOddWeb
    * @param const BigNumber& rhs the number we are comparing to.
    * @return bool if the 2 numbers are not the same.
    */
-  bool BigNumber::Unequal(const BigNumber& rhs) const
+  bool BigNumber::IsUnequal(const BigNumber& rhs) const
   {
     return (0 != Compare(rhs));
   }
@@ -1171,7 +1171,7 @@ namespace MyOddWeb
    * @param const BigNumber& rhs the number we are comparing to.
    * @return bool if this number is greater than the given number
    */
-  bool BigNumber::Greater(const BigNumber& rhs) const
+  bool BigNumber::IsGreater(const BigNumber& rhs) const
   {
     return (1 == Compare(rhs));
   }
@@ -1182,7 +1182,7 @@ namespace MyOddWeb
    * @param const BigNumber& rhs the number we are comparing to.
    * @return bool if this number is smaller
    */
-  bool BigNumber::Less(const BigNumber& rhs) const
+  bool BigNumber::IsLess(const BigNumber& rhs) const
   {
     return (-1 == Compare(rhs));
   }
@@ -1193,7 +1193,7 @@ namespace MyOddWeb
    * @param const BigNumber& rhs the number we are comparing to.
    * @return bool
    */
-  bool BigNumber::GreaterEqual(const BigNumber& rhs) const
+  bool BigNumber::IsGreaterEqual(const BigNumber& rhs) const
   {
     int compare = Compare(rhs);
     return (compare == 0 || compare == 1);
@@ -1205,7 +1205,7 @@ namespace MyOddWeb
    * @param const BigNumber& rhs the number we are comparing to.
    * @return bool if this number is smaller or equal to this number.
    */
-  bool BigNumber::LessEqual(const BigNumber& rhs) const
+  bool BigNumber::IsLessEqual(const BigNumber& rhs) const
   {
     int compare = Compare(rhs);
     return (compare == 0 || compare == -1);
@@ -1218,7 +1218,7 @@ namespace MyOddWeb
    */
   BigNumber& BigNumber::Add(const BigNumber& rhs)
   {
-    if (Neg() == rhs.Neg() ) 
+    if (IsNeg() == rhs.IsNeg() )
     { 
       //  both +1 or both -1
       // -1 + -1 = -1 * (1+1)
@@ -1240,7 +1240,7 @@ namespace MyOddWeb
     if (BigNumber::AbsCompare( *this, rhs ) >= 0 )
     {
       //  save the sign
-      bool neg = Neg();
+      bool neg = IsNeg();
 
       //  10 + -5 = this._neg * (10 - 5)  = 5
       //  -10 + 5 = this._neg * (10 - 5)  = -5
@@ -1254,7 +1254,7 @@ namespace MyOddWeb
     }
 
     //  save the sign
-    bool neg = rhs.Neg();
+    bool neg = rhs.IsNeg();
 
     //  5 + -10 = this._neg * (10 - 5)  = -5
     //  -5 + 10 = this._neg * (10 - 5)  = 5
@@ -1276,10 +1276,10 @@ namespace MyOddWeb
   {
     // if they are not the same sign then we add them
     // and save the current sign
-    if (Neg() != rhs.Neg())
+    if (IsNeg() != rhs.IsNeg())
     {
       // save the sign
-      bool neg = Neg();
+      bool neg = IsNeg();
 
       //  5 - -10 = this._neg * (10 + 5)  = 15
       //  -5 - 10 = this._neg * (10 + 5)  = -15
@@ -1298,7 +1298,7 @@ namespace MyOddWeb
     if (BigNumber::AbsCompare(*this, rhs) >= 0)
     {
       //  save the sign
-      bool neg = Neg();
+      bool neg = IsNeg();
 
       //  -10 - -5 = this._neg * (10 - 5)  = -5
       //  10 - 5 = this._neg * (10 - 5)  = 5
@@ -1315,7 +1315,7 @@ namespace MyOddWeb
     // so we must use the oposite sign of rhs
 
     //  save the sign
-    bool neg = rhs.Neg();
+    bool neg = rhs.IsNeg();
 
     //  -5 - -10 = !rhs._neg * (10 - 5)  = 5
     //  5 - 10 = !rhs._neg * (10 - 5)  = -5
@@ -1339,7 +1339,7 @@ namespace MyOddWeb
     // if one of them is negative, but not both, then it is negative
     // if they are both the same, then it is positive.
     // we need to save the value now as the next operation will make it positive
-    bool neg = (rhs.Neg() != Neg());
+    bool neg = (rhs.IsNeg() != IsNeg());
 
     // just multiply
     *this = BigNumber::AbsDiv(*this, rhs, precision );
@@ -1379,7 +1379,7 @@ namespace MyOddWeb
   {
     // sanity checks, even nthroots cannot get negative nuber
     // Root( 4, -24 ) is not posible as nothing x * x * x  * x can give a negative result
-    if ( Neg() && nthroot.Even() )
+    if (IsNeg() && nthroot.IsEven() )
     {
       // sqrt(-x) == NaN
       *this = BigNumber("NaN");
@@ -1389,7 +1389,7 @@ namespace MyOddWeb
     }
 
     // the nth root cannot be zero.
-    if (nthroot.Zero())
+    if (nthroot.IsZero())
     {
       // sqrt(-x) == NaN
       *this = BigNumber("NaN");
@@ -1400,7 +1400,7 @@ namespace MyOddWeb
 
     // if the number is zero than this is unchanged.
     // because for x*x*x = 0 then x = 0
-    if ( Zero() )
+    if (IsZero() )
     {
       // sqrt(0) == 0 and we are already zero...
       return PerformPostOperations( precision );
@@ -1442,7 +1442,7 @@ namespace MyOddWeb
 
     // if the exponent is negative 
     // then we need to divide.
-    if (exp.Neg())
+    if (exp.IsNeg())
     {
       // x^(-y) = 1/^|y|
       *this = BigNumber(_one).Div(*this, precision );
@@ -1463,7 +1463,7 @@ namespace MyOddWeb
     // if one of them is negative, but not both, then it is negative
     // if they are both the same, then it is positive.
     // we need to save the value now as the next operation will make it positive
-    bool neg = (rhs.Neg() != Neg());
+    bool neg = (rhs.IsNeg() != IsNeg());
 
     // just multiply
     *this = BigNumber::AbsMul(*this, rhs, precision );
@@ -1515,7 +1515,7 @@ namespace MyOddWeb
    */
   BigNumber& BigNumber::Factorial()
   {
-    if (Neg())
+    if (IsNeg())
     {
       // we cannot do the factorial of a negative number
       _nan = true;
@@ -1525,7 +1525,7 @@ namespace MyOddWeb
     }
 
     // is it zero
-    if (Zero())
+    if (IsZero())
     {
       // The value of 0!is 1, according to the convention for an empty product
       *this = _one;
@@ -1567,9 +1567,9 @@ namespace MyOddWeb
     BigNumber::AbsQuotientAndRemainder(numerator, denominator, quotient, remainder);
 
     // clean up the quotient and the remainder.
-    if ( !denominator.Zero())
+    if ( !denominator.IsZero())
     {
-      if (numerator.Neg())
+      if (numerator.IsNeg())
       {
         // 10 modulo -3 = -2
         remainder._neg = true;
@@ -1595,7 +1595,7 @@ namespace MyOddWeb
     }
 
     // are we trying to divide by zero?
-    if (denominator.Zero())
+    if (denominator.IsZero())
     {
       // those are not value numbers.
       remainder = BigNumber( "NaN" );
@@ -1683,7 +1683,7 @@ namespace MyOddWeb
     for (;;)
     {
       BigNumber f = BigNumber::AbsSub(remainder, denominator);
-      if (f.Neg())
+      if (f.IsNeg())
       {
         //  that's it, removing that number would
         // cause the number to be negative.
@@ -1709,7 +1709,7 @@ namespace MyOddWeb
    */
   double BigNumber::ToDouble() const
   {
-    if (Nan())
+    if (IsNan())
     {
       //  c++ does not have a Nan() number.
       return 0;
@@ -1726,7 +1726,7 @@ namespace MyOddWeb
    */
   int BigNumber::ToInt() const
   {
-    if (Nan())
+    if (IsNan())
     {
       //  c++ does not have a Nan() number.
       return 0;
@@ -1755,7 +1755,7 @@ namespace MyOddWeb
         break;
       }
     }
-    return Neg() ? -1 * number : number;
+    return IsNeg() ? -1 * number : number;
   }
 
   /**
@@ -1764,7 +1764,7 @@ namespace MyOddWeb
    */
   std::string BigNumber::ToString() const
   {
-    if (Nan())
+    if (IsNan())
     {
       return "NaN";
     }
@@ -1784,7 +1784,7 @@ namespace MyOddWeb
         number += '.';
       }
     }
-    return Neg() ? '-' + number : number;
+    return IsNeg() ? '-' + number : number;
   }
 
   /**
@@ -1886,7 +1886,7 @@ namespace MyOddWeb
   BigNumber& BigNumber::Exp(size_t precision)
   {
     // shortcut
-    if (Zero())
+    if (IsZero())
     {
       // reset this to 1
       *this = _one;
@@ -1908,7 +1908,7 @@ namespace MyOddWeb
 
     // the two sides of the equation
     // the whole number.
-    if (!integer.Zero())
+    if (!integer.IsZero())
     {
       // get the value of e
       BigNumber e = BigNumber::e();
@@ -1921,7 +1921,7 @@ namespace MyOddWeb
       *this = e.Pow(integer, precision + DEFAULT_PRECISION_CORRECTION);
     }
 
-    if (!fraction.Zero())
+    if (!fraction.IsZero())
     {
       //     x^1   x^2   x^3
       // 1 + --- + --- + --- ...
@@ -1935,7 +1935,7 @@ namespace MyOddWeb
       {
         //  calculate the number up to the precision we are after.
         BigNumber calulatedNumber = BigNumber::AbsDiv(power, fact, precision + DEFAULT_PRECISION_CORRECTION);
-        if (calulatedNumber.Zero())
+        if (calulatedNumber.IsZero())
         {
           break;
         }
@@ -1973,7 +1973,7 @@ namespace MyOddWeb
   BigNumber& BigNumber::Ln(size_t precision )
   {
     // sanity checks
-    if (Neg())
+    if (IsNeg())
     {
       *this = BigNumber("NaN");
       return PerformPostOperations( precision );
@@ -2029,7 +2029,7 @@ namespace MyOddWeb
 
       // there is no need to go further, with this presision 
       // and with this number of iterations we will keep adding/subtrating zeros.
-      if (currentBase.Zero())
+      if (currentBase.IsZero())
       {
         break;
       }

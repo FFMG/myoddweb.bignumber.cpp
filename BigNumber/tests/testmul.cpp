@@ -158,7 +158,7 @@ TEST(MultiplyBigNumber, ZeroMultiplyIsZero) {
 
     int num = x.Mul(y).ToInt();
     ASSERT_EQ(0, num);
-    ASSERT_TRUE( x.Zero() );
+    ASSERT_TRUE( x.IsZero() );
   }
   {
     MyOddWeb::BigNumber x((rand() % 32767));
@@ -166,7 +166,7 @@ TEST(MultiplyBigNumber, ZeroMultiplyIsZero) {
 
     int num = x.Mul(y).ToInt();
     ASSERT_EQ(0, num);
-    ASSERT_TRUE(x.Zero());
+    ASSERT_TRUE(x.IsZero());
   }
   {
     MyOddWeb::BigNumber x(0);
@@ -174,7 +174,7 @@ TEST(MultiplyBigNumber, ZeroMultiplyIsZero) {
 
     int num = x.Mul(y).ToInt();
     ASSERT_EQ(0, num);
-    ASSERT_TRUE(x.Zero());
+    ASSERT_TRUE(x.IsZero());
   }
 }
 
@@ -343,13 +343,13 @@ TEST(MultiplyBigNumber, SquareRootOfLargeNumber) {
 TEST(MultiplyBigNumber, SquareRootOfLargeNegativeNumber ) {
   MyOddWeb::BigNumber x = "-18446744073709551616";
   MyOddWeb::BigNumber y = x.Sqrt();
-  ASSERT_TRUE(y.Nan());
+  ASSERT_TRUE(y.IsNan());
 }
 
 TEST(MultiplyBigNumber, SquareRootOfSmallNegativeNumber) {
   MyOddWeb::BigNumber x = "-4";
   MyOddWeb::BigNumber y = x.Sqrt();
-  ASSERT_TRUE(y.Nan());
+  ASSERT_TRUE(y.IsNan());
 }
 
 TEST(MultiplyBigNumber, SquareRootOfZero) {
@@ -357,7 +357,7 @@ TEST(MultiplyBigNumber, SquareRootOfZero) {
   MyOddWeb::BigNumber y = x.Sqrt();
   std::string z = y.ToString();
   ASSERT_EQ("0", z);
-  ASSERT_TRUE(y.Zero() );
+  ASSERT_TRUE(y.IsZero() );
 }
 
 TEST(MultiplyBigNumber, NthRootOfZero) {
@@ -365,13 +365,13 @@ TEST(MultiplyBigNumber, NthRootOfZero) {
   MyOddWeb::BigNumber y = x.Root( 17 );
   std::string z = y.ToString();
   ASSERT_EQ("0", z);
-  ASSERT_TRUE(y.Zero());
+  ASSERT_TRUE(y.IsZero());
 }
 
 TEST(MultiplyBigNumber, NthRootIsZero) {
   MyOddWeb::BigNumber x = 212;
   MyOddWeb::BigNumber y = x.Root(0);
-  ASSERT_TRUE(y.Nan() );
+  ASSERT_TRUE(y.IsNan() );
 }
 
 TEST(MultiplyBigNumber, NthRootOfOne) {

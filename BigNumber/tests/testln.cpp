@@ -87,11 +87,11 @@ TEST(LogBigNumber, CalculatePowerEquivalentNumberSmallerThanOne) {
 TEST(LogBigNumber, NegativeNumber) {
   MyOddWeb::BigNumber x(-7);
   x.Ln();
-  ASSERT_TRUE(x.Nan());
+  ASSERT_TRUE(x.IsNan());
 }
 
 TEST(LogBigNumber, NegativeFractionalNumber) {
   MyOddWeb::BigNumber x(-0.1234);
   x.Ln();
-  ASSERT_TRUE(x.Nan());
+  ASSERT_TRUE(x.IsNan());
 }
