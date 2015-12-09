@@ -90,6 +90,7 @@ namespace MyOddWeb
     bool IsNeg() const;
     bool IsOdd() const;
     bool IsEven() const;
+    bool IsInteger() const;
     bool IsEqual(const BigNumber& rhs) const;
     bool IsUnequal(const BigNumber& rhs) const;
     bool IsGreater(const BigNumber& rhs) const;

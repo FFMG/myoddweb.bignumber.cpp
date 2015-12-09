@@ -1229,3 +1229,83 @@ TEST(FunctionBigNumber, RoundNegativeNumberWithPrecision)
   std::string fraction = x.Round(3).ToString();
   ASSERT_EQ("-12.635", fraction);
 }
+
+TEST(FunctionBigNumber, PositiveNumberIsCreatedAsInteger)
+{
+  MyOddWeb::BigNumber x("12");
+  ASSERT_TRUE( x.IsInteger() );
+}
+
+TEST(FunctionBigNumber, NegativeNumberIsCreatedAsInteger)
+{
+  MyOddWeb::BigNumber x("-12");
+  ASSERT_TRUE(x.IsInteger());
+}
+
+TEST(FunctionBigNumber, TruncatedDoubleBecomesInteger)
+{
+  MyOddWeb::BigNumber x("12.1234");
+  ASSERT_FALSE(x.IsInteger());
+
+  x.Trunc();
+  ASSERT_TRUE(x.IsInteger());
+}
+
+TEST(FunctionBigNumber, TruncatedDoubleEffectivelyBecomesInteger)
+{
+  MyOddWeb::BigNumber x("12.00001234");
+  ASSERT_FALSE(x.IsInteger());
+
+  x.Trunc(4); // because of the zeros, it becomes an in
+  ASSERT_TRUE(x.IsInteger());
+}
+
+TEST(FunctionBigNumber, PositiveNumberIsCreatedAsIntegerEvenWithZeros)
+{
+  MyOddWeb::BigNumber x("12.00");
+  ASSERT_TRUE(x.IsInteger());
+}
+
+TEST(FunctionBigNumber, NegativeNumberIsCreatedAsIntegerEvenWithZeros)
+{
+  MyOddWeb::BigNumber x("-12.00");
+  ASSERT_TRUE(x.IsInteger());
+}
+
+TEST(FunctionBigNumber, AdditionOfPositiveIntegerIsInteger )
+{
+  MyOddWeb::BigNumber x("12.00");
+  MyOddWeb::BigNumber y("34.00");
+  MyOddWeb::BigNumber z = x.Add(y);
+  ASSERT_TRUE(z.IsInteger());
+}
+
+TEST(FunctionBigNumber, MultiplicationOfPositiveIntegerIsInteger)
+{
+  MyOddWeb::BigNumber x("12.00");
+  MyOddWeb::BigNumber y("34.00");
+  MyOddWeb::BigNumber z = x.Mul(y);
+  ASSERT_TRUE(z.IsInteger());
+}
+
+TEST(FunctionBigNumber, AdditionOfNegativeIntegerIsInteger)
+{
+  MyOddWeb::BigNumber x("-12.00");
+  MyOddWeb::BigNumber y("-34.00");
+  MyOddWeb::BigNumber z = x.Add(y);
+  ASSERT_TRUE(z.IsInteger());
+}
+
+TEST(FunctionBigNumber, MultiplicationOfNegativeIntegerIsInteger)
+{
+  MyOddWeb::BigNumber x("-12.00");
+  MyOddWeb::BigNumber y("-34.00");
+  MyOddWeb::BigNumber z = x.Mul(y);
+  ASSERT_TRUE(z.IsInteger());
+}
+
+TEST(FunctionBigNumber, ZeroIsAnInteger)
+{
+  MyOddWeb::BigNumber x(0);
+  ASSERT_TRUE(x.IsInteger());
+}

@@ -76,8 +76,8 @@ Double
 - IsNeg() : If '*this*' number is negative or not.
 - IsZero() : If '*this*' number is zero or not.
 - IsNan() : If '*this*' number is Not a number or not, (NAN). This is the result of divide by zero or negative factorials for example.
-- IsOdd()
-- IsEven()
+- IsOdd() : If '*this*' number is odd.
+- IsEven() : If '*this*' number is even.
 - Compare( number ) : -ve = smaller / +ve = greater / 0 = same.
 	- IsEqual( number ) : If '*this*' is equal to '*number*'.
 	- IsUnequal( number ) : If '*this*' is not equal to '*number*'.
@@ -85,6 +85,7 @@ Double
 	- IsLess( number ) : If '*this*' is less than '*number*'.
 	- IsGreaterEqual( number ) : If '*this*' is greater or equal to '*number*'.
 	- IsLessEqual( number ) : If '*this*' is less or equal to '*number*'.
+- IsInteger() : If '*this*' number is a whole number positive or negative. 
 
 - ToInt() : convert to int
 - ToDouble() : convert to double.

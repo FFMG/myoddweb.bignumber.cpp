@@ -131,6 +131,19 @@ namespace MyOddWeb
   }
 
   /**
+   * return if the number is an integer or not.
+   * @see https://en.wikipedia.org/wiki/Integer
+   * @return bool
+   */
+  bool BigNumber::IsInteger() const
+  {
+    // if we have no decimals, we are an int
+    // but we must also be a valid number.
+    // zero is also an integer.
+    return (_decimals == 0 && !IsNan());
+  }
+
+  /**
    * return if the number is zero or not
    * @return bool
    */
