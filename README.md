@@ -73,25 +73,26 @@ Double
 - Exp() : e raised to the power '*this*'
 
 ### Other functions ###
-- Neg() : If '*this*' number is negative or not.
-- Zero() : If '*this*' number is zero or not.
-- Nan() : If '*this*' number is Not a number or not, (NAN). This is the result of divide by zero or negative factorials for example.
+- IsNeg() : If '*this*' number is negative or not.
+- IsZero() : If '*this*' number is zero or not.
+- IsNan() : If '*this*' number is Not a number or not, (NAN). This is the result of divide by zero or negative factorials for example.
+- IsOdd()
+- IsEven()
+- Compare( number ) : -ve = smaller / +ve = greater / 0 = same.
+	- IsEqual( number ) : If '*this*' is equal to '*number*'.
+	- IsUnequal( number ) : If '*this*' is not equal to '*number*'.
+	- IsGreater( number ) : If '*this*' is greater than '*number*'.
+	- IsLess( number ) : If '*this*' is less than '*number*'.
+	- IsGreaterEqual( number ) : If '*this*' is greater or equal to '*number*'.
+	- IsLessEqual( number ) : If '*this*' is less or equal to '*number*'.
+
 - ToInt() : convert to int
-- ToDouble() : convert to double
+- ToDouble() : convert to double.
 - ToString() : convert to string.
 - Abs() : Get the absolute value of the number
 - Trunc( precision ) : Truncate the number, strip the decimals. (+/-n.xyz = n)
 - Ceil( precision ) : Round the number up (2.1 = 3 / -2.1 = -2)
 - Floor( precision ) : Round the number down (2.1 = 2 / -2.1 = -3)
-- Odd() : Check if a number is Odd.
-- Even() : Check of a number is Even.
-- Compare( number ) : -ve = smaller / +ve = greater / 0 = same.
-	- Equal( number ) : Equal to '*number*'.
-	- Unequal( number ) : Unequal to '*number*'.
-	- Greater( number ) : greater than '*number*'.
-	- Less( number ) : less than '*number*'.
-	- GreaterEqual( number ) : greater or equal to '*number*'.
-	- LessEqual( number ) : less or equal to '*number*'.
 - Frac() : convert this to a fraction , (-1.2 => -0.2)
 - Integer() : convert this to a integer, (1.2 => 1)
 
@@ -103,8 +104,8 @@ Double
 ## Functions to do ##
 
 ### Math functions ###
-- Sqrt() : The square root of '*this*' number.
-- Root( number ) : The nth root of '*this*' number.
+- <s>Sqrt() : The square root of '*this*' number.</s>
+- <s>Root( number ) : The nth root of '*this*' number.</s>
 - Factorial() : The factorial of decimal numbers.
 - <s>Pow( number ) : Raise '*this*' by the '*number*' power (n * n * n * ...)</s>
 	- <s>Pow( number ) - decimal numbers.</s>
