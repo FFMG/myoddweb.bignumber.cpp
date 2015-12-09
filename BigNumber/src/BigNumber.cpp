@@ -38,7 +38,10 @@ namespace MyOddWeb
   BigNumber BigNumber::_e = 0;
 
   // one.
-  BigNumber BigNumber::_one = 1;
+  const BigNumber BigNumber::_one = 1;
+
+  // two
+  const BigNumber BigNumber::_two = 2;
 
   BigNumber::BigNumber() : _base(10)
   {
@@ -545,6 +548,13 @@ namespace MyOddWeb
       return BigNumber(0);
     }
 
+    // any number divided by one is one.
+    if (rhs.Compare(_one) == 0)
+    {
+      // lhs / 1 = lhs
+      return lhs;
+    }
+
     // the decimal place.
     size_t decimals = 0;
 
@@ -553,7 +563,7 @@ namespace MyOddWeb
 
     // the number we are working with.
     BigNumber number(lhs);
-    number._neg;
+    number._neg = false;
 
     // quotien/remainder we will use.
     BigNumber quotient;
@@ -1642,11 +1652,13 @@ namespace MyOddWeb
         break;
       }
 
+      // we cannot subtract the max_denominator as it is greater than the remainder.
+      // so we divide it so we can look for a smaller number.
       if (compare == 1)
       {
         // it is too big, we must remove 10.
         max_denominator.DevideByBase(1);
-        
+
         // if the max denominaor is now smaller than the one we were
         // given, then we must stop right away.
         if (BigNumber::AbsCompare(max_denominator, denominator) <= 0)
@@ -1968,7 +1980,7 @@ namespace MyOddWeb
     }
 
     //  if this is 1 then log 1 is zero.
-    if (Compare(1) == 0 )
+    if (Compare( _one ) == 0 )
     {
       *this = 0;
       return PerformPostOperations( precision );
@@ -1979,9 +1991,9 @@ namespace MyOddWeb
 
     long long counter1 = 0;
     long long counter2 = 0;
-    while (Compare(2) > 0)
+    while (Compare( _two ) > 0)
     {
-      Div(2, precision + DEFAULT_PRECISION_CORRECTION);
+      Div(_two, precision + DEFAULT_PRECISION_CORRECTION);
       ++counter2;
     }
     while (Compare(1.1) > 0)
@@ -1992,9 +2004,9 @@ namespace MyOddWeb
 
     //  we must make sure that *is 
     BigNumber x(*this);
-    const BigNumber base = x.Sub( _one ).Trunc( precision+ DEFAULT_PRECISION_CORRECTION);  // Base of the numerator; exponent will be explicit
-    int den = 1;                        // Denominator of the nth term
-    bool neg = false;                   // start positive.
+    const BigNumber base = x.Sub( _one ); // Base of the numerator; exponent will be explicit
+    BigNumber den( _one );                // Denominator of the nth term
+    bool neg = false;                     // start positive.
     
     //                  (x-1)^2    (x-1)^3   (x-1)^4 
     // ln(x) = (x-1) - --------- + ------- - ------- ...
@@ -2004,16 +2016,16 @@ namespace MyOddWeb
     for ( size_t i = 0; i < MAX_LN_ITERATIONS; ++i )
     {
       // next donominator
-      ++den;
+      den.Add( _one );
 
       // swap operation
       neg = !neg;
 
       // the denominator+power is the same thing
-      baseRaised.Mul(base, precision + DEFAULT_PRECISION_CORRECTION).Trunc( precision+ DEFAULT_PRECISION_CORRECTION);
+      baseRaised.Mul(base, precision + DEFAULT_PRECISION_CORRECTION);
 
       // now devide it
-      BigNumber currentBase = BigNumber::AbsDiv(baseRaised, den, precision+ DEFAULT_PRECISION_CORRECTION);
+      BigNumber currentBase = BigNumber::AbsDiv(baseRaised, den, precision + DEFAULT_PRECISION_CORRECTION);
 
       // there is no need to go further, with this presision 
       // and with this number of iterations we will keep adding/subtrating zeros.

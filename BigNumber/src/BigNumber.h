@@ -112,7 +112,7 @@ namespace MyOddWeb
     static BigNumber AbsPow(const BigNumber& base, const BigNumber& exp, size_t precision);
     static int AbsCompare(const BigNumber& lhs, const BigNumber& rhs); //  greater or equal
 
-  protected:
+  public:
     static void QuotientAndRemainder(const BigNumber& numerator, const BigNumber& denominator, BigNumber& quotient, BigNumber& remainder);
     static void AbsQuotientAndRemainder(const BigNumber& numerator, const BigNumber& denominator, BigNumber& quotient, BigNumber& remainder);
 
@@ -159,7 +159,8 @@ namespace MyOddWeb
 
     // constant values
     static BigNumber _e;
-    static BigNumber _one;
+    static const BigNumber _one;
+    static const BigNumber _two;
 
   protected:
     unsigned long long _MakeNumberAtIndex(size_t index, size_t length) const;
