@@ -242,3 +242,17 @@ TEST(SubtractBigNumber, SubtractLessDecimalsInTheItemBeenSubtracted) {
   std::string z = x.Sub("244.75").ToString();
   ASSERT_EQ("2098.390625", z);
 }
+
+TEST(SubtractBigNumber, SubtractSmallNumberToBecomeInteger) {
+  MyOddWeb::BigNumber x = "123.02";
+  MyOddWeb::BigNumber y = 0.02;
+  std::string z = x.Sub(y).ToString();
+  ASSERT_EQ("123", z);
+}
+
+TEST(SubtractBigNumber, SubtractSmallNumberToBecomeLargeInteger) {
+  MyOddWeb::BigNumber x = "123456789123456789123456789123456789.000002";
+  MyOddWeb::BigNumber y = "0.000002";
+  std::string z = x.Sub(y).ToString();
+  ASSERT_EQ("123456789123456789123456789123456789", z);
+}

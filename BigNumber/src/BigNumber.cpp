@@ -890,11 +890,51 @@ namespace MyOddWeb
   }
 
   /**
-  * Add 2 absolute numbers together.
-  * @param const BigNumber& lhs the number been Added from
-  * @param const BigNumber& rhs the number been Added with.
-  * @return BigNumber the sum of the two numbers.
-  */
+   * Get a number at a certain position, (from the last digit)
+   * In a number 1234.456 position #0 = 6 and #3=4
+   * The expected decimal, is the number of decimal we should have, if the expected number of decimals is 5, and the 
+   * current number is 1234.56 then the 'actual' number is 1234.56000 so we have 5 decimal places.
+   * @param size_t position the number we want.
+   * @param size_t expectedDecimals the number of decimals we _should_ have, (see note).
+   * @return unsigned char the number or 255 if there is no valid number.
+   */
+  unsigned char BigNumber::_At(size_t position, size_t expectedDecimals) const
+  {
+    // the numbers are saved in reverse:
+    //    #123 = [3][2][1]
+    // decimals are the same
+    //    #123.45 = [5][4][3][2][1]
+    //
+    // 'expectedDecimals' are decimals we are expected to have
+    // wether they exist or not, does not matter.
+    // so the number 123 with 2 'expected' decimals becomes
+    //    #123 = [0][0][3][2][1]
+    // but the number 123.45 with 2 'expected' decimals remains
+    //    #123 = [5][4][3][2][1]
+    // 
+    // so, if we are looking to item 'position'=0 and we have 2 'expectedDecimals'
+    // then what we are really after is the first item '0'.
+    //    #123 = [0][0][3][2][1]
+    //
+    int actualPosition = (int)position - (int)expectedDecimals + (int)_decimals;
+
+    // if that number is negative or past our limit
+    // then we return 255
+    if(actualPosition < 0 || actualPosition >= _numbers.size() )
+    {
+      return (unsigned char)255;
+    }
+
+    // we all good!
+    return _numbers[actualPosition];
+  }
+
+  /**
+   * Add 2 absolute numbers together.
+   * @param const BigNumber& lhs the number been Added from
+   * @param const BigNumber& rhs the number been Added with.
+   * @return BigNumber the sum of the two numbers.
+   */
   BigNumber BigNumber::AbsAdd(const BigNumber& lhs, const BigNumber& rhs)
   {
     unsigned char carryOver = 0;
@@ -909,13 +949,14 @@ namespace MyOddWeb
     NUMBERS numbers;
     for (size_t i = 0;; ++i)
     {
-      if ((i + lhsDecimalsOffset) >= ll && (i + rhsDecimalsOffset) >= rl)
-      {
+      unsigned char l = lhs._At( i, maxDecimals);
+      unsigned char r = rhs._At(i, maxDecimals);
+      if (l == 255 && r == 255) {
         break;
       }
-      
-      unsigned char l = (i >= lhsDecimalsOffset && i < ll + lhsDecimalsOffset) ? lhs._numbers[i - lhsDecimalsOffset] : 0;
-      unsigned char r = (i >= rhsDecimalsOffset && i < rl + rhsDecimalsOffset) ? rhs._numbers[i - rhsDecimalsOffset] : 0;
+
+      l = (l == 255) ? 0 : l;
+      r = (r == 255) ? 0 : r;
 
       unsigned char sum = l + r + carryOver;
 

@@ -195,3 +195,10 @@ TEST(AddBigNumber, AddAnIntegerToADecimalSmallerThanOne) {
   std::string z = y.Add(x).ToString();
   ASSERT_EQ("42.02", z );
 }
+
+TEST(AddBigNumber, AddLargeIntegerToADecimalSmallerThanOne) {
+  MyOddWeb::BigNumber x = "123456789123456789123456789";
+  MyOddWeb::BigNumber y = "0.0000000002";
+  std::string z = y.Add(x).ToString();
+  ASSERT_EQ("123456789123456789123456789.0000000002", z);
+}

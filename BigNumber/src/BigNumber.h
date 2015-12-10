@@ -168,5 +168,7 @@ namespace MyOddWeb
 
   protected:
     unsigned long long _MakeNumberAtIndex(size_t index, size_t length) const;
+
+    unsigned char _At(size_t position, size_t expectedDecimals) const;
   };
 }// namespace MyOddWeb
