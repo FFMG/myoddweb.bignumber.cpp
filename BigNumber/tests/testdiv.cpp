@@ -109,7 +109,6 @@ TEST(DivBigNumber, DivisionNonRecuring) {
     std::string z = y.ToString();
     ASSERT_EQ("0.3125", z);
   }
-
 }
 
 TEST(DivBigNumber, DivideExactSameWholeNumber) {
@@ -119,9 +118,9 @@ TEST(DivBigNumber, DivideExactSameWholeNumber) {
   ASSERT_EQ(1, z);
 }
 
-TEST(DivBigNumber, DivideExactSameRealNumber) {
-  MyOddWeb::BigNumber x = 12345.678;
-  MyOddWeb::BigNumber y = 12345.678;
+TEST(DivBigNumber, DivideExactSameBigRealNumber) {
+  MyOddWeb::BigNumber x = "123456789123456789123456789123456789.123456789123456789123456789123456789123456789123456789123456789123456789";
+  MyOddWeb::BigNumber y = "123456789123456789123456789123456789.123456789123456789123456789123456789123456789123456789123456789123456789";
   int z = x.Div(y).ToInt();
   ASSERT_EQ(1, z);
 }
