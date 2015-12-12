@@ -39,6 +39,7 @@
 #define MAX_LN_ITERATIONS ((size_t)100)
 #define MAX_EXP_ITERATIONS ((size_t)100)
 #define MAX_ROOT_ITERATIONS ((size_t)100)
+#define MAX_TRIG_ITERATIONS ((size_t)100)
 
 namespace MyOddWeb
 {
@@ -67,7 +68,7 @@ namespace MyOddWeb
     BigNumber& Ln(size_t precision = DEFAULT_PRECISION );
     BigNumber& Exp(size_t precision = DEFAULT_PRECISION);
     BigNumber& Log( const BigNumber& exponent, size_t precision = DEFAULT_PRECISION);
-    BigNumber& Factorial();
+    BigNumber& Factorial( size_t precision = DEFAULT_PRECISION);
     BigNumber Mod(const BigNumber& denominator) const;
     BigNumber Quotient(const BigNumber& denominator) const;
 

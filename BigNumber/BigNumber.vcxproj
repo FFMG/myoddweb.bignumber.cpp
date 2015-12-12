@@ -172,6 +172,7 @@
     <ClCompile Include="tests\testln.cpp" />
     <ClCompile Include="tests\testmul.cpp" />
     <ClCompile Include="tests\testsub.cpp" />
+    <ClCompile Include="tests\testtrig.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\googletest\googletest.vcxproj">

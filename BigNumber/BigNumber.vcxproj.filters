@@ -62,6 +62,9 @@
     <ClCompile Include="tests\testexp.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="tests\testtrig.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="BigNumber.natvis">

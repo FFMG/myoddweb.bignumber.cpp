@@ -1630,9 +1630,10 @@ namespace MyOddWeb
    * Calculate the factorial of a non negative number
    * 5! = 5x4x3x2x1 = 120
    * @see https://en.wikipedia.org/wiki/Factorial
+   * @param size_t precision the precision we want to use.
    * @return BigNumber& the factorial of this number. 
    */
-  BigNumber& BigNumber::Factorial()
+  BigNumber& BigNumber::Factorial( size_t precision )
   {
     if (IsNeg())
     {
@@ -1662,7 +1663,7 @@ namespace MyOddWeb
       Sub(_one);
 
       // multiply it
-      c.Mul(*this);
+      c.Mul(*this, precision );
     }
 
     // clean it all up and update our value.
@@ -2248,9 +2249,47 @@ namespace MyOddWeb
     //                (x ^ 3)   (x ^ 5)   (x ^ 7)
     // sin(x) = (x) - ------- + ------- - -------
     //                  3!       5!         7!
+    BigNumber result = *this;
+    const BigNumber multiplier = BigNumber(*this).Pow(2, DEFAULT_PRECISION_PADDED(precision ));
+    BigNumber startingMultiplier = *this;
+    BigNumber startingFractional = _one;
+    BigNumber fractionalCounter = _one;
+
+    bool neg = true;
+    for (size_t i = 0; i < MAX_TRIG_ITERATIONS; ++i)
+    {
+      startingMultiplier.Mul(multiplier);
+
+      startingFractional.Mul(fractionalCounter.Add(_one));
+      startingFractional.Mul(fractionalCounter.Add(_one));
+
+      BigNumber currentBase = BigNumber(startingMultiplier).Div(startingFractional, DEFAULT_PRECISION_PADDED(precision));
+
+      // there is no need to go further, with this presision 
+      // and with this number of iterations we will keep adding/subtrating zeros.
+      if (currentBase.IsZero())
+      {
+        break;
+      }
+
+      if (neg)
+      {
+        result.Sub(currentBase);
+      }
+      else
+      {
+        result.Add(currentBase);
+      }
+
+      // swap around
+      neg = !neg;
+    }
+
+    // set the number
+    *this = result;
 
     // clean up and done.
-    return PerformPostOperations(precision);
+    return Round( precision).PerformPostOperations(precision);
   }
 
   /**
