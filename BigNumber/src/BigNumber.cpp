@@ -34,8 +34,9 @@
 
 namespace MyOddWeb
 {
-  //  set the constents to zero for now.
+  //  set the constants to zero for now.
   BigNumber BigNumber::_e = 0;
+  BigNumber BigNumber::_pi = 0;
 
   // one.
   const BigNumber BigNumber::_one = 1;
@@ -646,9 +647,9 @@ namespace MyOddWeb
     // if we have decimals, we need to do it the hard/long way...
     if (copyExp._decimals > 0)
     {
-      copyBase.Ln(precision +  DEFAULT_PRECISION_CORRECTION); //  we need the correction, do we don't loose it too quick.
-      copyBase.Mul( copyExp, precision + DEFAULT_PRECISION_CORRECTION);
-      result = copyBase.Exp( precision + DEFAULT_PRECISION_CORRECTION);
+      copyBase.Ln(DEFAULT_PRECISION_PADDED(precision)); //  we need the correction, do we don't loose it too quick.
+      copyBase.Mul( copyExp, DEFAULT_PRECISION_PADDED(precision));
+      result = copyBase.Exp(DEFAULT_PRECISION_PADDED(precision));
     }
     else
     {
@@ -661,7 +662,7 @@ namespace MyOddWeb
         // if it is odd...
         if (copyExp.IsOdd())
         {
-          result = BigNumber::AbsMul(result, copyBase, precision+DEFAULT_PRECISION_CORRECTION);
+          result = BigNumber::AbsMul(result, copyBase, DEFAULT_PRECISION_PADDED(precision));
         }
 
         // devide by 2 with no decimal places.
@@ -672,7 +673,7 @@ namespace MyOddWeb
         }
 
         // multiply the base by itself.
-        copyBase = BigNumber::AbsMul(copyBase, copyBase, precision+DEFAULT_PRECISION_CORRECTION);
+        copyBase = BigNumber::AbsMul(copyBase, copyBase, DEFAULT_PRECISION_PADDED(precision));
       }
     }
 
@@ -1441,7 +1442,7 @@ namespace MyOddWeb
     }
 
     // the padded precision so we do not, slowly, loose our final precision.
-    const size_t padded_precision = precision + DEFAULT_PRECISION_CORRECTION;
+    const size_t padded_precision = DEFAULT_PRECISION_PADDED(precision);
 
     // copy this number variable so it is easier to read.
     BigNumber x = *this;
@@ -1533,12 +1534,12 @@ namespace MyOddWeb
 
       // try and use the power of...
       // nthroot = x^( 1/nthroot)
-      const BigNumber number_one_over = BigNumber( _one).Div( nthroot, precision + DEFAULT_PRECISION_CORRECTION);
+      const BigNumber number_one_over = BigNumber( _one).Div( nthroot, DEFAULT_PRECISION_PADDED(precision));
 
       // calculate it, use the correction to make sure we are well past
       // the actual value we want to set is as.
       // the rounding will then take care of the rest.
-      *this = Pow(number_one_over, precision + DEFAULT_PRECISION_CORRECTION).Round(precision);
+      *this = Pow(number_one_over, DEFAULT_PRECISION_PADDED(precision)).Round(precision);
     }
 
     // return this/cleaned up.
@@ -2017,13 +2018,37 @@ namespace MyOddWeb
     return _e;
   }
 
+  /**
+  * @see https://en.wikipedia.org/wiki/E_%28mathematical_constant%29
+  * @return const BigNumber& pi
+  */
+  const BigNumber& BigNumber::pi()
+  {
+    //  did we calculate e already?
+    if (_pi._decimals != 0)
+    {
+      return _pi;
+    }
+
+    // create it now using {}, it is slightly faster than using the string parsing, (just a little).
+    // uncomment the code below if that causes an error.
+    NUMBERS numbers = { 8,2,1,8,0,4,9,5,3,5,2,7,1,3,2,2,8,5,0,5,5,9,0,6,4,4,8,3,9,0,7,4,6,6,0,3,2,8,2,3,1,5,6,8,0,8,4,1,2,8,9,7,6,0,7,1,1,2,4,3,5,2,8,4,3,0,8,2,6,8,9,9,8,0,2,6,8,2,6,0,4,6,1,8,7,0,3,2,9,5,4,4,9,4,7,9,0,2,8,5,0,1,5,7,3,9,9,3,9,6,1,7,9,1,4,8,8,2,0,5,9,7,2,3,8,3,3,4,6,2,6,4,8,3,2,3,9,7,9,8,5,3,5,6,2,9,5,1,4,1,3 };
+    _pi = BigNumber(numbers, 150, false);
+
+    // in case you cannot use NUMBERS numbers = {}
+    // _pi = BigNumber("3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148086513282306647093844609550582231725359408128");
+
+    // return it
+    return _pi;
+  }
+  
   BigNumber& BigNumber::Log(const BigNumber& base, size_t precision )
   {
     BigNumber ln = *this;
     BigNumber lnbase = base;
-    ln.Ln(precision + DEFAULT_PRECISION_CORRECTION);
-    lnbase.Ln(precision + DEFAULT_PRECISION_CORRECTION);
-    *this = ln.Div(lnbase, precision + DEFAULT_PRECISION_CORRECTION);
+    ln.Ln(DEFAULT_PRECISION_PADDED(precision));
+    lnbase.Ln(DEFAULT_PRECISION_PADDED(precision));
+    *this = ln.Div(lnbase, DEFAULT_PRECISION_PADDED(precision));
     // clean up and done.
     return PerformPostOperations( precision );
   }
@@ -2065,10 +2090,10 @@ namespace MyOddWeb
 
       // truncate the presision so we do not do too many multiplications.
       // add a bit of room for more accurate precision.
-      e.Trunc(precision + DEFAULT_PRECISION_CORRECTION);
+      e.Trunc(DEFAULT_PRECISION_PADDED(precision));
 
       //  then raise it.
-      *this = e.Pow(integer, precision + DEFAULT_PRECISION_CORRECTION);
+      *this = e.Pow(integer, DEFAULT_PRECISION_PADDED(precision));
     }
 
     if (!fraction.IsZero())
@@ -2084,7 +2109,7 @@ namespace MyOddWeb
       for (size_t i = 1; i < MAX_EXP_ITERATIONS; ++i)
       {
         //  calculate the number up to the precision we are after.
-        BigNumber calulatedNumber = BigNumber::AbsDiv(power, fact, precision + DEFAULT_PRECISION_CORRECTION);
+        BigNumber calulatedNumber = BigNumber::AbsDiv(power, fact, DEFAULT_PRECISION_PADDED(precision));
         if (calulatedNumber.IsZero())
         {
           break;
@@ -2094,17 +2119,17 @@ namespace MyOddWeb
         result.Add( calulatedNumber );
 
         // x * x * x ...
-        power = BigNumber::AbsMul(power, base, precision+DEFAULT_PRECISION_CORRECTION );
+        power = BigNumber::AbsMul(power, base, DEFAULT_PRECISION_PADDED(precision));
 
         //  1 * 2 * 3 ...
-        fact = BigNumber::AbsMul(fact, (int)(i+1), precision+DEFAULT_PRECISION_CORRECTION );
+        fact = BigNumber::AbsMul(fact, (int)(i+1), DEFAULT_PRECISION_PADDED(precision));
       }
 
       //  the decimal part of the number.
       fraction = result;
 
       // multiply the decimal number with the fraction.
-      Mul(fraction, precision + DEFAULT_PRECISION_CORRECTION);
+      Mul(fraction, DEFAULT_PRECISION_PADDED(precision));
     }
 
     // clean up and return.
@@ -2143,12 +2168,12 @@ namespace MyOddWeb
     long long counter2 = 0;
     while (Compare( _two ) > 0)
     {
-      Div(_two, precision + DEFAULT_PRECISION_CORRECTION);
+      Div(_two, DEFAULT_PRECISION_PADDED(precision));
       ++counter2;
     }
     while (Compare(1.1) > 0)
     {
-      Div(1.1, precision+DEFAULT_PRECISION_CORRECTION);
+      Div(1.1, DEFAULT_PRECISION_PADDED(precision));
       ++counter1;
     }
 
@@ -2172,10 +2197,10 @@ namespace MyOddWeb
       neg = !neg;
 
       // the denominator+power is the same thing
-      baseRaised.Mul(base, precision + DEFAULT_PRECISION_CORRECTION);
+      baseRaised.Mul(base, DEFAULT_PRECISION_PADDED(precision));
 
       // now devide it
-      BigNumber currentBase = BigNumber::AbsDiv(baseRaised, den, precision + DEFAULT_PRECISION_CORRECTION);
+      BigNumber currentBase = BigNumber::AbsDiv(baseRaised, den, DEFAULT_PRECISION_PADDED(precision));
 
       // there is no need to go further, with this presision 
       // and with this number of iterations we will keep adding/subtrating zeros.
@@ -2196,14 +2221,17 @@ namespace MyOddWeb
     }
 
     // now add ln(2) and ln(1.1)
-    static const BigNumber ln2("0.693147180559945309417232121458176568075500134360255254120680009493393621969694715605863326996418687542001481020570685733685520235758130557032670751635075961930727570828371435190307038623891673471123350115364497955239120475172681574932065155524734139525882950453007095326366642654104239157814952043740430385500801944170641671518644712839968171784546957026271631064546150257207402481637773389638550695260668341137273873722928956493547025762652098859693201965058554764703306793654432547632744951250406069438147104689946506220167720424524529612687946546193165174681392672504103802546259656869144192871608293803172714368");
-    static const BigNumber ln11("0.0953101798043248600439521232807650922206053653086441991852398081630010142358842328390575029130364930727479418458517498888460436935129806386890150217023263755687346983551204157456607731117050481406611584967219092627683199972666804124629171163211396201386277872575289851216418802049468841988934550053918259553296705084248072320206243393647990631942365020716424972582488628309770740635849277971589257686851592941134955982468458204470563781108676951416362518738052421687452698243540081779470585025890580291528650263570516836272082869034439007178525831485094480503205465208833580782304569935437696233763597527612962802333");
+    // "0.693147180559945309417232121458176568075500134360255254120680009493393621969694715605863326996418687542001481020570685733685520235758130557032670751635075961930727570828371435190307038623891673471123350115364497955239120475172681574932065155524734139525882950453007095326366642654104239157814952043740430385500801944170641671518644712839968171784546957026271631064546150257207402481637773389638550695260668341137273873722928956493547025762652098859693201965058554764703306793654432547632744951250406069438147104689946506220167720424524529612687946546193165174681392672504103802546259656869144192871608293803172714368"
+    static const BigNumber ln2( { 8,6,3,4,1,7,2,7,1,3,0,8,3,9,2,8,0,6,1,7,8,2,9,1,4,4,1,9,6,8,6,5,6,9,5,2,6,4,5,2,0,8,3,0,1,4,0,5,2,7,6,2,9,3,1,8,6,4,7,1,5,6,1,3,9,1,6,4,5,6,4,9,7,8,6,2,1,6,9,2,5,4,2,5,4,2,4,0,2,7,7,6,1,0,2,2,6,0,5,6,4,9,9,8,6,4,0,1,7,4,1,8,3,4,9,6,0,6,0,4,0,5,2,1,5,9,4,4,7,2,3,6,7,4,5,2,3,4,4,5,6,3,9,7,6,0,3,3,0,7,4,6,7,4,5,5,8,5,0,5,6,9,1,0,2,3,9,6,9,5,8,8,9,0,2,5,6,2,6,7,5,2,0,7,4,5,3,9,4,6,5,9,8,2,9,2,2,7,3,7,8,3,7,2,7,3,1,1,4,3,8,6,6,0,6,2,5,9,6,0,5,5,8,3,6,9,8,3,3,7,7,7,3,6,1,8,4,2,0,4,7,0,2,7,5,2,0,5,1,6,4,5,4,6,0,1,3,6,1,7,2,6,2,0,7,5,9,6,4,5,4,8,7,1,7,1,8,6,9,9,3,8,2,1,7,4,4,6,8,1,5,1,7,6,1,4,6,0,7,1,4,4,9,1,0,8,0,0,5,5,8,3,0,3,4,0,4,7,3,4,0,2,5,9,4,1,8,7,5,1,9,3,2,4,0,1,4,5,6,2,4,6,6,6,3,6,2,3,5,9,0,7,0,0,3,5,4,0,5,9,2,8,8,5,2,5,9,3,1,4,3,7,4,2,5,5,5,1,5,6,0,2,3,9,4,7,5,1,8,6,2,7,1,5,7,4,0,2,1,9,3,2,5,5,9,7,9,4,4,6,3,5,1,1,0,5,3,3,2,1,1,7,4,3,7,6,1,9,8,3,2,6,8,3,0,7,0,3,0,9,1,5,3,4,1,7,3,8,2,8,0,7,5,7,2,7,0,3,9,1,6,9,5,7,0,5,3,6,1,5,7,0,7,6,2,3,0,7,5,5,0,3,1,8,5,7,5,3,2,0,2,5,5,8,6,3,3,7,5,8,6,0,7,5,0,2,0,1,8,4,1,0,0,2,4,5,7,8,6,8,1,4,6,9,9,6,2,3,3,6,8,5,0,6,5,1,7,4,9,6,9,6,9,1,2,6,3,9,3,3,9,4,9,0,0,0,8,6,0,2,1,4,5,2,5,5,2,0,6,3,4,3,1,0,0,5,5,7,0,8,6,5,6,7,1,8,5,4,1,2,1,2,3,2,7,1,4,9,0,3,5,4,9,9,5,5,0,8,1,7,4,1,3,9,6,0 }, 615, false );
+    
+    // "0.0953101798043248600439521232807650922206053653086441991852398081630010142358842328390575029130364930727479418458517498888460436935129806386890150217023263755687346983551204157456607731117050481406611584967219092627683199972666804124629171163211396201386277872575289851216418802049468841988934550053918259553296705084248072320206243393647990631942365020716424972582488628309770740635849277971589257686851592941134955982468458204470563781108676951416362518738052421687452698243540081779470585025890580291528650263570516836272082869034439007178525831485094480503205465208833580782304569935437696233763597527612962802333"
+    static const BigNumber ln11({3,3,3,2,0,8,2,6,9,2,1,6,7,2,5,7,9,5,3,6,7,3,3,2,6,9,6,7,3,4,5,3,9,9,6,5,4,0,3,2,8,7,0,8,5,3,3,8,8,0,2,5,6,4,5,0,2,3,0,5,0,8,4,4,9,0,5,8,4,1,3,8,5,2,5,8,7,1,7,0,0,9,3,4,4,3,0,9,6,8,2,8,0,2,7,2,6,3,8,6,1,5,0,7,5,3,6,2,0,5,6,8,2,5,1,9,2,0,8,5,0,9,8,5,2,0,5,8,5,0,7,4,9,7,7,1,8,0,0,4,5,3,4,2,8,9,6,2,5,4,7,8,6,1,2,4,2,5,0,8,3,7,8,1,5,2,6,3,6,1,4,1,5,9,6,7,6,8,0,1,1,8,7,3,6,5,0,7,4,4,0,2,8,5,4,8,6,4,2,8,9,5,5,9,4,3,1,1,4,9,2,9,5,1,5,8,6,8,6,7,5,2,9,8,5,1,7,9,7,7,2,9,4,8,5,3,6,0,4,7,0,7,7,9,0,3,8,2,6,8,8,4,2,8,5,2,7,9,4,2,4,6,1,7,0,2,0,5,6,3,2,4,9,1,3,6,0,9,9,7,4,6,3,9,3,3,4,2,6,0,2,0,2,3,2,7,0,8,4,2,4,8,0,5,0,7,6,9,2,3,5,5,9,5,2,8,1,9,3,5,0,0,5,5,4,3,9,8,8,9,1,4,8,8,6,4,9,4,0,2,0,8,8,1,4,6,1,2,1,5,8,9,8,2,5,7,5,2,7,8,7,7,2,6,8,3,1,0,2,6,9,3,1,1,2,3,6,1,1,7,1,9,2,6,4,2,1,4,0,8,6,6,6,2,7,9,9,9,1,3,8,6,7,2,6,2,9,0,9,1,2,7,6,9,4,8,5,1,1,6,6,0,4,1,8,4,0,5,0,7,1,1,1,3,7,7,0,6,6,5,4,7,5,1,4,0,2,1,5,5,3,8,9,6,4,3,7,8,6,5,5,7,3,6,2,3,2,0,7,1,2,0,5,1,0,9,8,6,8,3,6,0,8,9,2,1,5,3,9,6,3,4,0,6,4,8,8,8,8,9,4,7,1,5,8,5,4,8,1,4,9,7,4,7,2,7,0,3,9,4,6,3,0,3,1,9,2,0,5,7,5,0,9,3,8,2,3,2,4,8,8,5,3,2,4,1,0,1,0,0,3,6,1,8,0,8,9,3,2,5,8,1,9,9,1,4,4,6,8,0,3,5,6,3,5,0,6,0,2,2,2,9,0,5,6,7,0,8,2,3,2,1,2,5,9,3,4,0,0,6,8,4,2,3,4,0,8,9,7,1,0,1,3,5,9,0,0}, 616, false );
 
     // log rules are... ln(ab) = ln(a) + ln(b)
     BigNumber ln2_tmp = ln2;
     BigNumber ln11_tmp = ln11;
-    ln2_tmp.Mul( counter2, precision + DEFAULT_PRECISION_CORRECTION);
-    ln11_tmp.Mul( counter1, precision + DEFAULT_PRECISION_CORRECTION);
+    ln2_tmp.Mul( counter2, DEFAULT_PRECISION_PADDED(precision));
+    ln11_tmp.Mul( counter1, DEFAULT_PRECISION_PADDED(precision));
 
     result.Add(ln11_tmp);
     result.Add(ln2_tmp);
@@ -2214,4 +2242,15 @@ namespace MyOddWeb
     // clean up and done.
     return PerformPostOperations( precision );
   }
+
+  BigNumber& BigNumber::Sin(size_t precision )
+  {
+    //                (x ^ 3)   (x ^ 5)   (x ^ 7)
+    // sin(x) = (x) - ------- + ------- - -------
+    //                  3!       5!         7!
+
+    // clean up and done.
+    return PerformPostOperations(precision);
+  }
+
 }// namespace MyOddWeb

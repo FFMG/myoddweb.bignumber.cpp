@@ -35,7 +35,7 @@
 // the precision we want to stop at, by default.
 // so we  don't devide for ever and ever...
 #define DEFAULT_PRECISION ((size_t)100)
-#define DEFAULT_PRECISION_CORRECTION ((size_t)5)
+#define DEFAULT_PRECISION_PADDED(s) ( s + (size_t)5)
 #define MAX_LN_ITERATIONS ((size_t)100)
 #define MAX_EXP_ITERATIONS ((size_t)100)
 #define MAX_ROOT_ITERATIONS ((size_t)100)
@@ -70,6 +70,10 @@ namespace MyOddWeb
     BigNumber& Factorial();
     BigNumber Mod(const BigNumber& denominator) const;
     BigNumber Quotient(const BigNumber& denominator) const;
+
+    //
+    // Basic Trigonometric Functions
+    BigNumber& Sin(size_t precision = DEFAULT_PRECISION);
       
     //
     // manipulation
@@ -81,7 +85,10 @@ namespace MyOddWeb
     BigNumber& Ceil(size_t precision = 0);
     BigNumber& Floor(size_t precision = 0);
 
+    //
+    // Constants
     static const BigNumber& e();
+    static const BigNumber& pi();
 
     //
     // Helper
@@ -160,6 +167,8 @@ namespace MyOddWeb
 
     // constant values
     static BigNumber _e;
+    static BigNumber _pi;
+
     static const BigNumber _one;
     static const BigNumber _two;
 

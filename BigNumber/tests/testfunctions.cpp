@@ -574,7 +574,7 @@ TEST(FunctionBigNumber, TheGivenStringIsInvalid)
   EXPECT_THROW(MyOddWeb::BigNumber(" Hello World"), std::runtime_error);
 }
 
-TEST(FunctionBigNumber, GetNaturalETo1000places)
+TEST(FunctionBigNumber, GetNaturalETo150places)
 {
   MyOddWeb::BigNumber e1 = MyOddWeb::BigNumber::e();
 
@@ -583,10 +583,6 @@ TEST(FunctionBigNumber, GetNaturalETo1000places)
 
   //
   ASSERT_EQ(se, e1.ToString());
-
-  //  get it againn
-  MyOddWeb::BigNumber e2 = MyOddWeb::BigNumber::e();
-  ASSERT_EQ(se, e2.ToString());
 }
 
 TEST(FunctionBigNumber, SimpleMod)
@@ -1308,4 +1304,14 @@ TEST(FunctionBigNumber, ZeroIsAnInteger)
 {
   MyOddWeb::BigNumber x(0);
   ASSERT_TRUE(x.IsInteger());
+}
+
+TEST(FunctionBigNumber, GetPiTo150places)
+{
+  MyOddWeb::BigNumber pi1 = MyOddWeb::BigNumber::pi();
+
+  std::string spi = "3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148086513282306647093844609550582231725359408128";
+
+  //
+  ASSERT_EQ(spi, pi1.ToString());
 }
