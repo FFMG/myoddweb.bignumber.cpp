@@ -170,5 +170,7 @@ namespace MyOddWeb
     unsigned long long _MakeNumberAtIndex(size_t index, size_t length) const;
 
     unsigned char _At(size_t position, size_t expectedDecimals) const;
+
+    static bool _RecalcDenominator(BigNumber& max_denominator, BigNumber& base_multiplier, const BigNumber& remainder);
   };
 }// namespace MyOddWeb

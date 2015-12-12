@@ -1758,37 +1758,11 @@ namespace MyOddWeb
     // 2- subtract, (if need be, then update the quotient accordingly).
     for (;;)
     {
-      // if the max denominator is greater than the remained
-      // then we must devide by 10
-      int compare = BigNumber::AbsCompare(max_denominator, remainder);
-      if (compare == 0)
+      // make sure that the max denominator and multiplier
+      // are still within the limits we need.
+      if (!BigNumber::_RecalcDenominator(max_denominator, base_multiplier, remainder))
       {
-        //  it is the same!
-        // the remainder has to be zero
-        remainder = 0;
-        quotient.Add(base_multiplier);
         break;
-      }
-
-      // we cannot subtract the max_denominator as it is greater than the remainder.
-      // so we divide it so we can look for a smaller number.
-      if (compare == 1)
-      {
-        // it is too big, we must remove 10.
-        max_denominator.DevideByBase(1);
-
-        // if the max denominaor is now smaller than the one we were
-        // given, then we must stop right away.
-        if (BigNumber::AbsCompare(max_denominator, denominator) <= 0)
-        {
-          break;
-        }
-
-        // we need to update the base as well.
-        base_multiplier.DevideByBase(1);
-
-        // go around again.
-        continue;
       }
 
       // we can still remove this amount from the loop.
@@ -1820,6 +1794,64 @@ namespace MyOddWeb
     remainder.PerformPostOperations( remainder._decimals );
     quotient.PerformPostOperations( quotient._decimals );
   }
+
+  /**
+   * Work out the bigest denominator we can use for the given remainder
+   * This is not a stand alone function, the values are calculated based on the value given to us.
+   * @param BigNumber& max_denominator the current denominator, if it is too big we will devide it by base
+   * @param BigNumber& base_multiplier the current multiplier, it the denominator is too big, we will divide it as well.
+   * @param const BigNumber& remainder the current remainder value.
+   * @return bool if we can continue using the values or if we must end now.
+   */
+  bool BigNumber::_RecalcDenominator(BigNumber& max_denominator, BigNumber& base_multiplier, const BigNumber& remainder)
+  {
+    // are done with this?
+    if (remainder.IsZero())
+    {
+      return false;
+    }
+
+    // if the max denominator is greater than the remained
+    // then we must devide by _base.
+    int compare = BigNumber::AbsCompare(max_denominator, remainder);
+    switch (compare)
+    {
+    case 0:
+      //  it is the same!
+      // the remainder has to be zero
+      return true;
+
+    // we cannot subtract the max_denominator as it is greater than the remainder.
+    // so we divide it so we can look for a smaller number.
+    case 1:
+      // divide all by _base
+      max_denominator.DevideByBase(1);
+      base_multiplier.DevideByBase(1);
+
+      // have we reached the end of the division limits?
+      if ( !base_multiplier.IsInteger() )
+      {
+        // the number is no longer an integer
+        // meaning that we have divided it to the maximum.
+        return false;
+      }
+
+      // compare the value again, if it is _still_ too big, then go around divide it again.
+      // this causes recursion, but it should never hit any limits.
+      int compare = BigNumber::AbsCompare(max_denominator, remainder);
+      if (compare != -1)
+      {
+        return BigNumber::_RecalcDenominator( max_denominator, base_multiplier, remainder);
+      }
+
+      // the number is now small enought and can be used.
+      return true;
+    }
+
+    //  still big enough.
+    return true;
+  }
+
 
   /**
    * Convert a big number to a double.
