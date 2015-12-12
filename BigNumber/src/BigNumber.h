@@ -73,6 +73,9 @@ namespace MyOddWeb
 
     //
     // Basic Trigonometric Functions
+    BigNumber& ToRadian(size_t precision = DEFAULT_PRECISION);
+    BigNumber& ToDegree(size_t precision = DEFAULT_PRECISION);
+
     BigNumber& Sin(size_t precision = DEFAULT_PRECISION);
       
     //

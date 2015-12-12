@@ -1315,3 +1315,38 @@ TEST(FunctionBigNumber, GetPiTo150places)
   //
   ASSERT_EQ(spi, pi1.ToString());
 }
+
+TEST(FunctionBigNumber, ThirtyDegreesToRadian)
+{
+  {
+    MyOddWeb::BigNumber rad = MyOddWeb::BigNumber(30).ToRadian(10);
+    std::string z = rad.ToString();
+    ASSERT_EQ("0.5235987756", z);
+  }
+  {
+    MyOddWeb::BigNumber rad = MyOddWeb::BigNumber(30).ToRadian(20);
+    std::string z = rad.ToString();
+    ASSERT_EQ("0.52359877559829887308", z);
+  }
+}
+
+TEST(FunctionBigNumber, ThirtyDegreesRadianToDegree)
+{
+  {
+    MyOddWeb::BigNumber rad = MyOddWeb::BigNumber("0.5235987756" ).ToDegree(10);
+    std::string z = rad.ToString();
+    ASSERT_EQ("30.0000000001", z);
+  }
+  {
+    MyOddWeb::BigNumber rad = MyOddWeb::BigNumber("0.52359877559829887308").ToDegree(20);
+    std::string z = rad.ToString();
+    ASSERT_EQ("30.00000000000000000017", z);
+  }
+}
+
+TEST(FunctionBigNumber, PiToDegree)
+{
+  MyOddWeb::BigNumber rad = MyOddWeb::BigNumber(MyOddWeb::BigNumber::pi() ).ToDegree(10);
+  std::string z = rad.ToString();
+  ASSERT_EQ("180", z);
+}

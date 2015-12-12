@@ -95,10 +95,15 @@ Double
 - Ceil( precision ) : Round the number up (2.1 = 3 / -2.1 = -2)
 - Floor( precision ) : Round the number down (2.1 = 2 / -2.1 = -3)
 - Frac() : convert this to a fraction , (-1.2 => -0.2)
-- Integer() : convert this to a integer, (1.2 => 1)
+- Integer() : convert *this* to a integer, (1.2 => 1)
+    
+    
+- ToDegree( ... ) : convert *this* from a Radian to a Degree given a certain precision.  
+- ToRadiant( ... ) : convert *this* from a Degree to a Radian given a certain precision.    
 
 ## Constants ##
-- e() : [Euler's number](https://en.wikipedia.org/wiki/E_%28mathematical_constant%29) (to 1000 decimals) 
+- e() : [Euler's number](https://en.wikipedia.org/wiki/E_%28mathematical_constant%29) (to 150 decimals).
+- pi(): [Pi](https://en.wikipedia.org/wiki/Pi), (to 150 decimals).
 
 # Todo #
 
@@ -114,6 +119,7 @@ Double
 - <s>Ln( ... )</s>/Log( ... )
 - Gamma()
 - <s>Round( precision ) : round a number up/down</s>
+- Basic Trigonometric Functions : Sin() / Cos() /Tan() 
 
 ### Other functions ###
 - ToUInt()
@@ -122,6 +128,7 @@ Double
 - ToFloat()
 - ToLongLong()
 - ToLong
+- <s>pi() : constant</s>
 
 ## Misc ##
 
@@ -129,7 +136,7 @@ Double
 - ToDouble( ... ) and ToInt( ... ) do not check if limits are reached.
 - Optimise:
 	- Multiplication and Divisions, (especially **division**). Currently they are doing long division and long multiplication. This is not efficient.
-	- Factorial, the current implementation does 1*2*3*... and this is slow, (of course). Use the **Gamma** function.
+	- Factorial, the current implementation does 1 * 2 * 3*... and this is slow, (of course). Use the **Gamma** function.
 
 - Specifically for C++ enable operators
 	- operator+

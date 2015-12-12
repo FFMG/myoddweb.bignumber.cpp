@@ -2253,4 +2253,52 @@ namespace MyOddWeb
     return PerformPostOperations(precision);
   }
 
+  /**
+  * Convert a Radian number to degree
+  * @see http://www.mathwarehouse.com/trigonometry/radians/convert-degee-to-radians.php
+  * @param size_t precision the precision we want to limit this to.
+  * @return BigNumber this number converted to a Degree number.
+  */
+  BigNumber& BigNumber::ToDegree(size_t precision)
+  {
+    if (IsZero())
+    {
+      // nothing to do, apart from trimming.
+      return PerformPostOperations(precision);
+    }
+
+    // get 180 / pi
+    BigNumber oneEightyOverpi = BigNumber::AbsDiv(180, BigNumber::pi(), DEFAULT_PRECISION_PADDED(precision));
+
+    // the number is x * (180/pi)
+    Mul(oneEightyOverpi, DEFAULT_PRECISION_PADDED(precision));
+
+    // clean up and done.
+    return Round(precision).PerformPostOperations(precision);
+  }
+
+  /**
+   * Convert a Degree number to radian
+   * @see http://www.mathwarehouse.com/trigonometry/radians/convert-degee-to-radians.php
+   * @param size_t precision the precision we want to limit this to.
+   * @return BigNumber this number converted to a Radian number.
+   */
+  BigNumber& BigNumber::ToRadian(size_t precision)
+  {
+    if (IsZero())
+    {
+      // nothing to do, apart from trimming.
+      return PerformPostOperations(precision);
+    }
+
+    // get pi / 180
+    BigNumber piOver180 = BigNumber::AbsDiv(BigNumber::pi(), 180, DEFAULT_PRECISION_PADDED(precision));
+
+    // the number is x * (pi/180)
+    Mul(piOver180, DEFAULT_PRECISION_PADDED(precision) );
+
+    // clean up and done.
+    return Round(precision).PerformPostOperations(precision);
+  }
+
 }// namespace MyOddWeb
