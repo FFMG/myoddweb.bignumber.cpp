@@ -2244,10 +2244,16 @@ namespace MyOddWeb
     return PerformPostOperations( precision );
   }
 
-  BigNumber& BigNumber::Sin(size_t precision )
+  /**
+   * Calculate the sin of this number.
+   * @see https://www.quora.com/How-do-I-calculate-cos-sine-etc-without-a-calculator
+   * @param size_t precision the precision
+   * @return BigNumber& this number.
+   */
+  BigNumber& BigNumber::Sin( size_t precision )
   {
     //                (x ^ 3)   (x ^ 5)   (x ^ 7)
-    // sin(x) = (x) - ------- + ------- - -------
+    // sin(x) = (x) - ------- + ------- - ------- ...
     //                  3!       5!         7!
     BigNumber result = *this;
     const BigNumber multiplier = BigNumber(*this).Pow(2, DEFAULT_PRECISION_PADDED(precision ));
@@ -2290,6 +2296,60 @@ namespace MyOddWeb
 
     // clean up and done.
     return Round( precision).PerformPostOperations(precision);
+  }
+
+  /**
+   * Calculate the cos of this number.
+   * @see https://www.quora.com/How-do-I-calculate-cos-sine-etc-without-a-calculator
+   * @param size_t precision the precision
+   * @return BigNumber& this number.
+   */
+  BigNumber& BigNumber::Cos(size_t precision)
+  {
+    //                (x ^ 2)   (x ^ 4)   (x ^ 6)
+    // sin(x) = (1) - ------- + ------- - ------- ...
+    //                  2!       4!         6!
+    BigNumber result = _one;
+    const BigNumber multiplier = BigNumber(*this).Pow(2, DEFAULT_PRECISION_PADDED(precision));
+    BigNumber startingMultiplier = _one;
+    BigNumber startingFractional = _one;
+    BigNumber fractionalCounter = _zero;
+
+    bool neg = true;
+    for (size_t i = 0; i < MAX_TRIG_ITERATIONS; ++i)
+    {
+      startingMultiplier.Mul(multiplier);
+
+      startingFractional.Mul(fractionalCounter.Add(_one));
+      startingFractional.Mul(fractionalCounter.Add(_one));
+
+      BigNumber currentBase = BigNumber(startingMultiplier).Div(startingFractional, DEFAULT_PRECISION_PADDED(precision));
+
+      // there is no need to go further, with this presision 
+      // and with this number of iterations we will keep adding/subtrating zeros.
+      if (currentBase.IsZero())
+      {
+        break;
+      }
+
+      if (neg)
+      {
+        result.Sub(currentBase);
+      }
+      else
+      {
+        result.Add(currentBase);
+      }
+
+      // swap around
+      neg = !neg;
+    }
+
+    // set the number
+    *this = result;
+
+    // clean up and done.
+    return Round(precision).PerformPostOperations(precision);
   }
 
   /**

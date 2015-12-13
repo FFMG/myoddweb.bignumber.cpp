@@ -43,6 +43,22 @@ TEST(TrigBigNumber, SinOfPositive45Degree ) {
   ASSERT_EQ("0.7071067812", z);
 }
 
+TEST(TrigBigNumber, CosOfPositive45Degree) {
+  MyOddWeb::BigNumber x = 45;
+  x.ToRadian(10);
+  MyOddWeb::BigNumber y = x.Cos(10);  //  0.7071067812
+  std::string z = y.ToString();
+  ASSERT_EQ("0.7071067812", z);
+}
+
+TEST(TrigBigNumber, CosOfPositive35Degree) {
+  MyOddWeb::BigNumber x = 35;
+  x.ToRadian(10);
+  MyOddWeb::BigNumber y = x.Cos(10);  //  0.8191520443
+  std::string z = y.ToString();
+  ASSERT_EQ("0.8191520443", z);
+}
+
 TEST(TrigBigNumber, SinOfPositive405Degree) {
   MyOddWeb::BigNumber x = 405;
   x.ToRadian(10);
@@ -59,10 +75,34 @@ TEST(TrigBigNumber, SinOfNegative45Degree) {
   ASSERT_EQ("-0.7071067812", z);
 }
 
+TEST(TrigBigNumber, CosOfNegative35Degree) {
+  MyOddWeb::BigNumber x = -35;
+  x.ToRadian(10);
+  MyOddWeb::BigNumber y = x.Cos(10);  //  0.8191520443
+  std::string z = y.ToString();
+  ASSERT_EQ("0.8191520443", z);
+}
+
 TEST(TrigBigNumber, SinOfNegative405Degree) {
   MyOddWeb::BigNumber x = -405;
   x.ToRadian(10);
   MyOddWeb::BigNumber y = x.Sin(10);  //  -0.7071067812
   std::string z = y.ToString();
   ASSERT_EQ("-0.7071067812", z);
+}
+
+TEST(TrigBigNumber, CosOfNegative12Degree) {
+  MyOddWeb::BigNumber x = -12;
+  x.ToRadian(10);
+  MyOddWeb::BigNumber y = x.Cos(10);  //  0.97814760073
+  std::string z = y.ToString();
+  ASSERT_EQ("0.9781476007", z);
+}
+
+TEST(TrigBigNumber, CosOfPositive12Degree) {
+  MyOddWeb::BigNumber x = 12;
+  x.ToRadian(10);
+  MyOddWeb::BigNumber y = x.Cos(10);  //  0.97814760073
+  std::string z = y.ToString();
+  ASSERT_EQ("0.9781476007", z);
 }

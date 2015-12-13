@@ -78,7 +78,8 @@ namespace MyOddWeb
     BigNumber& ToDegree(size_t precision = DEFAULT_PRECISION);
 
     BigNumber& Sin(size_t precision = DEFAULT_PRECISION);
-      
+    BigNumber& Cos(size_t precision = DEFAULT_PRECISION);
+
     //
     // manipulation
     BigNumber& Abs();

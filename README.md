@@ -72,6 +72,7 @@ Double
 	- Negative number.
 - Exp() : e raised to the power '*this*'
 - Sin( number ) : The radian sin of *this* number
+- Cos( number ) : The radian cos of *this* number
 
 ### Other functions ###
 - IsNeg() : If '*this*' number is negative or not.
@@ -120,7 +121,7 @@ Double
 - <s>Ln( ... )</s>/Log( ... )
 - Gamma()
 - <s>Round( precision ) : round a number up/down</s>
-- Basic Trigonometric Functions : <s>Sin()</s> / Cos() /Tan() 
+- Basic Trigonometric Functions : <s>Sin()</s> / <s>Cos()</s> /Tan() 
 
 ### Other functions ###
 - ToUInt()
