@@ -36,7 +36,7 @@
 // so we  don't devide for ever and ever...
 #define DEFAULT_PRECISION ((size_t)100)
 #define DEFAULT_PRECISION_PADDED(s) ( s + (size_t)5)
-#define MAX_LN_ITERATIONS ((size_t)100)
+#define MAX_LN_ITERATIONS ((size_t)200)
 #define MAX_EXP_ITERATIONS ((size_t)100)
 #define MAX_ROOT_ITERATIONS ((size_t)100)
 #define MAX_TRIG_ITERATIONS ((size_t)100)
@@ -79,6 +79,7 @@ namespace MyOddWeb
 
     BigNumber& Sin(size_t precision = DEFAULT_PRECISION);
     BigNumber& Cos(size_t precision = DEFAULT_PRECISION);
+    BigNumber& Tan(size_t precision = DEFAULT_PRECISION);
 
     //
     // manipulation
@@ -186,5 +187,7 @@ namespace MyOddWeb
     unsigned char _At(size_t position, size_t expectedDecimals) const;
 
     static bool _RecalcDenominator(BigNumber& max_denominator, BigNumber& base_multiplier, const BigNumber& remainder);
+
+    static BigNumber _NormalizeAngle( const BigNumber& radian );
   };
 }// namespace MyOddWeb

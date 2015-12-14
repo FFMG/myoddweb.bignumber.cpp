@@ -56,3 +56,12 @@ TEST(ExpBigNumber, PositiveNumberGreaterThanOne) {
     ASSERT_EQ("9.097503179538797", z);
   }
 }
+
+TEST(ExpBigNumber, LnOfSmallDecimalNumer) {
+  {
+    MyOddWeb::BigNumber x("0.5");
+    x.Ln(30); // -0.69314718055994530941723212145817
+    std::string z = x.ToString();
+    ASSERT_EQ("-0.693147180559945309417232121458", z);
+  }
+}

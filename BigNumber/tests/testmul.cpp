@@ -388,3 +388,10 @@ TEST(MultiplyBigNumber, CubeRootOfTwentySeven) {
   std::string z = y.ToString();
   ASSERT_EQ("3", z);
 }
+
+TEST(MultiplyBigNumber, SqrtOfZeroPointFive) {
+  MyOddWeb::BigNumber x = 0.5;
+  MyOddWeb::BigNumber y = x.Sqrt(10);  //  0.70710678118654752440084436210485
+  std::string z = y.ToString();
+  ASSERT_EQ("0.7071067812", z);
+}
