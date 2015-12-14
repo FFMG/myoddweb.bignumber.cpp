@@ -1386,3 +1386,19 @@ TEST(FunctionBigNumber, NegativePiToDegree)
   std::string z = rad.ToString();
   ASSERT_EQ("-180", z);
 }
+
+TEST(FunctionBigNumber, QuickModCheckForEven)
+{
+  int rnd = (rand() % 32767) * 2;  //  it has to be even...
+  MyOddWeb::BigNumber evenNumber = rnd;
+  ASSERT_TRUE(evenNumber.IsEven());//  it has to be even...
+  ASSERT_EQ(0, evenNumber.Mod(2).ToInt() );
+}
+
+TEST(FunctionBigNumber, QuickModCheckForOdd )
+{
+  int rnd = (rand() % 32767) * 2 + 1;  //  it has to be odd...
+  MyOddWeb::BigNumber evenNumber = rnd;
+  ASSERT_FALSE(evenNumber.IsEven());   //  it has to be odd...
+  ASSERT_EQ(1, evenNumber.Mod(2).ToInt() );
+}

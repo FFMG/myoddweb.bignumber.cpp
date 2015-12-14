@@ -1614,6 +1614,13 @@ namespace MyOddWeb
    */
   BigNumber BigNumber::Mod(const BigNumber& denominator) const
   {
+    // quick shortcut for an often use function.
+    if (denominator.Compare(_two) == 0)
+    {
+      // use this function, it is a lot quicker.
+      return IsEven() ? _zero : _one;
+    }
+
     // calculate both the quotient and remainder.
     BigNumber quotient;
     BigNumber remainder;
