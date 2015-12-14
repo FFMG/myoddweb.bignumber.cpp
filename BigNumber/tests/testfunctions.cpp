@@ -1402,3 +1402,16 @@ TEST(FunctionBigNumber, QuickModCheckForOdd )
   ASSERT_FALSE(evenNumber.IsEven());   //  it has to be odd...
   ASSERT_EQ(1, evenNumber.Mod(2).ToInt() );
 }
+
+TEST(FunctionBigNumber, CannotRoundNanNumbers)
+{
+  MyOddWeb::BigNumber x(1);
+  x.Div(0);
+  ASSERT_TRUE(x.IsNan());
+  x.Round(10);
+
+  ASSERT_TRUE(x.IsNan());
+
+  std::string z = x.ToString();
+  ASSERT_EQ("NaN", z);
+}

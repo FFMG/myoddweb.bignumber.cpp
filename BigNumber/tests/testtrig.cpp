@@ -203,3 +203,21 @@ TEST(TrigBigNumber, TanOfPositive89Multiple360) {
   std::string z = y.ToString();
   ASSERT_EQ("57.2899616307", z);
 }
+
+TEST(TrigBigNumber, Tan90IsNotANumber) {
+  MyOddWeb::BigNumber x = 90;
+  x.ToRadian(10);
+  MyOddWeb::BigNumber y = x.Tan(10);  //  
+  ASSERT_TRUE(y.IsNan());
+}
+
+TEST(TrigBigNumber, Tan90IsNotANumberMultiple360) {
+  int rnd = (rand() % 32767);
+
+  MyOddWeb::BigNumber x = 90;
+  x.Add(360 * rnd);
+
+  x.ToRadian(10);
+  MyOddWeb::BigNumber y = x.Tan(10);  //  
+  ASSERT_TRUE(y.IsNan());
+}

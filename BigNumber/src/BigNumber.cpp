@@ -379,6 +379,12 @@ namespace MyOddWeb
    */
   BigNumber& BigNumber::Round(size_t precision)
   {
+    // if it is not a number than there is no rounding to do.
+    if (IsNan())
+    {
+      return *this;
+    }
+
     if ( IsNeg() )
     {
       _neg = false;
