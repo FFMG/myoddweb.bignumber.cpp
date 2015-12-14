@@ -2052,17 +2052,6 @@ namespace MyOddWeb
     // return it
     return _pi;
   }
-  
-  BigNumber& BigNumber::Log(const BigNumber& base, size_t precision )
-  {
-    BigNumber ln = *this;
-    BigNumber lnbase = base;
-    ln.Ln(DEFAULT_PRECISION_PADDED(precision));
-    lnbase.Ln(DEFAULT_PRECISION_PADDED(precision));
-    *this = ln.Div(lnbase, DEFAULT_PRECISION_PADDED(precision));
-    // clean up and done.
-    return PerformPostOperations( precision );
-  }
 
   /**
    * Raise e to the power of this.
@@ -2272,6 +2261,32 @@ namespace MyOddWeb
 
     // clean up and done.
     return PerformPostOperations( precision );
+  }
+  
+  /**
+   * Calculate the Logarithm of this number for any base.
+   * @see Ln( ... )
+   * @param const BigNumber& base the base we want to calculate this with.
+   * @paran size_t precision the precision we want to limit the number with.
+   * @return BigNumber& this number logarithm calulcated at the given base.
+   */
+  BigNumber& BigNumber::Log(const BigNumber& base, size_t precision)
+  {
+    // this number.
+    BigNumber ln = *this;
+
+    // this base.
+    BigNumber lnbase = base;
+
+    // calculate them both.
+    ln.Ln(DEFAULT_PRECISION_PADDED(precision));
+    lnbase.Ln(DEFAULT_PRECISION_PADDED(precision));
+
+    // one over the other
+    *this = ln.Div(lnbase, DEFAULT_PRECISION_PADDED(precision));
+
+    // clean up and done.
+    return Round(precision).PerformPostOperations(precision);
   }
 
   /**

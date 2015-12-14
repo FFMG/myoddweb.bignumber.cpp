@@ -67,7 +67,7 @@ namespace MyOddWeb
     BigNumber& Div(const BigNumber& rhs, size_t precision = DEFAULT_PRECISION);
     BigNumber& Ln(size_t precision = DEFAULT_PRECISION );
     BigNumber& Exp(size_t precision = DEFAULT_PRECISION);
-    BigNumber& Log( const BigNumber& exponent, size_t precision = DEFAULT_PRECISION);
+    BigNumber& Log( const BigNumber& base, size_t precision = DEFAULT_PRECISION);
     BigNumber& Factorial( size_t precision = DEFAULT_PRECISION);
     BigNumber Mod(const BigNumber& denominator) const;
     BigNumber Quotient(const BigNumber& denominator) const;

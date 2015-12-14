@@ -111,3 +111,35 @@ TEST(LogBigNumber, LnOfLargeNegativeNumber)
   MyOddWeb::BigNumber y = x.Ln(60);
   ASSERT_TRUE(y.IsNan());
 }
+
+TEST(LogBigNumber, LogOf10 )
+{
+  MyOddWeb::BigNumber x = 10;
+  MyOddWeb::BigNumber y = x.Log(10, 10);  //  1
+  std::string z = y.ToString();
+  ASSERT_EQ("1", z);
+}
+
+TEST(LogBigNumber, LogOf100)
+{
+  MyOddWeb::BigNumber x = 100;
+  MyOddWeb::BigNumber y = x.Log(10, 10);  //  1
+  std::string z = y.ToString();
+  ASSERT_EQ("2", z);
+}
+
+TEST(LogBigNumber, LogOfVeryLargeInteger)
+{
+  MyOddWeb::BigNumber x = "10000000000000000000000000";
+  MyOddWeb::BigNumber y = x.Log(10, 10);  //  25
+  std::string z = y.ToString();
+  ASSERT_EQ("25", z);
+}
+
+TEST(LogBigNumber, LogBaseSeven)
+{
+  MyOddWeb::BigNumber x = "200";
+  MyOddWeb::BigNumber y = x.Log(7, 40);  //  2.7227965120178988301500342012950088256286462086576031467522 
+  std::string z = y.ToString();
+  ASSERT_EQ("2.7227965120178988301500342012950088256286", z);
+}

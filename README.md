@@ -71,9 +71,11 @@ Double
 - Pow( number ) : '*this*' raised to '*number*' (n * n * n * ...).
 	- Negative number.
 - Exp() : e raised to the power '*this*'
-- Sin( number ) : The radian sin of *this* number
-- Cos( number ) : The radian cos of *this* number
-- Tan( number ) : The radian tan of *this* number
+- Ln() : logarithm base e of '*this*'.
+- Log( number ) : logarithm of any base, (*number*) of '*this*'.
+- Sin( number ) : The radian sin of '*this*' number
+- Cos( number ) : The radian cos of '*this*' number
+- Tan( number ) : The radian tan of '*this*' number
 
 ### Other functions ###
 - IsNeg() : If '*this*' number is negative or not.
@@ -119,7 +121,7 @@ Double
 - <s>Pow( number ) : Raise '*this*' by the '*number*' power (n * n * n * ...)</s>
 	- <s>Pow( number ) - decimal numbers.</s>
 	- <s>Pow( nmuber ) - negative numbs</s>
-- <s>Ln( ... )</s>/Log( ... )
+- <s>Ln( ... ) / Log( ... )</s>
 - Gamma()
 - <s>Round( precision ) : round a number up/down</s>
 - <s>Basic Trigonometric Functions : Sin() / Cos() / Tan()</s> 
@@ -139,7 +141,7 @@ Double
 - ToDouble( ... ) and ToInt( ... ) do not check if limits are reached.
 - Optimise:
 	- Multiplication and Divisions, (especially **division**). Currently they are doing long division and long multiplication. This is not efficient.
-	- Factorial, the current implementation does 1 * 2 * 3*... and this is slow, (of course). Use the **Gamma** function.
+	- Factorial, the current implementation does 1 * 2 * 3 * ... and this is slow, (of course). Use the **Gamma** function.
 
 - Specifically for C++ enable operators
 	- operator+
