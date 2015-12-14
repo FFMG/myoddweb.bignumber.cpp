@@ -35,19 +35,6 @@
 
 int main(int argc, char** argv)
 {
-  {
-    MyOddWeb::BigNumber x = "0.000304586489579";
-    MyOddWeb::BigNumber y = x.Ln(10);  //  -8.096555473119213120980193958418059718205997528898698701702
-    std::string z = y.ToString();
-  }
-
-  {
-    MyOddWeb::BigNumber x = 89;
-    x.ToRadian(10);
-    MyOddWeb::BigNumber y = x.Tan(10);  //  
-    std::string z = y.ToString();
-  }
-
   /* initialize random seed: */
   srand( (unsigned int)time(NULL));
 
