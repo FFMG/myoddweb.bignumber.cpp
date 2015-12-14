@@ -95,3 +95,19 @@ TEST(LogBigNumber, NegativeFractionalNumber) {
   x.Ln();
   ASSERT_TRUE(x.IsNan());
 }
+
+TEST(LogBigNumber, LnOfLargePositiveNumber)
+{
+  MyOddWeb::BigNumber x = "290438572";
+  MyOddWeb::BigNumber y = x.Ln(60);  //  19.486902655786089696360309780672125078314844293178248031571
+                                     //  19.486902655786089696360309780672125078314844293178248031571123
+  std::string z = y.ToString();
+  ASSERT_EQ("19.486902655786089696360309780672125078314844293178248031571123", z);
+}
+
+TEST(LogBigNumber, LnOfLargeNegativeNumber)
+{
+  MyOddWeb::BigNumber x = "-290438572";
+  MyOddWeb::BigNumber y = x.Ln(60);
+  ASSERT_TRUE(y.IsNan());
+}
