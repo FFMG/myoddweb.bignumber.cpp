@@ -151,3 +151,6 @@ Double
 	- operator*
 
 - Do some speed tests / benchmarks / comparison.
+
+- Add version number embeded in the code.
+- Create a version.md file
