@@ -38,11 +38,14 @@ namespace MyOddWeb
   BigNumber BigNumber::_e = 0;
   BigNumber BigNumber::_pi = 0;
 
+  // zero.
+  const BigNumber BigNumber::_number_zero = 0;
+
   // one.
-  const BigNumber BigNumber::_one = 1;
+  const BigNumber BigNumber::_number_one = 1;
 
   // two
-  const BigNumber BigNumber::_two = 2;
+  const BigNumber BigNumber::_number_two = 2;
 
   BigNumber::BigNumber() : _base(10)
   {
@@ -336,7 +339,7 @@ namespace MyOddWeb
 
   /**
    * Transform the number into absolute number.
-   * @return const BigNumber& this non negative number.
+   * @return BigNumber& this non negative number.
    */
   BigNumber& BigNumber::Abs()
   {
@@ -424,7 +427,7 @@ namespace MyOddWeb
     // if it positive then we need to go up one more
     if (!IsNeg())
     {
-      Add( _one );
+      Add(_number_one );
     }
 
     // done.
@@ -450,7 +453,7 @@ namespace MyOddWeb
     // if it negative then we need to subtract one more.
     if (IsNeg())
     {
-      Sub( _one );
+      Sub(_number_one );
     }
 
     // done.
@@ -458,7 +461,7 @@ namespace MyOddWeb
   }
 
   /**
-   * Clean up the number to remove leading zeros and uneeded trailling zeros, (for decimals).
+   * Clean up the number to remove leading zeros and unneeded trailing zeros, (for decimals).
    * @param size_t precision the max precision we want to set.
    * @return BigNumber& the number we cleaned up.
    */
@@ -499,7 +502,7 @@ namespace MyOddWeb
       --_decimals;
     }
 
-    // rememver that the numbers are in reverse
+    // remember that the numbers are in reverse
     for (;;)
     {
       // get the last number
@@ -570,7 +573,7 @@ namespace MyOddWeb
     }
 
     // any number divided by one is one.
-    if (rhs.Compare(_one) == 0)
+    if (rhs.Compare(_number_one) == 0)
     {
       // lhs / 1 = lhs
       return lhs;
@@ -634,11 +637,11 @@ namespace MyOddWeb
   {
     if( exp.IsZero() )
     {
-      return _one;
+      return _number_one;
     }
 
     // +ve 1 exp = x
-    if ( BigNumber::AbsCompare( exp, _one) == 0 )
+    if ( BigNumber::AbsCompare( exp, _number_one) == 0 )
     {
       return base;
     }
@@ -648,7 +651,7 @@ namespace MyOddWeb
     BigNumber copyExp = exp; copyExp.Abs();
 
     // the current result.
-    BigNumber result = _one;
+    BigNumber result = _number_one;
 
     // if we have decimals, we need to do it the hard/long way...
     if (copyExp._decimals > 0)
@@ -669,7 +672,7 @@ namespace MyOddWeb
         }
 
         // devide by 2 with no decimal places.
-        copyExp = BigNumber::AbsDiv(copyExp, _two, 0);
+        copyExp = BigNumber::AbsDiv(copyExp, _number_two, 0);
         if (copyExp.IsZero())
         {
           break;
@@ -702,11 +705,11 @@ namespace MyOddWeb
     }
 
     // anything multiplied by one == anything
-    if (BigNumber::AbsCompare(lhs, _one) == 0) // 1 x rhs = rhs
+    if (BigNumber::AbsCompare(lhs, _number_one) == 0) // 1 x rhs = rhs
     {
       return rhs;
     }
-    if (BigNumber::AbsCompare(rhs, _one) == 0) // lhs x 1 = lhs
+    if (BigNumber::AbsCompare(rhs, _number_one) == 0) // lhs x 1 = lhs
     {
       return lhs;
     }
@@ -1090,7 +1093,7 @@ namespace MyOddWeb
   */
   bool BigNumber::IsEven() const
   {
-    // if we are NaN then we ar not odd or even
+    // if we are NaN then we are not odd or even
     if (IsNan())
     {
       return false;
@@ -1438,9 +1441,9 @@ namespace MyOddWeb
    */
   BigNumber& BigNumber::RootNewton( const BigNumber& nthroot, size_t precision)
   {
-    if ( Compare(_one) == 0)
+    if ( Compare(_number_one) == 0)
     {
-      *this = _one;
+      *this = _number_one;
       return *this;
     }
 
@@ -1451,8 +1454,8 @@ namespace MyOddWeb
     BigNumber x = *this;
 
     // values used a lot
-    const BigNumber r_less_one = BigNumber(nthroot).Sub(_one);
-    const BigNumber one_over_r = BigNumber(_one).Div(nthroot, padded_precision);
+    const BigNumber r_less_one = BigNumber(nthroot).Sub(_number_one);
+    const BigNumber one_over_r = BigNumber(_number_one).Div(nthroot, padded_precision);
 
     // calculate this over and over again.
     for (size_t i = 0; i < MAX_ROOT_ITERATIONS; ++i)
@@ -1523,9 +1526,9 @@ namespace MyOddWeb
 
     // if the number is one, then this number is one.
     // it has to be as only 1*1 = 1 is the only posibility is.
-    if (Compare(_one) == 0)
+    if (Compare(_number_one) == 0)
     {
-      *this = _one;
+      *this = _number_one;
     }
     else
     {
@@ -1537,7 +1540,7 @@ namespace MyOddWeb
 
       // try and use the power of...
       // nthroot = x^( 1/nthroot)
-      const BigNumber number_one_over = BigNumber( _one).Div( nthroot, DEFAULT_PRECISION_PADDED(precision));
+      const BigNumber number_one_over = BigNumber(_number_one).Div( nthroot, DEFAULT_PRECISION_PADDED(precision));
 
       // calculate it, use the correction to make sure we are well past
       // the actual value we want to set is as.
@@ -1567,7 +1570,7 @@ namespace MyOddWeb
     if (exp.IsNeg())
     {
       // x^(-y) = 1/^|y|
-      *this = BigNumber(_one).Div(*this, precision );
+      *this = BigNumber(_number_one).Div(*this, precision );
     }
 
     // return this/cleaned up.
@@ -1621,10 +1624,10 @@ namespace MyOddWeb
   BigNumber BigNumber::Mod(const BigNumber& denominator) const
   {
     // quick shortcut for an often use function.
-    if (denominator.Compare(_two) == 0)
+    if (denominator.Compare(_number_two) == 0)
     {
       // use this function, it is a lot quicker.
-      return IsEven() ? _zero : _one;
+      return IsEven() ? _number_zero : _number_one;
     }
 
     // calculate both the quotient and remainder.
@@ -1658,7 +1661,7 @@ namespace MyOddWeb
     if (IsZero())
     {
       // The value of 0!is 1, according to the convention for an empty product
-      *this = _one;
+      *this = _number_one;
 
       // then return this number
       return *this;
@@ -1667,10 +1670,10 @@ namespace MyOddWeb
     // the factorial.
     BigNumber c = *this;
 
-    while (BigNumber::AbsCompare(*this, _one ) == 1 )
+    while (BigNumber::AbsCompare(*this, _number_one ) == 1 )
     {
       // subtract one.
-      Sub(_one);
+      Sub(_number_one);
 
       // multiply it
       c.Mul(*this, precision );
@@ -1708,13 +1711,13 @@ namespace MyOddWeb
   }
 
   /**
-  * Calculate the quotien and remainder of a division
-  * @see https://en.wikipedia.org/wiki/Modulo_operation
-  * @param const BigNumber& numerator the numerator been devided.
-  * @param const BigNumber& denominator the denominator dividing the number.
-  * @param BigNumber& quotient the quotient of the division
-  * @param BigNumber& remainder the remainder.
-  */
+   * Calculate the quotien and remainder of a division
+   * @see https://en.wikipedia.org/wiki/Modulo_operation
+   * @param const BigNumber& numerator the numerator been devided.
+   * @param const BigNumber& denominator the denominator dividing the number.
+   * @param BigNumber& quotient the quotient of the division
+   * @param BigNumber& remainder the remainder.
+   */
   void BigNumber::AbsQuotientAndRemainder(const BigNumber& numerator, const BigNumber& denominator, BigNumber& quotient, BigNumber& remainder)
   {
     // check if we can actually do this, it should work for all
@@ -1759,7 +1762,7 @@ namespace MyOddWeb
     //    we need the number to be positive.
     BigNumber max_denominator = denominator;
     max_denominator._neg = false;
-    BigNumber base_multiplier = _one;
+    BigNumber base_multiplier = _number_one;
 
     while ( BigNumber::AbsCompare(max_denominator, numerator) < 0)
     {
@@ -1896,9 +1899,6 @@ namespace MyOddWeb
 
     // the return number.
     int number = 0;
-
-    // the current multiplier.
-    unsigned long multiplier = 1;
 
     // the total number of items.
     size_t l = _numbers.size();
@@ -2065,7 +2065,7 @@ namespace MyOddWeb
     if (IsZero())
     {
       // reset this to 1
-      *this = _one;
+      *this = _number_one;
 
       //  done
       return PerformPostOperations( precision );
@@ -2080,7 +2080,7 @@ namespace MyOddWeb
     fraction.Frac();
 
     // reset this to 1
-    *this = _one;
+    *this = _number_one;
 
     // the two sides of the equation
     // the whole number.
@@ -2102,11 +2102,11 @@ namespace MyOddWeb
       //     x^1   x^2   x^3
       // 1 + --- + --- + --- ...
       //      1!    2!    3!
-      BigNumber fact( _one );
+      BigNumber fact(_number_one );
       const BigNumber base(fraction);
       BigNumber power(base);
 
-      BigNumber result = _one;
+      BigNumber result = _number_one;
       for (size_t i = 1; i < MAX_EXP_ITERATIONS; ++i)
       {
         //  calculate the number up to the precision we are after.
@@ -2156,7 +2156,7 @@ namespace MyOddWeb
     }
 
     //  if this is 1 then log 1 is zero.
-    if (Compare( _one ) == 0 )
+    if (Compare(_number_one ) == 0 )
     {
       *this = 0;
       return PerformPostOperations( precision );
@@ -2174,9 +2174,9 @@ namespace MyOddWeb
       Mul(1.8, DEFAULT_PRECISION_PADDED(precision));
       ++counter8;
     }
-    while (Compare( _two ) > 0)
+    while (Compare(_number_two ) > 0)
     {
-      Div(_two, DEFAULT_PRECISION_PADDED(precision));
+      Div(_number_two, DEFAULT_PRECISION_PADDED(precision));
       ++counter2;
     }
     while (Compare(1.1) > 0)
@@ -2186,8 +2186,8 @@ namespace MyOddWeb
     }
 
     //  we must make sure that *is 
-    const BigNumber base = BigNumber(*this).Sub( _one ); // Base of the numerator; exponent will be explicit
-    BigNumber den( _one );                // Denominator of the nth term
+    const BigNumber base = BigNumber(*this).Sub(_number_one ); // Base of the numerator; exponent will be explicit
+    BigNumber den(_number_one );                // Denominator of the nth term
     bool neg = false;                     // start positive.
     
     //                  (x-1)^2    (x-1)^3   (x-1)^4 
@@ -2198,7 +2198,7 @@ namespace MyOddWeb
     for ( size_t i = 0; i < MAX_LN_ITERATIONS; ++i )
     {
       // next donominator
-      den.Add( _one );
+      den.Add(_number_one );
 
       // swap operation
       neg = !neg;
@@ -2298,7 +2298,7 @@ namespace MyOddWeb
    */
   BigNumber BigNumber::_NormalizeAngle(const BigNumber& radian)
   {
-    static const BigNumber twoPi = BigNumber(BigNumber::pi()).Mul(_two );
+    static const BigNumber twoPi = BigNumber(BigNumber::pi()).Mul(_number_two );
     BigNumber result = radian;
     if (BigNumber::AbsCompare(result, twoPi) == 1)
     {
@@ -2329,16 +2329,16 @@ namespace MyOddWeb
     BigNumber result = BigNumber::_NormalizeAngle( *this );
     const BigNumber multiplier = BigNumber(result).Pow(2, DEFAULT_PRECISION_PADDED(precision ));
     BigNumber startingMultiplier = result;
-    BigNumber startingFractional = _one;
-    BigNumber fractionalCounter = _one;
+    BigNumber startingFractional = _number_one;
+    BigNumber fractionalCounter = _number_one;
 
     bool neg = true;
     for (size_t i = 0; i < MAX_TRIG_ITERATIONS; ++i)
     {
       startingMultiplier.Mul(multiplier);
 
-      startingFractional.Mul(fractionalCounter.Add(_one));
-      startingFractional.Mul(fractionalCounter.Add(_one));
+      startingFractional.Mul(fractionalCounter.Add(_number_one));
+      startingFractional.Mul(fractionalCounter.Add(_number_one));
 
       BigNumber currentBase = BigNumber(startingMultiplier).Div(startingFractional, DEFAULT_PRECISION_PADDED(precision));
 
@@ -2380,19 +2380,19 @@ namespace MyOddWeb
     //                (x ^ 2)   (x ^ 4)   (x ^ 6)
     // sin(x) = (1) - ------- + ------- - ------- ...
     //                  2!       4!         6!
-    BigNumber result = _one;
+    BigNumber result = _number_one;
     const BigNumber multiplier = BigNumber::_NormalizeAngle( *this ).Pow(2, DEFAULT_PRECISION_PADDED(precision));
-    BigNumber startingMultiplier = _one;
-    BigNumber startingFractional = _one;
-    BigNumber fractionalCounter = _zero;
+    BigNumber startingMultiplier = _number_one;
+    BigNumber startingFractional = _number_one;
+    BigNumber fractionalCounter = _number_zero;
 
     bool neg = true;
     for (size_t i = 0; i < MAX_TRIG_ITERATIONS; ++i)
     {
       startingMultiplier.Mul(multiplier);
 
-      startingFractional.Mul(fractionalCounter.Add(_one));
-      startingFractional.Mul(fractionalCounter.Add(_one));
+      startingFractional.Mul(fractionalCounter.Add(_number_one));
+      startingFractional.Mul(fractionalCounter.Add(_number_one));
 
       BigNumber currentBase = BigNumber(startingMultiplier).Div(startingFractional, DEFAULT_PRECISION_PADDED(precision));
 
@@ -2437,7 +2437,7 @@ namespace MyOddWeb
 
     const BigNumber sinOfNumber = BigNumber(*this).Sin(DEFAULT_PRECISION_PADDED(precision));
     const BigNumber pwrSinOfNumber = BigNumber(sinOfNumber).Pow(2, DEFAULT_PRECISION_PADDED(precision));
-    const BigNumber sqrRoot = BigNumber(_one).Sub(pwrSinOfNumber).Sqrt(DEFAULT_PRECISION_PADDED(precision));
+    const BigNumber sqrRoot = BigNumber(_number_one).Sub(pwrSinOfNumber).Sqrt(DEFAULT_PRECISION_PADDED(precision));
     const BigNumber result = BigNumber(sinOfNumber).Div(sqrRoot, DEFAULT_PRECISION_PADDED(precision));
 
     // all done.

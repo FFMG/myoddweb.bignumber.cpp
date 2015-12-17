@@ -175,8 +175,9 @@ namespace MyOddWeb
     static BigNumber _e;
     static BigNumber _pi;
 
-    static const BigNumber _one;
-    static const BigNumber _two;
+    static const BigNumber _number_zero;
+    static const BigNumber _number_one;
+    static const BigNumber _number_two;
 
   protected:
     BigNumber& RootNewton( const BigNumber& nthroot, size_t precision);

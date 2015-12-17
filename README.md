@@ -1,6 +1,8 @@
 # myoddweb.bignumber.cpp #
 Yet another C++ BigNumber implementation with focus on switching between languages.
 
+- [PHP BigNumber](https://github.com/FFMG/myoddweb.bignumber.php)
+
 The main purpose of this class is to make it easier to write big number functions for scripting languages, (like Javascript or php ).
 
 # Usage #
@@ -58,7 +60,7 @@ Double
 
     double x = MyOddWeb::BigNumber(1.234).Add(MyOddWeb::BigNumber(2.345)).ToDouble();
 
-# Funtions #
+# Functions #
 ### Math functions ###
 - Add( number ) : Add '*number*' to '*this*' number.
 - Sub( number ) : Subtract '*number*' from '*this*' number.
