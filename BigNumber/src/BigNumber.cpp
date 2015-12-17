@@ -351,10 +351,10 @@ namespace MyOddWeb
   }
 
   /**
-  * Truncate the number
-  * @param size_t precision the max number of decimals.
-  * @return const BigNumber& the truncated number.
-  */
+   * Truncate the number
+   * @param size_t precision the max number of decimals.
+   * @return const BigNumber& the truncated number.
+   */
   BigNumber& BigNumber::Trunc(size_t precision)
   {
     // does anything need to be done.
@@ -401,7 +401,7 @@ namespace MyOddWeb
     // add 0.5 and floor(...) it.
     BigNumber number = 5;
     number.DevideByBase( (precision+1));
-    BigNumber x = AbsAdd(number, *this);
+    BigNumber x = BigNumber::AbsAdd(number, *this);
     *this = x.Floor( precision );
 
     // clean up.
@@ -548,12 +548,12 @@ namespace MyOddWeb
   }
 
   /**
-  * Multiply 2 absolute numbers together.
-  * @param const BigNumber& rhs the number been multiplied
-  * @param const BigNumber& rhs the number multipling
-  * @param size_t precision the max precision to stop once the limit is reached.
-  * @return BigNumber the product of the two numbers.
-  */
+   * Multiply 2 absolute numbers together.
+   * @param const BigNumber& rhs the number been multiplied
+   * @param const BigNumber& rhs the number multipling
+   * @param size_t precision the max precision to stop once the limit is reached.
+   * @return BigNumber the product of the two numbers.
+   */
   BigNumber BigNumber::AbsDiv(const BigNumber& lhs, const BigNumber& rhs, size_t precision)
   {
     // lhs / 0 = nan
@@ -569,7 +569,7 @@ namespace MyOddWeb
     if (lhs.IsZero())
     {
       // lhs / 0 = nan
-      return BigNumber(0);
+      return _number_zero;
     }
 
     // any number divided by one is one.
@@ -701,7 +701,7 @@ namespace MyOddWeb
     if (lhs.IsZero() || rhs.IsZero())
     {
       //  zero * anything = zero.
-      return BigNumber(0);
+      return _number_zero;
     }
 
     // anything multiplied by one == anything
@@ -944,14 +944,11 @@ namespace MyOddWeb
    */
   BigNumber BigNumber::AbsAdd(const BigNumber& lhs, const BigNumber& rhs)
   {
+    // the carry over
     unsigned char carryOver = 0;
-    size_t ll = lhs._numbers.size();
-    size_t rl = rhs._numbers.size();
 
     // get the maximum number of decimals.
     int maxDecimals = (int)(lhs._decimals >= rhs._decimals ? lhs._decimals : rhs._decimals);
-    const size_t lhsDecimalsOffset = maxDecimals - lhs._decimals;
-    const size_t rhsDecimalsOffset = maxDecimals - rhs._decimals;
 
     NUMBERS numbers;
     for (size_t i = 0;; ++i)
@@ -1867,7 +1864,6 @@ namespace MyOddWeb
     return true;
   }
 
-
   /**
    * Convert a big number to a double.
    * @return double the converted number to a double.
@@ -2448,11 +2444,11 @@ namespace MyOddWeb
   }
 
   /**
-  * Convert a Radian number to degree
-  * @see http://www.mathwarehouse.com/trigonometry/radians/convert-degee-to-radians.php
-  * @param size_t precision the precision we want to limit this to.
-  * @return BigNumber this number converted to a Degree number.
-  */
+   * Convert a Radian number to degree
+   * @see http://www.mathwarehouse.com/trigonometry/radians/convert-degee-to-radians.php
+   * @param size_t precision the precision we want to limit this to.
+   * @return BigNumber this number converted to a Degree number.
+   */
   BigNumber& BigNumber::ToDegree(size_t precision)
   {
     if (IsZero())
