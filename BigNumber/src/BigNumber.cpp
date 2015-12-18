@@ -316,19 +316,18 @@ namespace MyOddWeb
   }
 
   /**
-  * Convert this number to the fractional part of the integer.
-  * @see https://en.wikipedia.org/wiki/Fractional_part
-  * @return BigNumber& *this the fractional part of the number.
-  */
+   * Convert this number to the fractional part of the integer.
+   * @see https://en.wikipedia.org/wiki/Fractional_part
+   * @return BigNumber& *this the fractional part of the number.
+   */
   BigNumber& BigNumber::Frac()
   {
     if (_decimals == 0)
     {
-      *this = 0;
+      *this = _number_zero;
     }
     else
     {
-      size_t l = _numbers.size();
       _numbers.erase(_numbers.begin() + _decimals, _numbers.end());
       _numbers.push_back(0);
     }
