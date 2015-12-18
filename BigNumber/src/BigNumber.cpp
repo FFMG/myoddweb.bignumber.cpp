@@ -584,8 +584,12 @@ namespace MyOddWeb
     // the result
     NUMBERS c;
 
+    // remove unneeded decimal places.
+    BigNumber tlhs = BigNumber(lhs).Round(DEFAULT_PRECISION_PADDED(precision));
+    BigNumber trhs = BigNumber(rhs).Round(DEFAULT_PRECISION_PADDED(precision));
+
     // the number we are working with.
-    BigNumber number(lhs);
+    BigNumber number(tlhs);
     number._neg = false;
 
     // quotien/remainder we will use.
@@ -596,7 +600,7 @@ namespace MyOddWeb
     for (;;)
     {
       // get the quotient and remainder.
-      BigNumber::QuotientAndRemainder(number, rhs, quotient, remainder);
+      BigNumber::QuotientAndRemainder(number, trhs, quotient, remainder);
 
       // add the quotien to the current number.
       c.insert( c.begin(), quotient._numbers.begin(), quotient._numbers.end());
@@ -720,19 +724,21 @@ namespace MyOddWeb
     // this will allow us to do the multiplication. 
     if (maxDecimals > 0 )
     {
+      // remove unneeded decimal places.
+      BigNumber tlhs = BigNumber(lhs).Round(DEFAULT_PRECISION_PADDED(precision) );
+      BigNumber trhs = BigNumber(rhs).Round(DEFAULT_PRECISION_PADDED(precision));
+
       // the final number of decimals is the total number of decimals we used.
       // 10.12 * 10.12345=102.4493140
       // 1012 * 1012345 = 1024493140
       // decimals = 2 + 5 = 102.4493140
-      size_t decimals = lhs._decimals + rhs._decimals;
+      size_t decimals = tlhs._decimals + trhs._decimals;
 
       // copy the lhs with no decimals
-      BigNumber tlhs(lhs);
-      tlhs.MultiplyByBase(lhs._decimals);
+      tlhs.MultiplyByBase( tlhs._decimals);
 
       // copy the rhs with no decimals
-      BigNumber trhs(rhs);
-      trhs.MultiplyByBase(rhs._decimals);
+      trhs.MultiplyByBase( trhs._decimals);
 
       // do the multiplication without any decimals.
       BigNumber c = BigNumber::AbsMul(tlhs, trhs, 0);
@@ -762,8 +768,11 @@ namespace MyOddWeb
 
     // the return number
     BigNumber c;
-    static const size_t shift = 7;
-    static unsigned long long max_base = 10000000;
+    static const size_t shift = 4;           // max int = 2147483647 on a 32 bit process
+                                             // so the biggest number we can have is 46340 (46340*46340=2147395600)
+                                             // so using 1 and 0 only, the biggest number is 10000 (and shift=4xzeros)
+                                             // the biggest number is 9999*9999= 99980001
+    static unsigned long long max_base = 10000;
 
     NUMBERS shifts;
     for (size_t x = 0; x < ll; x+= shift)
