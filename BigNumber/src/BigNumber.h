@@ -32,14 +32,25 @@
 #pragma once
 #include <vector>
 
-// the precision we want to stop at, by default.
-// so we  don't devide for ever and ever...
-#define DEFAULT_PRECISION ((size_t)100)
-#define DEFAULT_PRECISION_PADDED(s) ( s + (size_t)5)
-#define MAX_LN_ITERATIONS ((size_t)200)
-#define MAX_EXP_ITERATIONS ((size_t)100)
-#define MAX_ROOT_ITERATIONS ((size_t)100)
-#define MAX_TRIG_ITERATIONS ((size_t)100)
+/**
+ * The version number vMajor.vMinor.vBuild
+ * The derived version will try and follow that number.
+ */
+#define BIGNUMBER_VERSION        "0.1.00"
+#define BIGNUMBER_VERSION_NUMBER 000100
+
+/**
+ * The precision we want to stop at, by default.
+ * so we  don't devide for ever and ever...
+ * Eventually those should be set in some sort of config
+ * Rather than working at config time.
+ */
+#define BIGNUMBER_DEFAULT_PRECISION ((size_t)100)
+#define BIGNUMBER_PRECISION_PADDED(s) ( s + (size_t)5)
+#define BIGNUMBER_MAX_LN_ITERATIONS ((size_t)200)
+#define BIGNUMBER_MAX_EXP_ITERATIONS ((size_t)100)
+#define BIGNUMBER_MAX_ROOT_ITERATIONS ((size_t)100)
+#define BIGNUMBER_MAX_TRIG_ITERATIONS ((size_t)100)
 
 namespace MyOddWeb
 {
@@ -58,28 +69,28 @@ namespace MyOddWeb
 
     //
     // Math
-    BigNumber& Pow(const BigNumber& exp, size_t precision = DEFAULT_PRECISION);
-    BigNumber& Sqrt(size_t precision = DEFAULT_PRECISION);
-    BigNumber& Root(const BigNumber& nthroot, size_t precision = DEFAULT_PRECISION);
+    BigNumber& Pow(const BigNumber& exp, size_t precision = BIGNUMBER_DEFAULT_PRECISION);
+    BigNumber& Sqrt(size_t precision = BIGNUMBER_DEFAULT_PRECISION);
+    BigNumber& Root(const BigNumber& nthroot, size_t precision = BIGNUMBER_DEFAULT_PRECISION);
     BigNumber& Add(const BigNumber& rhs);
     BigNumber& Sub(const BigNumber& rhs);
-    BigNumber& Mul(const BigNumber& rhs, size_t precision = DEFAULT_PRECISION);
-    BigNumber& Div(const BigNumber& rhs, size_t precision = DEFAULT_PRECISION);
-    BigNumber& Ln(size_t precision = DEFAULT_PRECISION );
-    BigNumber& Exp(size_t precision = DEFAULT_PRECISION);
-    BigNumber& Log( const BigNumber& base, size_t precision = DEFAULT_PRECISION);
-    BigNumber& Factorial( size_t precision = DEFAULT_PRECISION);
+    BigNumber& Mul(const BigNumber& rhs, size_t precision = BIGNUMBER_DEFAULT_PRECISION);
+    BigNumber& Div(const BigNumber& rhs, size_t precision = BIGNUMBER_DEFAULT_PRECISION);
+    BigNumber& Ln(size_t precision = BIGNUMBER_DEFAULT_PRECISION);
+    BigNumber& Exp(size_t precision = BIGNUMBER_DEFAULT_PRECISION);
+    BigNumber& Log( const BigNumber& base, size_t precision = BIGNUMBER_DEFAULT_PRECISION);
+    BigNumber& Factorial( size_t precision = BIGNUMBER_DEFAULT_PRECISION);
     BigNumber Mod(const BigNumber& denominator) const;
     BigNumber Quotient(const BigNumber& denominator) const;
 
     //
     // Basic Trigonometric Functions
-    BigNumber& ToRadian(size_t precision = DEFAULT_PRECISION);
-    BigNumber& ToDegree(size_t precision = DEFAULT_PRECISION);
+    BigNumber& ToRadian(size_t precision = BIGNUMBER_DEFAULT_PRECISION);
+    BigNumber& ToDegree(size_t precision = BIGNUMBER_DEFAULT_PRECISION);
 
-    BigNumber& Sin(size_t precision = DEFAULT_PRECISION);
-    BigNumber& Cos(size_t precision = DEFAULT_PRECISION);
-    BigNumber& Tan(size_t precision = DEFAULT_PRECISION);
+    BigNumber& Sin(size_t precision = BIGNUMBER_DEFAULT_PRECISION);
+    BigNumber& Cos(size_t precision = BIGNUMBER_DEFAULT_PRECISION);
+    BigNumber& Tan(size_t precision = BIGNUMBER_DEFAULT_PRECISION);
 
     //
     // manipulation
