@@ -28,8 +28,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // Author: Florent Guelfucci
-
-#include "stdafx.h"
 #include <gtest\gtest.h>
 #include "src/BigNumber.h"
 
