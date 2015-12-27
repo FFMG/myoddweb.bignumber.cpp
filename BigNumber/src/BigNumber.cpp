@@ -47,37 +47,37 @@ namespace MyOddWeb
   // two
   const BigNumber BigNumber::_number_two = 2;
 
-  BigNumber::BigNumber() : _base(10)
+  BigNumber::BigNumber()
   {
     Default();
     _numbers.push_back(0); // positive zero.
   }
 
-  BigNumber::BigNumber(const char* source) : _base(10)
+  BigNumber::BigNumber(const char* source)
   {
     Default();
     Parse(source);
   }
 
-  BigNumber::BigNumber(int source) : _base(10)
+  BigNumber::BigNumber(int source)
   {
     Default();
     Parse( (long long) source);
   }
 
-  BigNumber::BigNumber(long long source) : _base(10)
+  BigNumber::BigNumber(long long source)
   {
     Default();
     Parse(source);
   }
 
-  BigNumber::BigNumber(double source) : _base(10)
+  BigNumber::BigNumber(double source)
   {
     Default();
     Parse(source);
   }
 
-  BigNumber::BigNumber(const NUMBERS& numbers, size_t decimals, bool neg) : _base(10)
+  BigNumber::BigNumber(const NUMBERS& numbers, size_t decimals, bool neg)
   {
     Default();
 
@@ -94,7 +94,7 @@ namespace MyOddWeb
     PerformPostOperations(decimals);
   }
 
-  BigNumber::BigNumber(const BigNumber& source) : _base(source._base)
+  BigNumber::BigNumber(const BigNumber& source)
   {
     Default();
     *this = source;
@@ -116,10 +116,6 @@ namespace MyOddWeb
   {
     if (this != &rhs)
     {
-      if (_base != rhs._base)
-      {
-        throw std::runtime_error("The source base does not match the destination base");
-      }
       _numbers.clear();
       _numbers = rhs._numbers;
       _neg = rhs.IsNeg();
@@ -201,10 +197,10 @@ namespace MyOddWeb
     long long c = abs(source);
     while (c > 0)
     {
-      unsigned char s = c % _base;
+      unsigned char s = c % BIGNUMBER_BASE;
       _numbers.push_back(s);
 
-      c = static_cast<long long>(c / _base);
+      c = static_cast<long long>(c / BIGNUMBER_BASE);
     }
 
     // clean it all up
@@ -720,7 +716,7 @@ namespace MyOddWeb
     int maxDecimals = (int)(lhs._decimals >= rhs._decimals ? lhs._decimals : rhs._decimals);
 
     // if we have more than one decimals then we have to shift everything
-    // by maxDecimals * _base
+    // by maxDecimals * BIGNUMBER_BASE
     // this will allow us to do the multiplication. 
     if (maxDecimals > 0 )
     {
@@ -759,7 +755,7 @@ namespace MyOddWeb
     //           = 75
     //           = 2*5             = 10 = push(0) carry_over = 1
     //           = 2*1+ccarry_over =  3 = push(3) carry_over = 0
-    //           = 30 * _base
+    //           = 30 * BIGNUMBER_BASE
     //           = 300+75=375
     
     // the two sizes
@@ -794,19 +790,19 @@ namespace MyOddWeb
 
         for (size_t z = 0; z < shift; ++z )
         {
-          unsigned char s = sum % rhs._base;
+          unsigned char s = sum % BIGNUMBER_BASE;
           numbers.push_back(s);
 
-          sum = static_cast<unsigned long long>(sum / rhs._base);
+          sum = static_cast<unsigned long long>(sum / BIGNUMBER_BASE);
         }
       }
 
       // add the carry over if we have one
       while (carryOver > 0)
       {
-        unsigned char s = carryOver % rhs._base;
+        unsigned char s = carryOver % BIGNUMBER_BASE;
         numbers.push_back(s);
-        carryOver = static_cast<unsigned long long>(carryOver / rhs._base);
+        carryOver = static_cast<unsigned long long>(carryOver / BIGNUMBER_BASE);
       }
 
       // shift everything
@@ -835,7 +831,7 @@ namespace MyOddWeb
       {
         continue;
       }
-      number = (number * _base) + _numbers[ (size_t)pos];
+      number = (number * BIGNUMBER_BASE) + _numbers[ (size_t)pos];
     }
     return number;
   }
@@ -893,7 +889,7 @@ namespace MyOddWeb
       carryOver = 0;
       if (sum < 0)
       {
-        sum += lhs._base;
+        sum += BIGNUMBER_BASE;
         carryOver = 1;
       }
 
@@ -973,9 +969,9 @@ namespace MyOddWeb
       unsigned char sum = l + r + carryOver;
 
       carryOver = 0;
-      if (sum >= lhs._base)
+      if (sum >= BIGNUMBER_BASE)
       {
-        sum -= lhs._base;
+        sum -= BIGNUMBER_BASE;
         carryOver = 1;
       }
       numbers.push_back(sum);
@@ -1725,13 +1721,6 @@ namespace MyOddWeb
    */
   void BigNumber::AbsQuotientAndRemainder(const BigNumber& numerator, const BigNumber& denominator, BigNumber& quotient, BigNumber& remainder)
   {
-    // check if we can actually do this, it should work for all
-    // but we need to test it first...
-    if (numerator._base != 10 || numerator._base != denominator._base)
-    {
-      throw std::runtime_error("This function was only tested with base 10!");
-    }
-
     // are we trying to divide by zero?
     if (denominator.IsZero())
     {
@@ -1832,7 +1821,7 @@ namespace MyOddWeb
     }
 
     // if the max denominator is greater than the remained
-    // then we must devide by _base.
+    // then we must devide by BIGNUMBER_BASE.
     int compare = BigNumber::AbsCompare(max_denominator, remainder);
     switch (compare)
     {
@@ -1844,7 +1833,7 @@ namespace MyOddWeb
     // we cannot subtract the max_denominator as it is greater than the remainder.
     // so we divide it so we can look for a smaller number.
     case 1:
-      // divide all by _base
+      // divide all by BIGNUMBER_BASE
       max_denominator.DevideByBase(1);
       base_multiplier.DevideByBase(1);
 
@@ -1886,7 +1875,10 @@ namespace MyOddWeb
 
     // the return number.
     std::string::size_type sz;     // alias of size_t
-    return std::stod( ToString(), &sz );
+
+    // make sure that the number is base 10.
+    // it should always be the case...
+    return std::stod( ToString( 10 ), &sz );
   }
 
   /**
@@ -1911,7 +1903,7 @@ namespace MyOddWeb
     for (NUMBERS::const_reverse_iterator rit = _numbers.rbegin(); rit != _numbers.rend(); ++rit)
     {
       const unsigned char c = *rit;
-      number = number * _base + c;
+      number = number * BIGNUMBER_BASE + c;
 
       // have we reached the decimal point?
       // if we have then we must stop now as all
@@ -1925,32 +1917,96 @@ namespace MyOddWeb
   }
 
   /**
-   * Convert a big number to an integer.
+   * Convert a big number to a string.
+   * @see http://mathbits.com/MathBits/CompSci/Introduction/frombase10.htm
+   * @param unsigned short the base we want to convert this number to.
    * @return std::string the converted number to a string.
    */
-  std::string BigNumber::ToString() const
+  std::string BigNumber::ToString(unsigned short base /*= BIGNUMBER_BASE*/) const
   {
+    // if it is not a number then there is nothing we can do about it.
     if (IsNan())
     {
       return "NaN";
     }
 
+    if (base > 62)
+    {
+      throw std::runtime_error("You cannot convert to a base greater than base 62");
+    }
+    if (base <= 1)
+    {
+      throw std::runtime_error("You cannot convert to a base greater smaller than base 2");
+    }
+
+    // is it the correct base already?
+    if (BIGNUMBER_BASE == base)
+    {
+      return BigNumber::_ToString(_numbers, _decimals, IsNeg());
+    }
+
+    // the base is not the same, so we now have to rebuild it.
+    // in the 'correct' base.
+    // @see http://mathbits.com/MathBits/CompSci/Introduction/frombase10.htm
+    BigNumber result = *this;
+    BigNumber bigNumberBase = base;
+    NUMBERS numbers;
+    for (;;)
+    {
+      BigNumber quotient;
+      BigNumber remainder;
+      BigNumber::AbsQuotientAndRemainder(result, bigNumberBase, quotient, remainder);
+      numbers.push_back( (char)remainder.ToInt() );
+
+      // are we done?
+      if (quotient.IsZero())
+      {
+        break;
+      }
+      result = quotient;
+    }
+
+    // no idea how to re-build that number.
+    return BigNumber::_ToString( numbers, 0, IsNeg() );
+  }
+
+  /**
+   * Convert a NUMBERS number to an integer.
+   * @param unsigned short the base we want to convert this number to.
+   * @return std::string the converted number to a string.
+   */
+  std::string BigNumber::_ToString(const NUMBERS& numbers, size_t decimals, bool isNeg)
+  {
     // the return number
     std::string number;
 
     // the total number of items.
-    size_t l = _numbers.size();
+    size_t l = numbers.size();
 
-    for (NUMBERS::const_reverse_iterator rit = _numbers.rbegin(); rit != _numbers.rend(); ++rit)
+    // all the numbers are in reverse order.
+    for (NUMBERS::const_reverse_iterator rit = numbers.rbegin(); rit != numbers.rend(); ++rit)
     {
-      unsigned char c = *rit;
-      number += char('0' + (int)c);
-      if (--l - _decimals == 0 && l != 0 )  //  don't add it right at the end...
+      const unsigned char& c = *rit;
+      if ((int)c <= 9) 
+      {
+        number += char('0' + (int)c);
+      }
+      else if ((int)c <= 36/*26+10*/)
+      {
+        number += char('A' + ((int)c - 10));
+      }
+      else if ((int)c <= 62/*26+26+10*/)
+      {
+        number += char('a' + ((int)c - 36));
+      }
+      if (--l - decimals == 0 && l != 0 )  //  don't add it right at the end...
       {
         number += '.';
       }
     }
-    return IsNeg() ? '-' + number : number;
+
+    // add the negative sign in front if needed.
+    return isNeg ? '-' + number : number;
   }
 
   /**
@@ -1992,7 +2048,7 @@ namespace MyOddWeb
       return;
     }
 
-    // muliply by _base means that we are shifting the multipliers.
+    // muliply by BIGNUMBER_BASE means that we are shifting the multipliers.
     while (_decimals > 0 && multiplier > 0 ) {
       --_decimals;
       --multiplier;

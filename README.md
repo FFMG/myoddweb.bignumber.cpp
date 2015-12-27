@@ -50,6 +50,13 @@ Doubles
     MyOddWeb::BigNumber y(26.0);
     double sum = x.Add( y ).ToDouble();
 
+Convert to another base
+
+    // output number to base 2.
+    MyOddWeb::BigNumber x(5);
+    std::string base2 = x.ToString( 2 );	// 101
+
+
 **Operations in one line:**
 
 Integers
@@ -96,7 +103,8 @@ Double
 
 - ToInt() : convert to int.
 - ToDouble() : convert to double.
-- ToString() : convert to string.
+- ToString( [base = 10] ) : convert to string.
+	- You can pass a base number to convert to, the default is base 10. The allowed bases are **2-62**. The values are **0-9** then **A-Z** then **a-z** 
 - Abs() : Get the absolute value of the number
 - Trunc( precision ) : Truncate the number, strip the decimals. (+/-n.xyz = n)
 - Ceil( precision ) : Round the number up (2.1 = 3 / -2.1 = -2)

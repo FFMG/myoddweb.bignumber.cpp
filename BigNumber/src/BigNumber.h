@@ -35,9 +35,19 @@
 /**
  * The version number vMajor.vMinor.vBuild
  * The derived version will try and follow that number.
+ * (X*1000000 + Y*1000 + Z)
+ *   #1   = major
+ *   #2-4 = minor
+ *   #5-7 = build
  */
-#define BIGNUMBER_VERSION        "0.1.00"
-#define BIGNUMBER_VERSION_NUMBER 000100
+#define BIGNUMBER_VERSION        "0.1.01"
+#define BIGNUMBER_VERSION_NUMBER 0001001
+
+/**
+ * this is a base 10 class, but we use this to prevent 
+ * magic numbers all over the place.
+ */
+#define BIGNUMBER_BASE           ((const unsigned short)10)
 
 /**
  * The precision we want to stop at, by default.
@@ -127,7 +137,7 @@ namespace MyOddWeb
     // conversion.
     int ToInt() const;
     double ToDouble() const;
-    std::string ToString() const;
+    std::string ToString( unsigned short base = BIGNUMBER_BASE ) const;
 
   protected:
     static BigNumber AbsDiv(const BigNumber& lhs, const BigNumber& rhs, size_t precision);
@@ -149,9 +159,6 @@ namespace MyOddWeb
     // the numbers.
     typedef std::vector<unsigned char> NUMBERS;
     NUMBERS _numbers;
-
-    // the number base.
-    const unsigned char _base;
 
     // is it negative or not?
     bool _neg;
@@ -201,5 +208,7 @@ namespace MyOddWeb
     static bool _RecalcDenominator(BigNumber& max_denominator, BigNumber& base_multiplier, const BigNumber& remainder);
 
     static BigNumber _NormalizeAngle( const BigNumber& radian );
+
+    static std::string _ToString(const NUMBERS& numbers, size_t decimals, bool isNeg );
   };
 }// namespace MyOddWeb

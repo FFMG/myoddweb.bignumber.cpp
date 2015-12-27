@@ -1438,3 +1438,152 @@ TEST(FunctionBigNumber, CannotRoundNanNumbers)
   std::string z = x.ToString();
   ASSERT_EQ("NaN", z);
 }
+
+TEST(FunctionBigNumber, ToStringBase2OfNotANumber)
+{
+  MyOddWeb::BigNumber x(5);
+  x.Div(0);
+  ASSERT_TRUE(x.IsNan());
+
+  std::string base = x.ToString(2);
+  ASSERT_EQ("NaN", base);
+}
+
+TEST(FunctionBigNumber, ToStringBase2PostiveSmallIntegers)
+{
+  {
+    MyOddWeb::BigNumber x(5);
+    std::string base = x.ToString(2);
+    ASSERT_EQ("101", base);
+  }
+  {
+    MyOddWeb::BigNumber x(1024);
+    std::string base = x.ToString(2);
+    ASSERT_EQ("10000000000", base);
+  }
+  {
+    MyOddWeb::BigNumber x(1023);
+    std::string base = x.ToString(2);
+    ASSERT_EQ("1111111111", base);
+  }
+  {
+    MyOddWeb::BigNumber x(6);
+    std::string base = x.ToString(2);
+    ASSERT_EQ("110", base);
+  }
+}
+
+TEST(FunctionBigNumber, ToStringBase8PostiveSmallIntegers)
+{
+  {
+    MyOddWeb::BigNumber x(140);
+    std::string base = x.ToString(8);
+    ASSERT_EQ("214", base);
+  }
+  {
+    MyOddWeb::BigNumber x(1024);
+    std::string base = x.ToString(8);
+    ASSERT_EQ("2000", base);
+  }
+  {
+    MyOddWeb::BigNumber x(1023);
+    std::string base = x.ToString(8);
+    ASSERT_EQ("1777", base);
+  }
+}
+
+TEST(FunctionBigNumber, ToStringBase2NegativeSmallIntegers)
+{
+  {
+    MyOddWeb::BigNumber x(-5);
+    std::string base = x.ToString(2);
+    ASSERT_EQ("-101", base);
+  }
+  {
+    MyOddWeb::BigNumber x(-6);
+    std::string base = x.ToString(2);
+    ASSERT_EQ("-110", base);
+  }
+}
+
+TEST(FunctionBigNumber, ToStringBase16PostiveSmallIntegers)
+{
+  {
+    MyOddWeb::BigNumber x(1023);
+    std::string base = x.ToString(16);
+    ASSERT_EQ("3FF", base);
+  }
+  {
+    MyOddWeb::BigNumber x(1024);
+    std::string base = x.ToString(16);
+    ASSERT_EQ("400", base);
+  }
+}
+
+TEST(FunctionBigNumber, ToStringBase36PostiveSmallIntegers)
+{
+  {
+    MyOddWeb::BigNumber x(35);
+    std::string base = x.ToString(36);
+    ASSERT_EQ("Z", base);
+  }
+  {
+    MyOddWeb::BigNumber x(36);
+    std::string base = x.ToString(36);
+    ASSERT_EQ("10", base);
+  }
+  {
+    MyOddWeb::BigNumber x(1023);
+    std::string base = x.ToString(36);
+    ASSERT_EQ("SF", base);
+  }
+}
+
+TEST(FunctionBigNumber, ToStringBase62PostiveSmallIntegers)
+{
+  {
+    MyOddWeb::BigNumber x(61);
+    std::string base = x.ToString(62);
+    ASSERT_EQ("z", base);
+  }
+  {
+    MyOddWeb::BigNumber x(62);
+    std::string base = x.ToString(62);
+    ASSERT_EQ("10", base);
+  }
+  {
+    MyOddWeb::BigNumber x(1023);
+    std::string base = x.ToString(62);
+    ASSERT_EQ("GV", base);
+  }
+  {
+    MyOddWeb::BigNumber x(204789);
+    std::string base = x.ToString(62);
+    ASSERT_EQ("rH3", base);
+  }
+}
+
+TEST(FunctionBigNumber, CannotConvertToABaseGreaterThan62 )
+{
+  MyOddWeb::BigNumber x(1023);
+  int bigBase = (rand() % 32767) + 63;
+  EXPECT_THROW( x.ToString(bigBase), std::runtime_error);
+}
+
+TEST(FunctionBigNumber, CannotConvertToBaseZero)
+{
+  MyOddWeb::BigNumber x(1023);
+  EXPECT_THROW(x.ToString(0), std::runtime_error);
+}
+
+TEST(FunctionBigNumber, CannotConvertToBaseOne)
+{
+  MyOddWeb::BigNumber x(1023);
+  EXPECT_THROW(x.ToString(1), std::runtime_error);
+}
+
+TEST(FunctionBigNumber, CannotConvertToBase63)
+{
+  MyOddWeb::BigNumber x(1023);
+  EXPECT_THROW(x.ToString(63), std::runtime_error);
+}
