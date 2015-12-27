@@ -1878,7 +1878,7 @@ namespace MyOddWeb
 
     // make sure that the number is base 10.
     // it should always be the case...
-    return std::stod( ToString( 10 ), &sz );
+    return std::stod( ToString(), &sz );
   }
 
   /**
@@ -1923,7 +1923,19 @@ namespace MyOddWeb
    * @param size_t precision the max precision we want to reach.
    * @return std::string the converted number to a string.
    */
-  std::string BigNumber::ToString(unsigned short base /*= BIGNUMBER_BASE*/, size_t precision /*= BIGNUMBER_DEFAULT_PRECISION*/) const
+  std::string BigNumber::ToString() const
+  {
+    return ToBase(BIGNUMBER_BASE, _decimals);
+  }
+
+  /**
+  * Convert a big number to a string.
+  * @see http://mathbits.com/MathBits/CompSci/Introduction/frombase10.htm
+  * @param unsigned short the base we want to convert this number to.
+  * @param size_t precision the max precision we want to reach.
+  * @return std::string the converted number to a string.
+  */
+  std::string BigNumber::ToBase(unsigned short base, size_t precision /*= BIGNUMBER_DEFAULT_PRECISION*/) const
   {
     // if it is not a number then there is nothing we can do about it.
     if (IsNan())

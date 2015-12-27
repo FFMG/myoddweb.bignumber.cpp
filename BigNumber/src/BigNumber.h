@@ -40,8 +40,8 @@
  *   #2-4 = minor
  *   #5-7 = build
  */
-#define BIGNUMBER_VERSION        "0.1.02"
-#define BIGNUMBER_VERSION_NUMBER 0001002
+#define BIGNUMBER_VERSION        "0.2.00"
+#define BIGNUMBER_VERSION_NUMBER 0002000
 
 /**
  * this is a base 10 class, but we use this to prevent 
@@ -137,7 +137,8 @@ namespace MyOddWeb
     // conversion.
     int ToInt() const;
     double ToDouble() const;
-    std::string ToString( unsigned short base = BIGNUMBER_BASE, size_t precision = BIGNUMBER_DEFAULT_PRECISION) const;
+    std::string ToString() const;
+    std::string ToBase(unsigned short base, size_t precision = BIGNUMBER_DEFAULT_PRECISION) const;
 
   protected:
     static BigNumber AbsDiv(const BigNumber& lhs, const BigNumber& rhs, size_t precision);

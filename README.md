@@ -54,8 +54,14 @@ Convert to another base
 
     // output number to base 2.
     MyOddWeb::BigNumber x(5);
-    std::string base2 = x.ToString( 2 );	// 101
+    std::string base2 = x.ToBase( 2 );	// =101 (base 2)
 
+    // fraction/real numbers
+    // output number to base 8 with decimals.
+    MyOddWeb::BigNumber x(10.8);
+    std::string base2 = x.ToBase( 8, 2 );	// =12.63 (base 8)
+
+You can convert from base 2 to base 62
 
 **Operations in one line:**
 
@@ -103,7 +109,8 @@ Double
 
 - ToInt() : convert to int.
 - ToDouble() : convert to double.
-- ToString( [base = 10[, precision=100]] ) : convert to string.
+- ToString() : Output the number as a string, (if you want to limit the number of decimals use the *ToBase( ... )* funtion).
+- ToBase( base = 10[, precision=100] ) : convert to string.
 	- You can pass a base number to convert to, the default is base 10. The allowed bases are **2-62**. The values are **0-9** then **A-Z** then **a-z**
 	- You can use the precision to limit the number of decimals been returned in the string output.  
 - Abs() : Get the absolute value of the number
