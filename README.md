@@ -103,8 +103,9 @@ Double
 
 - ToInt() : convert to int.
 - ToDouble() : convert to double.
-- ToString( [base = 10] ) : convert to string.
-	- You can pass a base number to convert to, the default is base 10. The allowed bases are **2-62**. The values are **0-9** then **A-Z** then **a-z** 
+- ToString( [base = 10[, precision=100]] ) : convert to string.
+	- You can pass a base number to convert to, the default is base 10. The allowed bases are **2-62**. The values are **0-9** then **A-Z** then **a-z**
+	- You can use the precision to limit the number of decimals been returned in the string output.  
 - Abs() : Get the absolute value of the number
 - Trunc( precision ) : Truncate the number, strip the decimals. (+/-n.xyz = n)
 - Ceil( precision ) : Round the number up (2.1 = 3 / -2.1 = -2)

@@ -40,8 +40,8 @@
  *   #2-4 = minor
  *   #5-7 = build
  */
-#define BIGNUMBER_VERSION        "0.1.01"
-#define BIGNUMBER_VERSION_NUMBER 0001001
+#define BIGNUMBER_VERSION        "0.1.02"
+#define BIGNUMBER_VERSION_NUMBER 0001002
 
 /**
  * this is a base 10 class, but we use this to prevent 
@@ -137,7 +137,7 @@ namespace MyOddWeb
     // conversion.
     int ToInt() const;
     double ToDouble() const;
-    std::string ToString( unsigned short base = BIGNUMBER_BASE ) const;
+    std::string ToString( unsigned short base = BIGNUMBER_BASE, size_t precision = BIGNUMBER_DEFAULT_PRECISION) const;
 
   protected:
     static BigNumber AbsDiv(const BigNumber& lhs, const BigNumber& rhs, size_t precision);
@@ -209,6 +209,8 @@ namespace MyOddWeb
 
     static BigNumber _NormalizeAngle( const BigNumber& radian );
 
-    static std::string _ToString(const NUMBERS& numbers, size_t decimals, bool isNeg );
+    static std::string _ToString(const NUMBERS& numbers, size_t decimals, bool isNeg, size_t precision );
+    static void _ConvertIntegerToBase( const BigNumber& givenNumber, NUMBERS& numbers, const unsigned short base );
+    static void _ConvertFractionToBase(const BigNumber& givenNumber, NUMBERS& numbers, const unsigned short base, size_t precision  );
   };
 }// namespace MyOddWeb

@@ -1587,3 +1587,39 @@ TEST(FunctionBigNumber, CannotConvertToBase63)
   MyOddWeb::BigNumber x(1023);
   EXPECT_THROW(x.ToString(63), std::runtime_error);
 }
+
+TEST(FunctionBigNumber, ToStringBase8PostiveFractionNumber)
+{
+  {
+    MyOddWeb::BigNumber x(10.8);
+    std::string base = x.ToString(8, 2);
+    ASSERT_EQ("12.63", base);
+  }
+}
+
+TEST(FunctionBigNumber, ToStringBase5PostiveFractionNumber)
+{
+  {
+    MyOddWeb::BigNumber x(0.375);
+    std::string base = x.ToString(5, 4);
+    ASSERT_EQ("0.1414", base);
+  }
+}
+
+TEST(FunctionBigNumber, ToStringBase2PostiveFractionNumber)
+{
+  {
+    MyOddWeb::BigNumber x(0.375);
+    std::string base = x.ToString(2, 10);
+    ASSERT_EQ("0.011", base);
+  }
+}
+
+TEST(FunctionBigNumber, ToStringPrecisionLessThanNumberOfDecimals)
+{
+  {
+    MyOddWeb::BigNumber x(0.375);
+    std::string base = x.ToString(10, 1);
+    ASSERT_EQ("0.3", base);
+  }
+}

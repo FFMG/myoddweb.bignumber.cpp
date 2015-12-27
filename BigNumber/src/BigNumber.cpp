@@ -1920,9 +1920,10 @@ namespace MyOddWeb
    * Convert a big number to a string.
    * @see http://mathbits.com/MathBits/CompSci/Introduction/frombase10.htm
    * @param unsigned short the base we want to convert this number to.
+   * @param size_t precision the max precision we want to reach.
    * @return std::string the converted number to a string.
    */
-  std::string BigNumber::ToString(unsigned short base /*= BIGNUMBER_BASE*/) const
+  std::string BigNumber::ToString(unsigned short base /*= BIGNUMBER_BASE*/, size_t precision /*= BIGNUMBER_DEFAULT_PRECISION*/) const
   {
     // if it is not a number then there is nothing we can do about it.
     if (IsNan())
@@ -1942,49 +1943,149 @@ namespace MyOddWeb
     // is it the correct base already?
     if (BIGNUMBER_BASE == base)
     {
-      return BigNumber::_ToString(_numbers, _decimals, IsNeg());
+      return BigNumber::_ToString(_numbers, _decimals, IsNeg(), precision );
     }
 
     // the base is not the same, so we now have to rebuild it.
     // in the 'correct' base.
     // @see http://mathbits.com/MathBits/CompSci/Introduction/frombase10.htm
-    BigNumber result = *this;
+    // @see http://www.mathpath.org/concepts/Num/frac.htm
+    NUMBERS numbersInteger;
+    BigNumber::_ConvertIntegerToBase(*this, numbersInteger, base);
+
+    NUMBERS numbersFrac;
+    BigNumber::_ConvertFractionToBase(*this, numbersFrac, base, precision );
+
+    // we now need to join the two.
+    numbersInteger.insert(numbersInteger.begin(), numbersFrac.begin(), numbersFrac.end());
+
+    // no idea how to re-build that number.
+    return BigNumber::_ToString(numbersInteger, numbersFrac.size(), IsNeg(), precision );
+  }
+   
+  /**
+   * Convert a number to a given base, (only the integer part).
+   * Convert the integer part of a number to the given base.
+   * @see http://mathbits.com/MathBits/CompSci/Introduction/frombase10.htm
+   * @see http://www.mathpath.org/concepts/Num/frac.htm
+   * @param const BigNumber& givenNumber
+   * @param NUMBERS& numbers the container that will contain all the numbers, (array of unsigned char).
+   * @param const unsigned short base the base we are converting to.
+   */
+  void BigNumber::_ConvertIntegerToBase(const BigNumber& givenNumber, NUMBERS& numbers, const unsigned short base)
+  {
+    numbers.clear();
+    BigNumber resultInteger = BigNumber(givenNumber).Integer();
+    if (resultInteger.IsZero())
+    {
+      // the integer part must have at least one number, 'zero' itself.
+      numbers.push_back(0);
+      return;
+    }
+
     BigNumber bigNumberBase = base;
-    NUMBERS numbers;
+
     for (;;)
     {
       BigNumber quotient;
       BigNumber remainder;
-      BigNumber::AbsQuotientAndRemainder(result, bigNumberBase, quotient, remainder);
-      numbers.push_back( (char)remainder.ToInt() );
+      BigNumber::AbsQuotientAndRemainder(resultInteger, bigNumberBase, quotient, remainder);
+      numbers.push_back((char)remainder.ToInt());
 
       // are we done?
       if (quotient.IsZero())
       {
         break;
       }
-      result = quotient;
+      resultInteger = quotient;
+    }
+  }
+
+  /**
+   * Convert a number to a given base, (only the fractional part).
+   * Convert the fractional part of a number to the given base.
+   * @see http://mathbits.com/MathBits/CompSci/Introduction/frombase10.htm
+   * @see http://www.mathpath.org/concepts/Num/frac.htm
+   * @param const BigNumber& givenNumber
+   * @param NUMBERS& numbers the container that will contain all the numbers, (array of unsigned char).
+   * @param const unsigned short base the base we are converting to.
+   * @param size_t precision the max presision we want to reach.
+   */
+  void BigNumber::_ConvertFractionToBase
+  (
+    const BigNumber& givenNumber, 
+    NUMBERS& numbers, 
+    const unsigned short base,
+    size_t precision
+  )
+  {
+    numbers.clear();
+    BigNumber resultFrac = BigNumber(givenNumber).Frac();
+    if (resultFrac.IsZero())
+    {
+      return;
     }
 
-    // no idea how to re-build that number.
-    return BigNumber::_ToString( numbers, 0, IsNeg() );
+    BigNumber bigNumberBase = base;
+    size_t actualPrecision = 0;
+
+    for (;;)
+    {
+      //  have we reached a presision limit?
+      if (actualPrecision >= precision)
+      {
+        break;
+      }
+
+      // the oresision we are at.
+      ++actualPrecision;
+
+      // we have to use our multiplier so we don't have rounding issues.
+      // if we use double/float
+      resultFrac = BigNumber::AbsMul(resultFrac, bigNumberBase, 1000 );
+
+      // the 'number' is the integer part.
+      BigNumber remainder = BigNumber(resultFrac).Integer();
+      numbers.push_back((char)remainder.ToInt());
+
+      // as long as the fractional part is not zero we can continue.
+      resultFrac = BigNumber(resultFrac).Frac();
+
+      // if it is zero, then we are done
+      if (resultFrac.IsZero())
+      {
+        break;
+      }
+    }
+
+    // we now need to reverse the array as this is the way all our numbers are.
+    std::reverse(numbers.begin(), numbers.end());
   }
 
   /**
    * Convert a NUMBERS number to an integer.
    * @param unsigned short the base we want to convert this number to.
+   * @param size_t precision the max presision we want to reach.
    * @return std::string the converted number to a string.
    */
-  std::string BigNumber::_ToString(const NUMBERS& numbers, size_t decimals, bool isNeg)
+  std::string BigNumber::_ToString(const NUMBERS& numbers, size_t decimals, bool isNeg, size_t precision)
   {
+    NUMBERS trimmedNumbers = numbers;
+    if (decimals > precision)
+    {
+      size_t end = decimals - precision;
+      trimmedNumbers.erase(trimmedNumbers.begin(), trimmedNumbers.begin() + end);
+      decimals -= end;
+    }
+
     // the return number
     std::string number;
 
     // the total number of items.
-    size_t l = numbers.size();
+    size_t l = trimmedNumbers.size();
 
     // all the numbers are in reverse order.
-    for (NUMBERS::const_reverse_iterator rit = numbers.rbegin(); rit != numbers.rend(); ++rit)
+    for (NUMBERS::const_reverse_iterator rit = trimmedNumbers.rbegin(); rit != trimmedNumbers.rend(); ++rit)
     {
       const unsigned char& c = *rit;
       if ((int)c <= 9) 
