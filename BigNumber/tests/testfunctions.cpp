@@ -1617,16 +1617,32 @@ TEST(FunctionBigNumber, ToBaseBase2PostiveFractionNumber)
 
 TEST(FunctionBigNumber, ToBasePrecisionLessThanNumberOfDecimals)
 {
-  MyOddWeb::BigNumber x(0.375);
-  std::string base = x.ToBase(10, 1);
-  ASSERT_EQ("0.3", base);
+  {
+    MyOddWeb::BigNumber x(0.375);
+    std::string base = x.ToBase(10, 1);
+    ASSERT_EQ("0.3", base);
 
-  base = x.ToBase(10, 2);
-  ASSERT_EQ("0.37", base);
+    base = x.ToBase(10, 2);
+    ASSERT_EQ("0.37", base);
 
-  base = x.ToBase(10, 3);
-  ASSERT_EQ("0.375", base);
+    base = x.ToBase(10, 3);
+    ASSERT_EQ("0.375", base);
 
-  base = x.ToBase(10, 10);
-  ASSERT_EQ("0.375", base);
+    base = x.ToBase(10, 10);
+    ASSERT_EQ("0.375", base);
+  }
+  {
+    MyOddWeb::BigNumber x(1234.375);
+    std::string base = x.ToBase(10, 1);
+    ASSERT_EQ("1234.3", base);
+
+    base = x.ToBase(10, 2);
+    ASSERT_EQ("1234.37", base);
+
+    base = x.ToBase(10, 3);
+    ASSERT_EQ("1234.375", base);
+
+    base = x.ToBase(10, 10);
+    ASSERT_EQ("1234.375", base);
+  }
 }
