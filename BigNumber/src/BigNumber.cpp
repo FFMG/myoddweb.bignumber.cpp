@@ -1424,12 +1424,9 @@ namespace MyOddWeb
    */
   BigNumber& BigNumber::Sqrt(size_t precision)
   {
-    // common number.
-    static const BigNumber number_two = 2;
-    
     // get the nroot=2
     // sqrt = x ^ (1 / 2)
-    return Root(number_two, precision);
+    return Root( _number_two, precision);
   }
 
   /**
@@ -1731,7 +1728,7 @@ namespace MyOddWeb
     }
 
     // reset the quotient to 0.
-    quotient = BigNumber(0);
+    quotient = _number_zero;
 
     // and set the current reaimined to be the numerator.
     // that way we know that we can return now something valid.
@@ -2293,10 +2290,10 @@ namespace MyOddWeb
         result.Add( calulatedNumber );
 
         // x * x * x ...
-        power = power.Mul( base, BIGNUMBER_PRECISION_PADDED(precision));
+        power.Mul( base, BIGNUMBER_PRECISION_PADDED(precision));
 
         //  1 * 2 * 3 ...
-        fact = fact.Mul( (int)(i+1), BIGNUMBER_PRECISION_PADDED(precision));
+        fact.Mul( (int)(i+1), BIGNUMBER_PRECISION_PADDED(precision));
       }
 
       //  the decimal part of the number.
