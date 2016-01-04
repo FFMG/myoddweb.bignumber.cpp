@@ -91,6 +91,8 @@ Double
 - Sin( number ) : The radian sin of '*this*' number
 - Cos( number ) : The radian cos of '*this*' number
 - Tan( number ) : The radian tan of '*this*' number
+- Root( number ) : The nth root of '*this*' number.
+- Sqrt() : The square root of '*this*' number.
 
 ### Other functions ###
 - IsNeg() : If '*this*' number is negative or not.
