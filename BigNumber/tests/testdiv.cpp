@@ -33,7 +33,7 @@
 #include "../src/BigNumber.h"
 
 //
-//  --gtest_filter=FunctionBigNumber*CompareSameNumbers
+//  --gtest_filter=DivBigNumber*CompareSameNumbers
 //
 
 TEST(DivBigNumber, DevideByZero) {
@@ -251,4 +251,28 @@ TEST(DivBigNumber, PositiveNumberDividedByNegativeNumber) {
     std::string z = x.Div(-244.140625).ToString();  //  4096
     ASSERT_EQ("-4096", z);
   }
+}
+
+TEST(DivBigNumber, DivideBigNumeratorBigDenominator) {
+  MyOddWeb::BigNumber x = "1234567890987654321";
+  std::string z = x.Div( "23456789876543" ).ToString();
+  ASSERT_EQ("52631.5790645434084361643505059107499537755787148740992012211246758467969873975942860529849895592435220682", z);
+}
+
+TEST(DivBigNumber, DivideBigNumeratorSmallDenominator) {
+  MyOddWeb::BigNumber x = "1234567890987654321";
+  std::string z = x.Div("234567898").ToString();
+  ASSERT_EQ("5263157923.628809262723580359662002854286565674898958253869845395468394400669438577652258281310087879118053912", z);
+}
+
+TEST(DivBigNumber, DivideBigNumeratorSmallDenominatorZeros) {
+  MyOddWeb::BigNumber x = "1234567890987654321";
+  std::string z = x.Div("123456789").ToString();
+  ASSERT_EQ("10000000008.0000000729000006633900060368490549353263999114702391943791766688505076865396199475105415223459278533", z);
+}
+
+TEST(DivBigNumber, DivideSmallNumeratorSmallDenominator) {
+  MyOddWeb::BigNumber x = "123456789";
+  std::string z = x.Div("23456789").ToString();
+  ASSERT_EQ("5.2631580989196773693108634775203033970250574364632772200832773829359167616675922693425771106181668769", z);
 }

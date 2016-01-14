@@ -40,8 +40,8 @@
  *   #2-4 = minor
  *   #5-7 = build
  */
-#define BIGNUMBER_VERSION        "0.2.01"
-#define BIGNUMBER_VERSION_NUMBER 0002001
+#define BIGNUMBER_VERSION        "0.2.002"
+#define BIGNUMBER_VERSION_NUMBER  0002002
 
 /**
  * this is a base 10 class, but we use this to prevent 
