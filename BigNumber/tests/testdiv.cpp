@@ -277,11 +277,24 @@ TEST(DivBigNumber, DivideSmallNumeratorSmallDenominator) {
   ASSERT_EQ("5.2631580989196773693108634775203033970250574364632772200832773829359167616675922693425771106181668769", z);
 }
 
+#include <chrono>
+#include <ctime>
+
+
 TEST(DivBigNumber, DivideBigNumbers) {
   // @see https://www.gamedev.net/forums/topic/309213-c-big-number-division/
   MyOddWeb::BigNumber x = "1234567890123456789012345678901234546789012345678901234567890";
   MyOddWeb::BigNumber y = "1230";
 
+  std::clock_t c_start = std::clock();
+  auto t_start = std::chrono::high_resolution_clock::now();
+
+  
   MyOddWeb::BigNumber z = x.Div(y); //  "1003713731807688446351500551952223208771554752584472548429";
+  
+  std::clock_t c_end = std::clock();
+  auto t_end = std::chrono::high_resolution_clock::now();
+
+  double d = std::chrono::duration<double, std::milli>(t_end - t_start).count();
   ASSERT_EQ("1003713731807688446351500551952223208771554752584472548429", z.Trunc().ToString() );
 }
