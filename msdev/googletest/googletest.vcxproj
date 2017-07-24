@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\gtest-1.7.0\src\gtest-all.cc" />
-    <ClCompile Include="..\..\gtest-1.7.0\src\gtest_main.cc" />
+    <ClCompile Include="..\..\gtest-1.8.0\src\gtest-all.cc" />
+    <ClCompile Include="..\..\gtest-1.8.0\src\gtest_main.cc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3EFC5188-CD12-48F2-BB6F-739F709E2785}</ProjectGuid>
@@ -74,17 +74,17 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>.\..\common\gtest-1.7.0\include;.\..\common\gtest-1.7.0;$(IncludePath)</IncludePath>
+    <IncludePath>.\..\common\gtest-1.8.0\include;.\..\common\gtest-1.8.0;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Output\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>.\..\common\gtest-1.7.0\include;.\..\common\gtest-1.7.0;$(IncludePath)</IncludePath>
+    <IncludePath>.\..\common\gtest-1.8.0\include;.\..\common\gtest-1.8.0;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Output\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>.\..\common\gtest-1.7.0\include;.\..\common\gtest-1.7.0;$(IncludePath)</IncludePath>
+    <IncludePath>.\..\common\gtest-1.8.0\include;.\..\common\gtest-1.8.0;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Output\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
@@ -99,7 +99,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gtest-1.7.0\include;..\..\gtest-1.7.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gtest-1.8.0\include;..\..\gtest-1.8.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -121,7 +121,7 @@ xcopy /y "$(TargetDir)*.lib" "..\lib\x86"
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gtest-1.7.0\include;..\..\gtest-1.7.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gtest-1.8.0\include;..\..\gtest-1.8.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -143,7 +143,7 @@ xcopy /y "$(TargetDir)*.pdb" "..\lib\x64"</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gtest-1.7.0\include;..\..\gtest-1.7.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gtest-1.8.0\include;..\..\gtest-1.8.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -169,7 +169,7 @@ xcopy /y "$(TargetDir)*.lib" "..\lib\x86"
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\gtest-1.7.0\include;..\..\gtest-1.7.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\gtest-1.8.0\include;..\..\gtest-1.8.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
