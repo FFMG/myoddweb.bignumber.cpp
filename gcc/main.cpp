@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "BigNumber.h"
+#include "..\src\BigNumber.h"
 
 int main()
 {
