@@ -31,6 +31,8 @@
 
 #pragma once
 #include <vector>
+#include <string>		//	for string
+#include <stddef.h>  	// size_t definition
 
 /**
  * The version number vMajor.vMinor.vBuild
