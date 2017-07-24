@@ -252,14 +252,14 @@ namespace MyOddWeb
         {
           _neg = true;
           allowSign = false;
-          *c++;
+          c++;
           continue;
         }
         if (*c == '+')
         {
           _neg = false;
           allowSign = false;
-          *c++;
+          c++;
           continue;
         }
       }
@@ -268,7 +268,7 @@ namespace MyOddWeb
       if (*c == ' ')
       {
         // then it wecan just move on
-        *c++;
+        c++;
         continue;
       }
 
@@ -282,7 +282,7 @@ namespace MyOddWeb
           _numbers.push_back(0);
           ++decimalPoint;
         }
-        *c++;
+        c++;
         continue;
       }
 
