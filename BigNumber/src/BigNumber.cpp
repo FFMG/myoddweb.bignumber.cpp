@@ -31,6 +31,9 @@
 
 #include "BigNumber.h"
 #include <sstream>
+#include <limits>
+#include <cstring> // strcmp
+#include <algorithm> // reverse
 
 namespace MyOddWeb
 {
@@ -931,7 +934,7 @@ namespace MyOddWeb
 
     // if that number is negative or past our limit
     // then we return 255
-    if(actualPosition < 0 || actualPosition >= _numbers.size() )
+    if(actualPosition < 0 || actualPosition >= (int)_numbers.size() )
     {
       return (unsigned char)255;
     }
