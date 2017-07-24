@@ -198,3 +198,8 @@ FakesAssemblies/
 *.opt
 BigNumber/ReadMe.txt
 googletest/ReadMe.txt
+
+# Eclipse
+.settings/
+.cproject
+.project
