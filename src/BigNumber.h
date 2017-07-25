@@ -41,12 +41,14 @@
  *   #1   = major
  *   #2-4 = minor
  *   #5-7 = build
+ *
+ *   0.3.001 - 2017-07-25 made some changes to make sure that it builds with gcc
  */
-#define BIGNUMBER_VERSION        "0.2.002"
-#define BIGNUMBER_VERSION_NUMBER  0002002
+#define BIGNUMBER_VERSION        "0.3.001"
+#define BIGNUMBER_VERSION_NUMBER  0003001
 
 /**
- * this is a base 10 class, but we use this to prevent 
+ * this is a base 10 class, but we use this to prevent
  * magic numbers all over the place.
  */
 #define BIGNUMBER_BASE           ((const unsigned short)10)
