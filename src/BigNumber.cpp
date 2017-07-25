@@ -267,7 +267,7 @@ namespace MyOddWeb
       // is it a space?
       if (*c == ' ')
       {
-        // then it wecan just move on
+        // then it we can just move on
         c++;
         continue;
       }

@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include "..\src\BigNumber.h"
 
 int main()
