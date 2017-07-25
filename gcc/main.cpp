@@ -28,18 +28,12 @@ void Div2( const MyOddWeb::BigNumber& x, const MyOddWeb::BigNumber& y)
 
   for(;;)
   {
-    MyOddWeb::BigNumber z = MyOddWeb::BigNumber(max).Add( min ).Div(2);
+    // add min+max and divide by 2
+    MyOddWeb::BigNumber posiblez = MyOddWeb::BigNumber( max ).Add( min ).Div(2).Trunc();
 
-    auto dm1 = min.ToDouble();
-    auto dm2 = max.ToDouble();
-    auto dm3 = z.ToDouble();
-
-    auto a =  MyOddWeb::BigNumber(z).Mul(y);
-    auto dm4 = a.ToDouble();
-
-    auto b =  MyOddWeb::BigNumber(x).Sub(a);
-
-    switch( a.Compare( x ) )
+    // then we multiply that number by y
+    auto multipliedz =  MyOddWeb::BigNumber(posiblez).Mul(y);
+    switch( multipliedz.Compare( x ) )
     {
     case 0:
       // it is exactly the same
@@ -50,14 +44,20 @@ void Div2( const MyOddWeb::BigNumber& x, const MyOddWeb::BigNumber& y)
       // ((max - min)/2)*y than greater
       // so we know that the number has to be smaller than 'z'
       // our new max is 'z'
-      max = z;
+      max = posiblez;
       break;
 
     case -1:
       // ((max - min)/2)*y than smaller
       // so we know that the number has to be greater than 'z'
       // our new min is 'z'
-      min = z;
+      min = posiblez;
+
+      if( MyOddWeb::BigNumber(x).Sub(posiblez).Compare(y) == 1 )
+      {
+        return;
+      }
+
       break;
     }
   }
@@ -69,12 +69,12 @@ int main(int argc, char** argv)
   MyOddWeb::BigNumber x = "1234567890123456789012345678901234546789012345678901234567890";
   MyOddWeb::BigNumber y = "1230";
 
-//  TIMER_START
-//  Div1( x, y );
-//  TIMER_END
+  TIMER_START
+  Div1( x, y );
+  TIMER_END
 
   TIMER_START
-  Div2( 17, 3 );
+  Div2( x, y );
   TIMER_END
 
   return 0;
