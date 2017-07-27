@@ -15,7 +15,7 @@ const MyOddWeb::BigNumber  Div1( const MyOddWeb::BigNumber& x, const MyOddWeb::B
 const MyOddWeb::BigNumber Div2( const MyOddWeb::BigNumber& x, const MyOddWeb::BigNumber& y)
 {
   // save the min max
-  MyOddWeb::BigNumber min = 1;
+  MyOddWeb::BigNumber min = 0;
   MyOddWeb::BigNumber max = x;
 
   for(;;)
@@ -25,6 +25,10 @@ const MyOddWeb::BigNumber Div2( const MyOddWeb::BigNumber& x, const MyOddWeb::Bi
 
     // then we multiply that number by y
     auto multipliedz =  MyOddWeb::BigNumber(posiblez).Mul(y);
+
+    auto dPosiblez = posiblez.ToDouble();
+    auto dMultipliedz = multipliedz.ToDouble();
+
     switch( multipliedz.Compare( x ) )
     {
     case 0:
@@ -45,7 +49,7 @@ const MyOddWeb::BigNumber Div2( const MyOddWeb::BigNumber& x, const MyOddWeb::Bi
       // our new min is 'z'
       min = posiblez;
 
-      if( MyOddWeb::BigNumber(x).Sub(posiblez).Compare(y) == 1 )
+      if( MyOddWeb::BigNumber(x).Sub(posiblez).Compare(y) == -1 )
       {
         return multipliedz;
       }
@@ -80,16 +84,16 @@ int main(int argc, char** argv)
 
   // @see https://www.gamedev.net/forums/topic/309213-c-big-number-division/
   // MyOddWeb::BigNumber x = "1234567890123456789012345678901234546789012345678901234567890";
-  // MyOddWeb::BigNumber y = "1230";
+  // MyOddWeb::BigNumber y = "1230"; // = 1003713731807688446351500551952223208771554752584472548429.1788617886178861788617886178861788617886178861788617886178861788617886178861788617886178861788617886
 
-  MyOddWeb::BigNumber x = "246";
-  MyOddWeb::BigNumber y = "3";       // = 82
+  // MyOddWeb::BigNumber x = "246";
+  // MyOddWeb::BigNumber y = "3";       // = 82
 
   // MyOddWeb::BigNumber x = "246";
   // MyOddWeb::BigNumber y = "2";    // = 123
 
-  // MyOddWeb::BigNumber x = "492";
-  // MyOddWeb::BigNumber y = "4";    // = 123
+  MyOddWeb::BigNumber x = "492";
+  MyOddWeb::BigNumber y = "4";    // = 123
 
 
   TimedDiv( x, y,  Div1 );
