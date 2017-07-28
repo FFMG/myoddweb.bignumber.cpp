@@ -73,6 +73,14 @@ Double
 
     double x = MyOddWeb::BigNumber(1.234).Add(MyOddWeb::BigNumber(2.345)).ToDouble();
 
+Long Double
+
+	long double x = MyOddWeb::BigNumber(1.234).Add(MyOddWeb::BigNumber(2.345)).ToLongDouble();
+
+Long Long
+
+	long long x = MyOddWeb::BigNumber(1.234).Add( 2222 ).ToLongLong();
+
 # Functions #
 ### Math functions ###
 - Add( number ) : Add '*number*' to '*this*' number.
@@ -111,6 +119,9 @@ Double
 
 - ToInt() : convert to int.
 - ToDouble() : convert to double.
+- ToLong() : convert to Long.
+- ToLongDouble() : convert to long double.
+- ToLongLong() : convert to long long. 
 - ToString() : Output the number as a string, (if you want to limit the number of decimals use the *ToBase( ... )* funtion).
 - ToBase( base = 10[, precision=100] ) : convert to string.
 	- You can pass a base number to convert to, the default is base 10. The allowed bases are **2-62**. The values are **0-9** then **A-Z** then **a-z**
@@ -151,8 +162,9 @@ Double
 - ToShort()
 - ToByte()
 - ToFloat()
-- ToLongLong()
-- ToLong
+- <s>ToLongLong()</s>
+- <s>ToLong</s>
+- <s>ToLongDouble</s>
 - <s>pi() : constant</s>
 
 ## Misc ##

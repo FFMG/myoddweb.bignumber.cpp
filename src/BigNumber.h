@@ -141,6 +141,9 @@ namespace MyOddWeb
     // conversion.
     int ToInt() const;
     double ToDouble() const;
+    long double ToLongDouble() const;
+    long ToLong() const;
+    long long ToLongLong() const;
     std::string ToString() const;
     std::string ToBase(unsigned short base, size_t precision = BIGNUMBER_DEFAULT_PRECISION) const;
 

@@ -1882,6 +1882,66 @@ namespace MyOddWeb
   }
 
   /**
+   * Convert a big number to a double double .
+   * @return double double the converted number to a double.
+   */
+  long double BigNumber::ToLongDouble() const
+  {
+    if (IsNan())
+    {
+      //  c++ does not have a Nan() number.
+      return 0;
+    }
+
+    // the return number.
+    std::string::size_type sz;     // alias of size_t
+
+    // make sure that the number is base 10.
+    // it should always be the case...
+    return std::stold( ToString(), &sz );
+  }
+
+  /**
+   * Convert a big number to a long.
+   * @return long the converted number to a long.
+   */
+  long BigNumber::ToLong() const
+  {
+    if (IsNan())
+    {
+      //  c++ does not have a Nan() number.
+      return 0;
+    }
+
+    // the return number.
+    std::string::size_type sz;     // alias of size_t
+
+    // make sure that the number is base 10.
+    // it should always be the case...
+    return std::stol( ToString(), &sz );
+  }
+
+  /**
+   * Convert a big number to a long.
+   * @return long the converted number to a long.
+   */
+  long long BigNumber::ToLongLong() const
+  {
+    if (IsNan())
+    {
+      //  c++ does not have a Nan() number.
+      return 0;
+    }
+
+    // the return number.
+    std::string::size_type sz;     // alias of size_t
+
+    // make sure that the number is base 10.
+    // it should always be the case...
+    return std::stoll( ToString(), &sz );
+  }
+
+  /**
    * Convert a big number to an integer.
    * @return int the converted number to an int.
    */

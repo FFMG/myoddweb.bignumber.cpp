@@ -92,9 +92,11 @@ int main(int argc, char** argv)
   // MyOddWeb::BigNumber x = "246";
   // MyOddWeb::BigNumber y = "2";    // = 123
 
-  MyOddWeb::BigNumber x = "492";
-  MyOddWeb::BigNumber y = "4";    // = 123
+  // MyOddWeb::BigNumber x = "492";
+  // MyOddWeb::BigNumber y = "4";    // = 123
 
+  MyOddWeb::BigNumber x = "9223372036854775807";
+  MyOddWeb::BigNumber y = "4";    // = 2305843009213693951.75
 
   TimedDiv( x, y,  Div1 );
   TimedDiv( x, y,  Div2 );
