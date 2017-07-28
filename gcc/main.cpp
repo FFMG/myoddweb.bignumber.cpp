@@ -26,8 +26,8 @@ const MyOddWeb::BigNumber Div2( const MyOddWeb::BigNumber& x, const MyOddWeb::Bi
     // then we multiply that number by y
     auto multipliedz =  MyOddWeb::BigNumber(posiblez).Mul(y);
 
-    auto dPosiblez = posiblez.ToDouble();
-    auto dMultipliedz = multipliedz.ToDouble();
+    auto dPosiblez = posiblez.ToLongLong();
+    auto dMultipliedz = multipliedz.ToLongLong();
 
     switch( multipliedz.Compare( x ) )
     {
