@@ -1853,7 +1853,7 @@ namespace MyOddWeb
         return BigNumber::_RecalcDenominator( max_denominator, base_multiplier, remainder);
       }
 
-      // the number is now small enought and can be used.
+      // the number is now small enough and can be used.
       return true;
     }
 
@@ -1873,12 +1873,20 @@ namespace MyOddWeb
       return 0;
     }
 
-    // the return number.
-    std::string::size_type sz;     // alias of size_t
+    try
+    {
+      // the return number.
+      std::string::size_type sz;     // alias of size_t
 
-    // make sure that the number is base 10.
-    // it should always be the case...
-    return std::stod( ToString(), &sz );
+      // make sure that the number is base 10.
+      // it should always be the case...
+      return std::stod( ToString(), &sz );
+    }
+    catch( const std::out_of_range& oor )
+    {
+      // the number would be out of range for this
+      return std::numeric_limits<double>::max();
+    }
   }
 
   /**
@@ -1893,12 +1901,20 @@ namespace MyOddWeb
       return 0;
     }
 
-    // the return number.
-    std::string::size_type sz;     // alias of size_t
+    try
+    {
+      // the return number.
+      std::string::size_type sz;     // alias of size_t
 
-    // make sure that the number is base 10.
-    // it should always be the case...
-    return std::stold( ToString(), &sz );
+      // make sure that the number is base 10.
+      // it should always be the case...
+      return std::stold( ToString(), &sz );
+    }
+    catch( const std::out_of_range& oor )
+    {
+      // the number would be out of range for this
+      return std::numeric_limits<long double>::max();
+    }
   }
 
   /**
@@ -1913,12 +1929,21 @@ namespace MyOddWeb
       return 0;
     }
 
-    // the return number.
-    std::string::size_type sz;     // alias of size_t
+    try
+    {
+      // the return number.
+      std::string::size_type sz;     // alias of size_t
 
-    // make sure that the number is base 10.
-    // it should always be the case...
-    return std::stol( ToString(), &sz );
+
+      // make sure that the number is base 10.
+      // it should always be the case...
+      return std::stol( ToString(), &sz );
+    }
+    catch( const std::out_of_range& oor )
+    {
+      // the number would be out of range for this
+      return std::numeric_limits<long>::max();
+    }
   }
 
   /**
@@ -1933,12 +1958,20 @@ namespace MyOddWeb
       return 0;
     }
 
-    // the return number.
-    std::string::size_type sz;     // alias of size_t
+    try
+    {
+      // the return number.
+      std::string::size_type sz;     // alias of size_t
 
-    // make sure that the number is base 10.
-    // it should always be the case...
-    return std::stoll( ToString(), &sz );
+      // make sure that the number is base 10.
+      // it should always be the case...
+      return std::stoll( ToString(), &sz );
+    }
+    catch( const std::out_of_range& oor )
+    {
+      // the number would be out of range for this
+      return std::numeric_limits<long long>::max();
+    }
   }
 
   /**

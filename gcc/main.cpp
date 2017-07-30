@@ -27,6 +27,9 @@ const MyOddWeb::BigNumber Div2( const MyOddWeb::BigNumber& x, const MyOddWeb::Bi
     auto multipliedz =  MyOddWeb::BigNumber(posiblez).Mul(y);
 
     auto dPosiblez = posiblez.ToLongLong();
+
+    auto sMultipliedz = multipliedz.ToString();
+    auto cMultipliedz = sMultipliedz.c_str();
     auto dMultipliedz = multipliedz.ToLongLong();
 
     switch( multipliedz.Compare( x ) )
@@ -80,6 +83,18 @@ void TimedDiv( const MyOddWeb::BigNumber& x, const MyOddWeb::BigNumber& y, std::
 
 int main(int argc, char** argv)
 {
+  try
+  {
+    std::string::size_type sz;     // alias of size_t
+    auto s = std::string("18446744073709551612");
+
+    std::stoll( s, &sz );
+  }
+catch( ... )
+{
+  std::cout << "oops!" << std::endl;
+}
+
   std::cout << "Starting test." << std::endl;
 
   // @see https://www.gamedev.net/forums/topic/309213-c-big-number-division/
