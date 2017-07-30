@@ -74,10 +74,16 @@ namespace MyOddWeb
     Parse(source);
   }
 
+  BigNumber::BigNumber(long double source)
+  {
+    Default();
+    Parse( source);
+  }
+
   BigNumber::BigNumber(double source)
   {
     Default();
-    Parse(source);
+    Parse( (long double)source);
   }
 
   BigNumber::BigNumber(const NUMBERS& numbers, size_t decimals, bool neg)
@@ -173,11 +179,11 @@ namespace MyOddWeb
     return _neg;
   }
 
-  void BigNumber::Parse(double source)
+  void BigNumber::Parse(long double source)
   {
     // convert to char
     std::ostringstream strs;
-    strs.precision(std::numeric_limits<double>::digits10);
+    strs.precision(std::numeric_limits<long double>::digits10);
     if (!(strs << source))
     {
       throw std::runtime_error("There was a problem converting the double to a bigNumber");

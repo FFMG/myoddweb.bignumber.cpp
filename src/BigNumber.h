@@ -76,6 +76,7 @@ namespace MyOddWeb
     BigNumber(int source);
     BigNumber(long long source);
     BigNumber(double source);
+    BigNumber(long double source);
     BigNumber(const BigNumber& source);
     BigNumber& operator=(const BigNumber& rhs);
 
@@ -162,7 +163,7 @@ namespace MyOddWeb
   protected:
     void Parse(const char* source);
     void Parse(long long source);
-    void Parse(double source);
+    void Parse(long double source);
 
     // the numbers.
     typedef std::vector<unsigned char> NUMBERS;
