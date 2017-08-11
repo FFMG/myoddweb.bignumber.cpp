@@ -1888,7 +1888,7 @@ namespace MyOddWeb
       // it should always be the case...
       return std::stod( ToString(), &sz );
     }
-    catch( const std::out_of_range )
+    catch( const std::out_of_range& )
     {
       // the number would be out of range for this
       return std::numeric_limits<double>::max();
@@ -1916,7 +1916,7 @@ namespace MyOddWeb
       // it should always be the case...
       return std::stold( ToString(), &sz );
     }
-    catch( const std::out_of_range  )
+    catch( const std::out_of_range&  )
     {
       // the number would be out of range for this
       return std::numeric_limits<long double>::max();
@@ -1945,7 +1945,7 @@ namespace MyOddWeb
       // it should always be the case...
       return std::stol( ToString(), &sz );
     }
-    catch( const std::out_of_range  )
+    catch( const std::out_of_range&  )
     {
       // the number would be out of range for this
       return std::numeric_limits<long>::max();
@@ -1973,7 +1973,7 @@ namespace MyOddWeb
       // it should always be the case...
       return std::stoll( ToString(), &sz );
     }
-    catch( const std::out_of_range  )
+    catch( const std::out_of_range&  )
     {
       // the number would be out of range for this
       return std::numeric_limits<long long>::max();

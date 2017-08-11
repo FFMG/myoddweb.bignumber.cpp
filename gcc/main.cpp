@@ -1,9 +1,32 @@
 #include <iostream>
+
+// include bignumber
 #include "../src/BigNumber.h"
 
+#include "src/gtest-all.cc"
+#include "gtest/gtest.h"
+
+#define UNITTEST 1
+
+#ifdef UNITTEST
+
+TEST(FactorialTest, Zero) {
+  EXPECT_EQ(1, 1);
+}
+
+int main(int argc, char** argv)
+{
+  printf("Running main() from gtest_main.cc\n");
+
+  ::testing::InitGoogleTest(&argc, argv);
+
+  return RUN_ALL_TESTS();
+}
+#else
+//////////////////////////////////////////////////////////
+// To remove
 #include <chrono>
 #include <ctime>
-
 #include <functional>
 
 const MyOddWeb::BigNumber  Div1( const MyOddWeb::BigNumber& x, const MyOddWeb::BigNumber& y)
@@ -81,6 +104,9 @@ void TimedDiv( const MyOddWeb::BigNumber& x, const MyOddWeb::BigNumber& y, std::
   std::cout << d << "ms" << std::endl;
 }
 
+// To remove
+//////////////////////////////////////////////////////////
+
 int main(int argc, char** argv)
 {
   std::cout << "Starting test." << std::endl;
@@ -105,5 +131,7 @@ int main(int argc, char** argv)
   TimedDiv( x, y,  Div2 );
 
   std::cout << "Test complete." << std::endl;
+
   return 0;
 }
+#endif
