@@ -1,5 +1,5 @@
 #include <iostream>
-#include "..\src\BigNumber.h"
+#include "../src/BigNumber.h"
 
 #include <chrono>
 #include <ctime>
@@ -83,18 +83,6 @@ void TimedDiv( const MyOddWeb::BigNumber& x, const MyOddWeb::BigNumber& y, std::
 
 int main(int argc, char** argv)
 {
-  try
-  {
-    std::string::size_type sz;     // alias of size_t
-    auto s = std::string("18446744073709551612");
-
-    std::stoll( s, &sz );
-  }
-catch( ... )
-{
-  std::cout << "oops!" << std::endl;
-}
-
   std::cout << "Starting test." << std::endl;
 
   // @see https://www.gamedev.net/forums/topic/309213-c-big-number-division/
