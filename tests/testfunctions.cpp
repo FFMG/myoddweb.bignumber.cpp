@@ -213,7 +213,7 @@ TEST(FunctionBigNumber, ModulusZero) {
 TEST(FunctionBigNumber, ModulusDecimalNumber) {
   MyOddWeb::BigNumber src(1000);
   MyOddWeb::BigNumber mod = src.Mod(244.14025);
-  ASSERT_EQ(23.439, mod.ToDouble());
+  ASSERT_DOUBLE_EQ(23.439, mod.ToDouble());
 }
 
 TEST(FunctionBigNumber, ModulusZeroNegativeDivisor) {

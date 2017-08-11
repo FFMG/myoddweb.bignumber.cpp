@@ -193,7 +193,7 @@ TEST(MultiplyBigNumber, MultiplyPositiveDecimalNumbersWithZeroWholeNumber) {
 
   double dr = x.Mul(y).ToDouble();
   double de = 0.012345;
-  ASSERT_EQ(de, dr);
+  ASSERT_DOUBLE_EQ(de, dr);
 }
 
 TEST(MultiplyBigNumber, MultiplyPositiveDecimalNumbersBothNegative) {

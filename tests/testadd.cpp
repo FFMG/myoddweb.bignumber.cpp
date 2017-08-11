@@ -160,7 +160,7 @@ TEST(AddBigNumber, AddTwoDecimalNumbers) {
 
   x.Add(y);
 
-  ASSERT_EQ((dx + dy), x.ToDouble());
+  ASSERT_DOUBLE_EQ((dx + dy), x.ToDouble());
 }
 
 TEST(AddBigNumber, AddTwoDecimalNumbersWithLongDecimals) {
@@ -173,7 +173,7 @@ TEST(AddBigNumber, AddTwoDecimalNumbersWithLongDecimals) {
 
   double a = 177.54448072756131; // double zz = dx + dy; // = 177.54448072756128 because of binary rounding...
   double b = x.ToDouble();
-  ASSERT_EQ(a, b);
+  ASSERT_DOUBLE_EQ(a, b);
 }
 
 TEST(AddBigNumber, AddTwoDecimalNumbersWithLongNegativeDecimals) {
@@ -186,7 +186,7 @@ TEST(AddBigNumber, AddTwoDecimalNumbersWithLongNegativeDecimals) {
 
   double a = -177.54448072756131; // double zz = dx + dy; // = -177.54448072756128 because of binary rounding...
   double b = x.ToDouble();
-  ASSERT_EQ(a, b);
+  ASSERT_DOUBLE_EQ(a, b);
 }
 
 TEST(AddBigNumber, AddAnIntegerToADecimalSmallerThanOne) {

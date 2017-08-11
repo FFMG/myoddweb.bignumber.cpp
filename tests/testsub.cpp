@@ -175,7 +175,7 @@ TEST(SubtractBigNumber, SubtractTwoDecimalNumbers) {
   x.Sub(y);
 
   double dz = x.ToDouble();
-  ASSERT_EQ(2.977, dz);       //  we cannot use dx-dy because it gives (2.9770000000000003)
+  ASSERT_DOUBLE_EQ(2.977, dz);       //  we cannot use dx-dy because it gives (2.9770000000000003)
 }
 
 TEST(SubtractBigNumber, SubtractTwoNegativeDecimalNumbers) {
@@ -187,7 +187,7 @@ TEST(SubtractBigNumber, SubtractTwoNegativeDecimalNumbers) {
   x.Sub(y);
 
   double dz = x.ToDouble();
-  ASSERT_EQ(-2.977, dz);       //  we cannot use dx-dy because it gives (2.9770000000000003)
+  ASSERT_DOUBLE_EQ(-2.977, dz);       //  we cannot use dx-dy because it gives (2.9770000000000003)
 }
 
 TEST(SubtractBigNumber, SubtractTwoDecimalNumbersWithLongDecimals) {
