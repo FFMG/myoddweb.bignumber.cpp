@@ -10,6 +10,8 @@ set -e
 mkdir -p bin
 cd bin
 
+echo $PWD
+
 # Compile
 $CXX -c -o bignumber.o ../src/BigNumber.cpp -I ../ 
 $CXX -c -o main.o ../gcc/main.cpp -I../
