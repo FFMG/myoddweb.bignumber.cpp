@@ -19,7 +19,7 @@ $CXX -c -o bignumber.o ../src/BigNumber.cpp
 $CXX -c ../tests/*.cpp -I"../gtest-1.8.0/include/"
 
 # Compile the main file that will pull it all together
-$CXX -c -o main.o ../gcc/main.cpp -I"../gtest-1.8.0/" -I"../gtest-1.8.0/include/" -I"../tests/" -pthread
+$CXX -c -o main.o ../gcc/main.cpp -I"../gtest-1.8.0/" -I"../gtest-1.8.0/include/" -I"../tests/"
 
 # Link it all together
 $CXX -o main *.o -pthread
