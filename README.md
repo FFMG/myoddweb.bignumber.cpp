@@ -1,3 +1,5 @@
+[![Build Status](https://api.travis-ci.org/FFMG/myoddweb.bignumber.cpp.svg)](https://travis-ci.org/FFMG/myoddweb.bignumber.cpp/builds/)
+
 # myoddweb.bignumber.cpp #
 Yet another C++ BigNumber implementation with focus on switching between languages.
 
