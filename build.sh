@@ -22,4 +22,4 @@ $CXX -c ../tests/*.cpp -I"../gtest-1.8.0/include/"
 $CXX -c -o main.o ../gcc/main.cpp -I"../gtest-1.8.0/" -I"../gtest-1.8.0/include/" -I"../tests/" -pthread
 
 # Link it all together
-$CXX -o main *.o
+$CXX -o main *.o -pthread
