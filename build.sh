@@ -11,7 +11,8 @@ mkdir -p bin
 cd bin
 
 # Compile
+$CXX -c -o bignumber.o ../src/BigNumber.cpp -I ../ 
 $CXX -c -o main.o ../gcc/main.cpp -I../
 
-# Link
-$CXX -o main main.o
+# Link it all together
+$CXX -o main bignumber.o main.o
