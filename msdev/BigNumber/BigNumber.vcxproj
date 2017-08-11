@@ -28,26 +28,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -153,15 +153,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\BigNumber.cpp" />
+    <ClCompile Include="..\..\tests\testadd.cpp" />
+    <ClCompile Include="..\..\tests\testdiv.cpp" />
+    <ClCompile Include="..\..\tests\testexp.cpp" />
+    <ClCompile Include="..\..\tests\testfunctions.cpp" />
+    <ClCompile Include="..\..\tests\testln.cpp" />
+    <ClCompile Include="..\..\tests\testmul.cpp" />
+    <ClCompile Include="..\..\tests\testsub.cpp" />
+    <ClCompile Include="..\..\tests\testtrig.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="tests\testadd.cpp" />
-    <ClCompile Include="tests\testdiv.cpp" />
-    <ClCompile Include="tests\testexp.cpp" />
-    <ClCompile Include="tests\testfunctions.cpp" />
-    <ClCompile Include="tests\testln.cpp" />
-    <ClCompile Include="tests\testmul.cpp" />
-    <ClCompile Include="tests\testsub.cpp" />
-    <ClCompile Include="tests\testtrig.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\googletest\googletest.vcxproj">
