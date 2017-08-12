@@ -2441,9 +2441,11 @@ namespace MyOddWeb
     long long counter2 = 0;
     long long counter8 = 0;
 
-    while (Compare(0.8) < 0)
+    static const BigNumber zeropeight = BigNumber({8,0}, 1, false);
+    static const BigNumber onepeight = BigNumber({8,1}, 1, false);
+    while (Compare(zeropeight) < 0)
     {
-      Mul(1.8, BIGNUMBER_PRECISION_PADDED(precision));
+      Mul(onepeight, BIGNUMBER_PRECISION_PADDED(precision));
       ++counter8;
     }
     while (Compare(_number_two ) > 0)
@@ -2451,9 +2453,11 @@ namespace MyOddWeb
       Div(_number_two, BIGNUMBER_PRECISION_PADDED(precision));
       ++counter2;
     }
-    while (Compare(1.1) > 0)
+
+    static const BigNumber onepone = BigNumber({1,1}, 1, false);
+    while (Compare(onepone) > 0)
     {
-      Div(1.1, BIGNUMBER_PRECISION_PADDED(precision));
+      Div( onepone, BIGNUMBER_PRECISION_PADDED(precision));
       ++counter1;
     }
 
@@ -2469,7 +2473,7 @@ namespace MyOddWeb
     BigNumber baseRaised = base;
     for ( size_t i = 0; i < BIGNUMBER_MAX_LN_ITERATIONS; ++i )
     {
-      // next donominator
+      // next denominator
       den.Add(_number_one );
 
       // swap operation
@@ -2478,11 +2482,11 @@ namespace MyOddWeb
       // the denominator+power is the same thing
       baseRaised.Mul(base, BIGNUMBER_PRECISION_PADDED(precision));
 
-      // now devide it
+      // now divide it
       BigNumber currentBase = BigNumber( baseRaised ).Div( den, BIGNUMBER_PRECISION_PADDED(precision));
 
-      // there is no need to go further, with this presision 
-      // and with this number of iterations we will keep adding/subtrating zeros.
+      // there is no need to go further, with this precision
+      // and with this number of iterations we will keep adding/subtracting zeros.
       if (currentBase.IsZero())
       {
         break;
@@ -2563,8 +2567,8 @@ namespace MyOddWeb
   }
 
   /**
-   * 'Normalise' the angle given an make sure that it falls within 0-2*pi
-   * This is used to make the calculations more acurate and faster.
+   * 'Normalize' the angle given an make sure that it falls within 0-2*pi
+   * This is used to make the calculations more accurate and faster.
    * @param const BigNumber& radian the radian we want to make sure is in range.
    * @return BigNumber the recalculated radian.
    */

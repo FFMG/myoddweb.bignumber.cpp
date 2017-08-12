@@ -55,7 +55,7 @@
 
 /**
  * The precision we want to stop at, by default.
- * so we  don't devide for ever and ever...
+ * so we  don't divide for ever and ever...
  * Eventually those should be set in some sort of config
  * Rather than working at config time.
  */
@@ -70,6 +70,10 @@ namespace MyOddWeb
 {
   class BigNumber
   {
+  protected:
+    // the numbers.
+    typedef std::vector<unsigned char> NUMBERS;
+
   public:
     BigNumber();
     BigNumber(const char* source);
@@ -80,6 +84,11 @@ namespace MyOddWeb
     BigNumber(const BigNumber& source);
     BigNumber& operator=(const BigNumber& rhs);
 
+  protected:
+    // construct a number from an array of numbers.
+    BigNumber( const NUMBERS& numbers, size_t decimals, bool neg );
+
+  public:
     ~BigNumber();
 
     //
@@ -165,14 +174,13 @@ namespace MyOddWeb
     void Parse(long long source);
     void Parse(long double source);
 
-    // the numbers.
-    typedef std::vector<unsigned char> NUMBERS;
+    // the numbers in a vector.
     NUMBERS _numbers;
 
     // is it negative or not?
     bool _neg;
 
-    // is not a number, in otherword is invalid or something
+    // is not a number, in other words, is invalid or something
     // like x / 0 = NAN()
     bool _nan;
 
@@ -185,9 +193,6 @@ namespace MyOddWeb
   protected:
     // set the default values.
     void Default();
-
-    // construct a number from an array of numbers.
-    BigNumber(const NUMBERS& numbers, size_t decimals, bool neg);
 
     // clean up everything.
     BigNumber& PerformPostOperations(size_t precision);

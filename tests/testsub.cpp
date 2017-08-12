@@ -246,7 +246,7 @@ TEST(SubtractBigNumber, SubtractLessDecimalsInTheItemBeenSubtracted) {
 TEST(SubtractBigNumber, SubtractSmallNumberToBecomeInteger) {
   MyOddWeb::BigNumber x = "123.02";
   MyOddWeb::BigNumber y = 0.02;
-  std::string z = x.Sub(y).ToString();
+  std::string z = x.Sub(y).Round(10).ToString();
   ASSERT_EQ("123", z);
 }
 

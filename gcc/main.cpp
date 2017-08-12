@@ -8,7 +8,7 @@
 
 #define UNITTEST 1
 
-#ifdef UNITTEST
+#if UNITTEST == 1
 int main(int argc, char** argv)
 {
   printf("Running main() from gtest_main.cc\n");
@@ -106,6 +106,17 @@ int main(int argc, char** argv)
 {
   std::cout << "Starting test." << std::endl;
 
+  {
+    std::cout << MyOddWeb::BigNumber(1.1).ToString() << std::endl;
+  }
+
+  MyOddWeb::BigNumber x(1.5);
+  x.Ln(25);
+  auto z = x.ToString(); // 0.4054651081081643819780131
+
+  std::cout << z << std::endl;
+
+  /*
   // @see https://www.gamedev.net/forums/topic/309213-c-big-number-division/
   // MyOddWeb::BigNumber x = "1234567890123456789012345678901234546789012345678901234567890";
   // MyOddWeb::BigNumber y = "1230"; // = 1003713731807688446351500551952223208771554752584472548429.1788617886178861788617886178861788617886178861788617886178861788617886178861788617886178861788617886
@@ -124,6 +135,7 @@ int main(int argc, char** argv)
 
   TimedDiv( x, y,  Div1 );
   TimedDiv( x, y,  Div2 );
+  */
 
   std::cout << "Test complete." << std::endl;
 

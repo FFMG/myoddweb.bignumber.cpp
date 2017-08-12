@@ -49,7 +49,6 @@ TEST(LogBigNumber, SmallPositiveLnCalculations ) {
     std::string z = x.ToString(); // 0.182321556793954 
     ASSERT_EQ("0.182321556793954", z);
   }
-
   {
     MyOddWeb::BigNumber x(1.5);
     x.Ln(25);
