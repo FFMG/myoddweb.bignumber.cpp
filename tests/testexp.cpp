@@ -44,13 +44,13 @@ TEST(ExpBigNumber, PositiveNumberLessThanOne ) {
 
 TEST(ExpBigNumber, PositiveNumberGreaterThanOne) {
   {
-    MyOddWeb::BigNumber x(1.208);
+    MyOddWeb::BigNumber x("1.208");
     x.Exp(15); // 3.3467843857441526240940403951701183080591879679251946131127
     std::string z = x.ToString();
     ASSERT_EQ("3.346784385744152", z);
   }
   {
-    MyOddWeb::BigNumber x(2.208);
+    MyOddWeb::BigNumber x("2.208");
     x.Exp(15); // 9.0975031795387977613874046439943215436120987224030888958893
     std::string z = x.ToString();
     ASSERT_EQ("9.097503179538797", z);

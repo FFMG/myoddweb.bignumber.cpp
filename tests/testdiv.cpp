@@ -161,8 +161,8 @@ TEST(DivBigNumber, DecimalDivision) {
   }
   {
     MyOddWeb::BigNumber x = 9.3;
-    std::string z = x.Div(1.5).ToString();
-    ASSERT_EQ("6.2", z);
+    auto z = x.Div(1.5).ToDouble();
+    ASSERT_DOUBLE_EQ(6.2, z);
   }
 }
 

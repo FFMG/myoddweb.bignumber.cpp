@@ -213,7 +213,7 @@ TEST(FunctionBigNumber, ModulusZero) {
 TEST(FunctionBigNumber, ModulusDecimalNumber) {
   MyOddWeb::BigNumber src(1000);
   MyOddWeb::BigNumber mod = src.Mod(244.14025);
-  ASSERT_DOUBLE_EQ(23.439, mod.ToDouble());
+  ASSERT_DOUBLE_EQ(23.439, mod.Round(3).ToDouble());
 }
 
 TEST(FunctionBigNumber, ModulusZeroNegativeDivisor) {
@@ -333,17 +333,17 @@ TEST(FunctionBigNumber, ToDoubleNegativeNumber) {
 TEST(FunctionBigNumber, ZeroNumbersWithDecimalsAreNotTimmed) {
   {
     MyOddWeb::BigNumber y(0.012345);
-    std::string sy = y.ToString();
+    std::string sy = y.Trunc(10).ToString();
     ASSERT_EQ(std::string("0.012345"), sy);
   }
   {
     MyOddWeb::BigNumber y(0.12345);
-    std::string sy = y.ToString();
+    std::string sy = y.Trunc(10).ToString();
     ASSERT_EQ(std::string("0.12345"), sy);
   }
   {
     MyOddWeb::BigNumber y(0000.12345);
-    std::string sy = y.ToString();
+    std::string sy = y.Trunc(10).ToString();
     ASSERT_EQ(std::string("0.12345"), sy);
   }
 }
@@ -600,7 +600,7 @@ TEST(FunctionBigNumber, GetNaturalETo1000places)
 TEST(FunctionBigNumber, SimpleMod)
 {
   MyOddWeb::BigNumber x("5.23");
-  MyOddWeb::BigNumber y(0.23);
+  MyOddWeb::BigNumber y("0.23");
   std::string z = x.Mod(y).ToString();
   ASSERT_EQ("0.17", z );
 }

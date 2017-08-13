@@ -192,7 +192,7 @@ TEST(AddBigNumber, AddTwoDecimalNumbersWithLongNegativeDecimals) {
 TEST(AddBigNumber, AddAnIntegerToADecimalSmallerThanOne) {
   MyOddWeb::BigNumber x = 42;
   MyOddWeb::BigNumber y = 0.02;
-  std::string z = y.Add(x).ToString();
+  std::string z = y.Add(x).Trunc(10).ToString();
   ASSERT_EQ("42.02", z );
 }
 
